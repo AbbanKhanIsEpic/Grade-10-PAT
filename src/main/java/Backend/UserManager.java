@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class UserManager {
     //Most of the code comes from https://github.com/cliftonbartholomew/SchoolPracticalsGr10/blob/master/src/main/java/SQL/DatabaseManager.java
     private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String url = "jdbc:mysql://102.130.115.69:3306/abbank";
+    private static final String url = "jdbc:mysql://102.130.115.69:3306/abbankDB/ChatBun";
     private static final String user = "abbank";
     private static final String pass = "Reddam2021";
     

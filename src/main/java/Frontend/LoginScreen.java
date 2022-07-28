@@ -4,6 +4,8 @@
  */
 package Frontend;
 
+import java.awt.Font;
+
 /**
  *
  * @author abban
@@ -26,21 +28,82 @@ public class LoginScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        UsernameLabel = new javax.swing.JLabel();
+        UsernameTextField = new javax.swing.JTextField();
+        PasswordLabel = new javax.swing.JLabel();
+        PasswordTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        RememberToggleButton = new javax.swing.JToggleButton();
+        LoginButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        UsernameLabel.setText("Username:");
+
+        PasswordLabel.setText("Password:");
+
+        jLabel1.setText("Remember me for 30 days:");
+
+        RememberToggleButton.setText("No");
+        RememberToggleButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                RememberToggleButtonItemStateChanged(evt);
+            }
+        });
+
+        LoginButton.setText("Login");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(RememberToggleButton)
+                    .addComponent(PasswordLabel)
+                    .addComponent(UsernameLabel)
+                    .addComponent(UsernameTextField)
+                    .addComponent(jLabel1)
+                    .addComponent(LoginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(PasswordTextField))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(UsernameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(PasswordLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(RememberToggleButton)
+                .addGap(23, 23, 23)
+                .addComponent(LoginButton)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void RememberToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_RememberToggleButtonItemStateChanged
+        int choice = evt.getStateChange(); //This declared variable get the value of the jToggle button
+        
+        switch(choice){ //This is a switch case which check if the user agree or disagree and change the text so the user know if they agree or not
+            case 1: 
+                RememberToggleButton.setText("Yes"); 
+                break;
+            case 2:
+                RememberToggleButton.setText("No");
+                break;
+        }
+    }//GEN-LAST:event_RememberToggleButtonItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -78,5 +141,12 @@ public class LoginScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton LoginButton;
+    private javax.swing.JLabel PasswordLabel;
+    private javax.swing.JTextField PasswordTextField;
+    private javax.swing.JToggleButton RememberToggleButton;
+    private javax.swing.JLabel UsernameLabel;
+    private javax.swing.JTextField UsernameTextField;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

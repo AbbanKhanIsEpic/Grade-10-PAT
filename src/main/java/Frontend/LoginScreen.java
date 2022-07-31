@@ -67,7 +67,7 @@ public class LoginScreen extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(LoginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                     .addComponent(PasswordTextField))
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -86,7 +86,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 .addComponent(RememberToggleButton)
                 .addGap(23, 23, 23)
                 .addComponent(LoginButton)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();

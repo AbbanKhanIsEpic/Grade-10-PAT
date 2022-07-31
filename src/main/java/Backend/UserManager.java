@@ -6,7 +6,7 @@ package Backend;
 
 /*
 
-This class forcus on user control. This will be:
+This class focus on user control. This will be:
 When login, the project will check if the user has entered the username and password correcly
 When login, the project will check if the user said yes or no to remember them for 30 days
 When at Welcome Screen, the program will check if the ip-address has an account that wanted the program to remember them
@@ -28,7 +28,7 @@ import java.sql.SQLException;
 public class UserManager {
     //Most of the code comes from https://github.com/cliftonbartholomew/SchoolPracticalsGr10/blob/master/src/main/java/SQL/DatabaseManager.java
     private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String url = "jdbc:mysql://102.130.115.69:3306/abbankDB/ChatBun";
+    private static final String url = "jdbc:mysql://102.130.115.69:3306/abbankDB";
     private static final String user = "abbank";
     private static final String pass = "Reddam2021";
     

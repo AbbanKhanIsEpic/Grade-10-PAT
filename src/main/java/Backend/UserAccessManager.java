@@ -25,7 +25,7 @@ import java.sql.SQLException;
  *
  * @author abban
  */
-public class UserManager {
+public class UserAccessManager {
     //Most of the code comes from https://github.com/cliftonbartholomew/SchoolPracticalsGr10/blob/master/src/main/java/SQL/DatabaseManager.java
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String url = "jdbc:mysql://102.130.115.69:3306/abbankDB";
@@ -51,7 +51,7 @@ public class UserManager {
 		statement.close();
 	}
         public static void main(String[] args) {
-		UserManager dm = new UserManager();
+		UserAccessManager dm = new UserAccessManager();
 		try {
 			//dm.update("INSERT INTO books VALUES(1334, 'Hills have eyes','Peter Peterson', 2, 2.75)");
 

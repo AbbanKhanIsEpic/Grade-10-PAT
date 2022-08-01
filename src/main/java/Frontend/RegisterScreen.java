@@ -4,10 +4,8 @@
  */
 package Frontend;
 
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import javax.swing.JFrame;
-import javax.swing.OverlayLayout;
+import Backend.PasswordManager;
+
 
 /**
  *
@@ -18,6 +16,7 @@ public class RegisterScreen extends javax.swing.JFrame {
     /**
      * Creates new form RegisterScreen
      */
+    String typed_password = "";
     
     public RegisterScreen() {
         initComponents();
@@ -61,6 +60,12 @@ public class RegisterScreen extends javax.swing.JFrame {
         ViewPasswordToggleButton.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 ViewPasswordToggleButtonItemStateChanged(evt);
+            }
+        });
+
+        PasswordTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                PasswordTextFieldKeyReleased(evt);
             }
         });
 
@@ -134,6 +139,7 @@ public class RegisterScreen extends javax.swing.JFrame {
         switch(choice){ //This is a switch case which check if the user agree or disagree and change the text so the user know if they agree or not
             case 1: 
                 ViewPasswordToggleButton.setText("Visible"); 
+                PasswordTextField.setText(typed_password);
                 
                 break;
             case 2:
@@ -141,6 +147,23 @@ public class RegisterScreen extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_ViewPasswordToggleButtonItemStateChanged
+
+    private void PasswordTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PasswordTextFieldKeyReleased
+        // TODO add your handling code here:
+        String selectedToggleButton = ViewPasswordToggleButton.getText();
+        String userPasswordInput = PasswordTextField.getText();
+        
+        if(selectedToggleButton.equals("Hidden")){
+                typed_password = PasswordManager.getTypedText(userPasswordInput, typed_password, selectedToggleButton);
+                PasswordTextField.setText(PasswordManager.getDisplayText(typed_password,selectedToggleButton));
+        }
+        else{
+            typed_password = userPasswordInput;
+            PasswordTextField.setText(typed_password);
+        }
+
+        System.out.println(typed_password);
+    }//GEN-LAST:event_PasswordTextFieldKeyReleased
 
     /**
      * @param args the command line arguments

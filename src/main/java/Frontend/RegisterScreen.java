@@ -4,7 +4,8 @@
  */
 package Frontend;
 
-import Backend.PasswordManager;
+import Backend.TextManager;
+import java.awt.Font;
 
 
 /**
@@ -17,9 +18,11 @@ public class RegisterScreen extends javax.swing.JFrame {
      * Creates new form RegisterScreen
      */
     String typed_password = "";
+    String confirm_typed_password = "";
     
     public RegisterScreen() {
         initComponents();
+        RegisterLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
     }
 
     /**
@@ -39,11 +42,22 @@ public class RegisterScreen extends javax.swing.JFrame {
         ViewPasswordToggleButton = new javax.swing.JToggleButton();
         PasswordTextField = new javax.swing.JTextField();
         ConfirmPasswordTextField = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        ViewConfirmPasswordToggleButton = new javax.swing.JToggleButton();
+        CheckingConfirmedPasswordLabel = new javax.swing.JLabel();
+        CheckingPasswordLabel = new javax.swing.JLabel();
+        CheckingUsernameLabel = new javax.swing.JLabel();
+        RegisterLabel = new javax.swing.JLabel();
+        ToContinueLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        UsernameLabel.setText("Username");
+        UsernameLabel.setText("Username:");
+
+        UsernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                UsernameTextFieldKeyReleased(evt);
+            }
+        });
 
         PasswordLabel.setText("Password:");
 
@@ -69,60 +83,90 @@ public class RegisterScreen extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 18, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 14, Short.MAX_VALUE)
-        );
+        ConfirmPasswordTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ConfirmPasswordTextFieldKeyReleased(evt);
+            }
+        });
+
+        ViewConfirmPasswordToggleButton.setText("Hidden");
+        ViewConfirmPasswordToggleButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ViewConfirmPasswordToggleButtonItemStateChanged(evt);
+            }
+        });
+
+        RegisterLabel.setText("Register");
+
+        ToContinueLabel.setText("to continue");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ConfirmPasswordTextField)
-                    .addComponent(UsernameLabel)
-                    .addComponent(UsernameTextField)
-                    .addComponent(PasswordLabel)
-                    .addComponent(ConfirmPasswordLabel)
-                    .addComponent(RegisterButton, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(PasswordTextField))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ViewPasswordToggleButton)
-                .addContainerGap(159, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 382, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CheckingPasswordLabel)
+                            .addComponent(CheckingUsernameLabel))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(CheckingConfirmedPasswordLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(RegisterButton, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                        .addComponent(ConfirmPasswordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                        .addComponent(ConfirmPasswordLabel)
+                                        .addComponent(PasswordLabel)
+                                        .addComponent(ToContinueLabel)
+                                        .addComponent(RegisterLabel)
+                                        .addComponent(UsernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                        .addComponent(UsernameLabel)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ViewConfirmPasswordToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(ViewPasswordToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(230, 230, 230))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
+                .addGap(33, 33, 33)
+                .addComponent(RegisterLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ToContinueLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(UsernameLabel)
                 .addGap(18, 18, 18)
                 .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(CheckingUsernameLabel)
+                .addGap(30, 30, 30)
                 .addComponent(PasswordLabel)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ViewPasswordToggleButton)
-                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ViewPasswordToggleButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(CheckingPasswordLabel)
+                .addGap(31, 31, 31)
                 .addComponent(ConfirmPasswordLabel)
                 .addGap(18, 18, 18)
-                .addComponent(ConfirmPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ConfirmPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ViewConfirmPasswordToggleButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(CheckingConfirmedPasswordLabel)
+                .addGap(31, 31, 31)
                 .addComponent(RegisterButton)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGap(60, 60, 60))
         );
 
         pack();
@@ -154,16 +198,61 @@ public class RegisterScreen extends javax.swing.JFrame {
         String userPasswordInput = PasswordTextField.getText();
         
         if(selectedToggleButton.equals("Hidden")){
-                typed_password = PasswordManager.getTypedText(userPasswordInput, typed_password, selectedToggleButton);
-                PasswordTextField.setText(PasswordManager.getDisplayText(typed_password,selectedToggleButton));
+                typed_password = TextManager.getTypedText(userPasswordInput, typed_password, selectedToggleButton);
+                PasswordTextField.setText(TextManager.getDisplayText(typed_password,selectedToggleButton));
         }
         else{
             typed_password = userPasswordInput;
             PasswordTextField.setText(typed_password);
         }
-
-        System.out.println(typed_password);
+        
+        CheckingPasswordLabel.setText(TextManager.isLegal(typed_password));
+        
     }//GEN-LAST:event_PasswordTextFieldKeyReleased
+
+    private void ViewConfirmPasswordToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ViewConfirmPasswordToggleButtonItemStateChanged
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        int choice = evt.getStateChange(); //This declared variable get the value of the jToggle button
+        
+        switch(choice){ //This is a switch case which check if the user agree or disagree and change the text so the user know if they agree or not
+            case 1: 
+                ViewConfirmPasswordToggleButton.setText("Visible"); 
+                ConfirmPasswordTextField.setText(confirm_typed_password);
+                
+                break;
+            case 2:
+                ViewConfirmPasswordToggleButton.setText("Hidden");
+                break;
+        }
+    }//GEN-LAST:event_ViewConfirmPasswordToggleButtonItemStateChanged
+
+    private void ConfirmPasswordTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ConfirmPasswordTextFieldKeyReleased
+        // TODO add your handling code here:
+        String selectedToggleButton = ViewConfirmPasswordToggleButton.getText();
+        String userConfirmPasswordInput = ConfirmPasswordTextField.getText();
+        String userPasswordInput = PasswordTextField.getText();
+        
+        if(selectedToggleButton.equals("Hidden")){
+                confirm_typed_password = TextManager.getTypedText(userConfirmPasswordInput, confirm_typed_password, selectedToggleButton);
+                ConfirmPasswordTextField.setText(TextManager.getDisplayText(confirm_typed_password,selectedToggleButton));
+        }
+        else{
+            confirm_typed_password = userConfirmPasswordInput;
+            ConfirmPasswordTextField.setText(confirm_typed_password);
+        }
+        
+        CheckingConfirmedPasswordLabel.setText(TextManager.isEqual(confirm_typed_password, typed_password));
+    }//GEN-LAST:event_ConfirmPasswordTextFieldKeyReleased
+
+    private void UsernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsernameTextFieldKeyReleased
+        // TODO add your handling code here:
+        String entered_username = UsernameTextField.getText();
+        int[] list = {58,59,60,61,62,63,64,91,92,93,94,95,96};
+        boolean case_closed = TextManager.isLegal(entered_username, 48, 122,list);
+        boolean range = TextManager.isBetweenLength(entered_username, 3, 50);
+        CheckingUsernameLabel.setText(TextManager.getResultUsername(case_closed,range));
+    }//GEN-LAST:event_UsernameTextFieldKeyReleased
 
     /**
      * @param args the command line arguments
@@ -200,14 +289,19 @@ public class RegisterScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel CheckingConfirmedPasswordLabel;
+    private javax.swing.JLabel CheckingPasswordLabel;
+    private javax.swing.JLabel CheckingUsernameLabel;
     private javax.swing.JLabel ConfirmPasswordLabel;
     private javax.swing.JTextField ConfirmPasswordTextField;
     private javax.swing.JLabel PasswordLabel;
     private javax.swing.JTextField PasswordTextField;
     private javax.swing.JButton RegisterButton;
+    private javax.swing.JLabel RegisterLabel;
+    private javax.swing.JLabel ToContinueLabel;
     private javax.swing.JLabel UsernameLabel;
     private javax.swing.JTextField UsernameTextField;
+    private javax.swing.JToggleButton ViewConfirmPasswordToggleButton;
     private javax.swing.JToggleButton ViewPasswordToggleButton;
-    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

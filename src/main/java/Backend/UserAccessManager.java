@@ -4,16 +4,7 @@
  */
 package Backend;
 
-/*
 
-This class focus on user control. This will be:
-When login, the project will check if the user has entered the username and password correcly
-When login, the project will check if the user said yes or no to remember them for 30 days
-When at Welcome Screen, the program will check if the ip-address has an account that wanted the program to remember them
-When at RegisterScreen, the program will check if the user entered a username that has not exsit 
-When at RegisterScreen, the program will check if the user entered something that will be restricted like if the username is too long
-This program also check if the user wants to delete their account
-*/
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

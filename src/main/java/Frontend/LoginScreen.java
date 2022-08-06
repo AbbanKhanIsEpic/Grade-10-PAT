@@ -17,6 +17,7 @@ public class LoginScreen extends javax.swing.JFrame {
      */
     public LoginScreen() {
         initComponents();
+        LoginLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
     }
 
     /**
@@ -35,6 +36,8 @@ public class LoginScreen extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         RememberToggleButton = new javax.swing.JToggleButton();
         LoginButton = new javax.swing.JButton();
+        LoginLabel = new javax.swing.JLabel();
+        ToContinueLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,40 +56,50 @@ public class LoginScreen extends javax.swing.JFrame {
 
         LoginButton.setText("Login");
 
+        LoginLabel.setText("Login");
+
+        ToContinueLabel.setText("to continue");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(RememberToggleButton)
-                    .addComponent(PasswordLabel)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ToContinueLabel)
+                    .addComponent(LoginLabel)
                     .addComponent(UsernameLabel)
-                    .addComponent(UsernameTextField)
+                    .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PasswordLabel)
+                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(LoginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(PasswordTextField))
-                .addContainerGap(170, Short.MAX_VALUE))
+                    .addComponent(RememberToggleButton))
+                .addContainerGap(212, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(UsernameLabel)
+                .addContainerGap()
+                .addComponent(LoginLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ToContinueLabel)
+                .addGap(30, 30, 30)
+                .addComponent(UsernameLabel)
+                .addGap(31, 31, 31)
                 .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(PasswordLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(31, 31, 31)
                 .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(RememberToggleButton)
-                .addGap(23, 23, 23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(LoginButton)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -142,9 +155,11 @@ public class LoginScreen extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginButton;
+    private javax.swing.JLabel LoginLabel;
     private javax.swing.JLabel PasswordLabel;
     private javax.swing.JTextField PasswordTextField;
     private javax.swing.JToggleButton RememberToggleButton;
+    private javax.swing.JLabel ToContinueLabel;
     private javax.swing.JLabel UsernameLabel;
     private javax.swing.JTextField UsernameTextField;
     private javax.swing.JLabel jLabel1;

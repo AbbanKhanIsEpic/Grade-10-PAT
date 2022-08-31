@@ -4,6 +4,9 @@
  */
 package Frontend;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+
 /**
  *
  * @author abban

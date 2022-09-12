@@ -4,6 +4,11 @@
  */
 package Frontend;
 
+import Backend.UserAccessManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author abban
@@ -34,7 +39,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         PasswordTextField = new javax.swing.JTextField();
         LoginButton = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
+        FinalErrorCheckerLabel = new javax.swing.JLabel();
         PasswordVisibleToggleButton = new javax.swing.JToggleButton();
         signUpScreen1 = new UISupport.SignUpBackground();
         jLabel3 = new javax.swing.JLabel();
@@ -68,10 +73,14 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
         LoginButton.setText("Login");
         LoginButton.setBorder(new javax.swing.border.MatteBorder(null));
+        LoginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoginButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel9.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel9.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel9.setText("Error checker");
+        FinalErrorCheckerLabel.setBackground(new java.awt.Color(255, 0, 0));
+        FinalErrorCheckerLabel.setForeground(new java.awt.Color(255, 0, 0));
 
         PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\open_eye.png")); // NOI18N
         PasswordVisibleToggleButton.addItemListener(new java.awt.event.ItemListener() {
@@ -87,7 +96,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
             .addGroup(loginBackground1Layout.createSequentialGroup()
                 .addGap(74, 74, 74)
                 .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
+                    .addComponent(FinalErrorCheckerLabel)
                     .addGroup(loginBackground1Layout.createSequentialGroup()
                         .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel8)
@@ -98,8 +107,8 @@ public class LoginMainScreen extends javax.swing.JFrame {
                             .addComponent(UsernameTextField)
                             .addComponent(LoginButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(PasswordVisibleToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(208, Short.MAX_VALUE))
+                        .addComponent(PasswordVisibleToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
         loginBackground1Layout.setVerticalGroup(
             loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,21 +121,17 @@ public class LoginMainScreen extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                .addGap(31, 31, 31)
                 .addComponent(jLabel8)
+                .addGap(18, 18, 18)
                 .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginBackground1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addComponent(PasswordVisibleToggleButton)
-                        .addGap(27, 27, 27)))
+                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PasswordVisibleToggleButton))
+                .addGap(19, 19, 19)
                 .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel9)
-                .addGap(56, 56, 56))
+                .addComponent(FinalErrorCheckerLabel)
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -220,6 +225,24 @@ public class LoginMainScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_PasswordVisibleToggleButtonItemStateChanged
 
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        // TODO add your handling code here:
+        String username = UsernameTextField.getText() + "main";
+        String password = PasswordTextField.getText();
+        
+        
+        String query = "SELECT count(*) FROM abbankDB.TableOfUsers WHERE Username = '"+username+"' and User_password = '"+ password + "';";
+        try {
+            int result = UserAccessManager.countRequest(query);
+            if(result == 1){
+                 new HomeScreen().setVisible(true);
+                 dispose();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginMainScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_LoginButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -257,6 +280,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel FinalErrorCheckerLabel;
     private javax.swing.JButton LoginButton;
     private javax.swing.JTextField PasswordTextField;
     private javax.swing.JToggleButton PasswordVisibleToggleButton;
@@ -270,7 +294,6 @@ public class LoginMainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private UISupport.LoginBackground loginBackground1;
     private UISupport.SignUpBackground signUpScreen1;
     // End of variables declaration//GEN-END:variables

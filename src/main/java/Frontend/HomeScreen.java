@@ -4,7 +4,7 @@
  */
 package Frontend;
 
-import Backend.TextManager;
+import Backend.TextFieldManager;
 import Backend.UserAccessManager;
 import java.net.URL;
 import javax.swing.DefaultListCellRenderer;
@@ -37,9 +37,9 @@ public class HomeScreen extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        TagList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        SettingList = new javax.swing.JList<>();
         WelcomeLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -49,6 +49,14 @@ public class HomeScreen extends javax.swing.JFrame {
         SendMessageTextField = new javax.swing.JTextField();
         SendMessageButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        BlockButton = new javax.swing.JButton();
+        DeleteButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        FriendButton = new javax.swing.JButton();
+        GroupButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList3 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -56,19 +64,28 @@ public class HomeScreen extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(153, 255, 204));
         jPanel1.setForeground(new java.awt.Color(255, 0, 0));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        TagList.setBackground(new java.awt.Color(153, 255, 204));
+        TagList.setForeground(new java.awt.Color(0, 0, 0));
+        TagList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(TagList);
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Settings", "Profile", "Friend requests", "Make group", " " };
+        SettingList.setBackground(new java.awt.Color(153, 255, 204));
+        SettingList.setForeground(new java.awt.Color(0, 0, 0));
+        SettingList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Settings", "Profile", "Friend requests", "Make group" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList2);
+        SettingList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                SettingListValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(SettingList);
 
         WelcomeLabel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         WelcomeLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\Bunnylogo.png")); // NOI18N
@@ -87,13 +104,11 @@ public class HomeScreen extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(WelcomeLabel)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel3)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -105,7 +120,7 @@ public class HomeScreen extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,15 +164,71 @@ public class HomeScreen extends javax.swing.JFrame {
                 .addGap(20, 20, 20))
         );
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        BlockButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\block_icon.png")); // NOI18N
+        BlockButton.setText("Block");
+
+        DeleteButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\delete_icon.png")); // NOI18N
+        DeleteButton.setText("Delete");
+
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\delete_message_icon.png")); // NOI18N
+        jButton1.setText("Delete message");
+
+        FriendButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\friend_icon.png")); // NOI18N
+        FriendButton.setText("Friend/s");
+
+        GroupButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\group_icon.png")); // NOI18N
+        GroupButton.setText("Group/s");
+
+        jList3.setBackground(new java.awt.Color(255, 255, 255));
+        jList3.setForeground(new java.awt.Color(0, 0, 0));
+        jList3.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(jList3);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(BlockButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DeleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(FriendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(GroupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BlockButton)
+                    .addComponent(DeleteButton)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FriendButton)
+                    .addComponent(GroupButton))
+                .addGap(110, 110, 110)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -167,8 +238,8 @@ public class HomeScreen extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -183,6 +254,10 @@ public class HomeScreen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void SettingListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_SettingListValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SettingListValueChanged
 
     /**
      * @param args the command line arguments
@@ -220,19 +295,27 @@ public class HomeScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BlockButton;
+    private javax.swing.JButton DeleteButton;
+    private javax.swing.JButton FriendButton;
+    private javax.swing.JButton GroupButton;
     private javax.swing.JTextArea MessageTextArea;
     private javax.swing.JButton SendMessageButton;
     private javax.swing.JTextField SendMessageTextField;
+    private javax.swing.JList<String> SettingList;
+    private javax.swing.JList<String> TagList;
     private javax.swing.JLabel WelcomeLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
+    private javax.swing.JList<String> jList3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

@@ -26,45 +26,17 @@ public class SettingScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        BackgroundPanel = new javax.swing.JPanel();
-        SettingLabel = new javax.swing.JLabel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 102, 0));
-
-        SettingLabel.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        SettingLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\Setting.png")); // NOI18N
-        SettingLabel.setText("Setting");
-
-        javax.swing.GroupLayout BackgroundPanelLayout = new javax.swing.GroupLayout(BackgroundPanel);
-        BackgroundPanel.setLayout(BackgroundPanelLayout);
-        BackgroundPanelLayout.setHorizontalGroup(
-            BackgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BackgroundPanelLayout.createSequentialGroup()
-                .addGap(161, 161, 161)
-                .addComponent(SettingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(143, Short.MAX_VALUE))
-        );
-        BackgroundPanelLayout.setVerticalGroup(
-            BackgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BackgroundPanelLayout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(SettingLabel)
-                .addContainerGap(528, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(BackgroundPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(BackgroundPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -106,7 +78,5 @@ public class SettingScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel BackgroundPanel;
-    private javax.swing.JLabel SettingLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,6 +19,10 @@ public class LoginBackground extends javax.swing.JPanel {
     /**
      * Creates new form LoginBackground
      */
+    
+    //From 28 to 38 is stolen
+    //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
+    //This jPanel is meant to be only for login-related screen but changed my mind
     public LoginBackground() {
         initComponents();
         setOpaque(false);

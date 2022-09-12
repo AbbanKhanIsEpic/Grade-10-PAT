@@ -21,6 +21,9 @@ public class SignUpBackground extends javax.swing.JPanel {
     /**
      * Creates new form SignUpScreen
      */
+    //From 29 to 39 is stolen
+    //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
+    //This jPanel is meant to be only for login-related screen but changed my mind
     public SignUpBackground() {
         initComponents();
         setOpaque(false);

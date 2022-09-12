@@ -59,6 +59,21 @@ public class UserAccessManager {
         try {
             String query = "Insert into abbankDB.TableOfUsers(Username,User_password,DisplayName,AccountCreated) Values ('"+username+"','"+password+"', '"+displayName+"',current_date());";
             update(query);
+            String table_name = displayName + "_msg";
+            query = " CREATE TABLE `" + table_name + "` ( \n" + 
+                    "`Friends` varchar(60) NOT NULL,\n " + 
+                    "`FriendsBlockOrNot` int(1) DEFAULT NULL,\n" + 
+                    "`FriendMessages` longtext Not Null,\n" + 
+                    "`GroupName` varchar(200) NOT NULL,\n" + 
+                    " `GroupList` varchar(200) NOT NULL,\n" + 
+                    " `GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
+                    " `GroupMessages` longtext Not Null,\n" +
+                    " PRIMARY KEY (`Friends`)\n" +
+                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+            
+            update(query);
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(UserAccessManager.class.getName()).log(Level.SEVERE, null, ex);
         }

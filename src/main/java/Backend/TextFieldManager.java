@@ -24,8 +24,8 @@ public class TextFieldManager {
                 
             }
             //This check if the Username is too long
-            //In MySQL, table max length is 64 (14 character for the tags)
-            else if(username.length() >= 50){
+            //In MySQL, table max length is 64 and need some space for the tags
+            else if(username.length() >= 45){
                 result = "Username is too long";
             }
             

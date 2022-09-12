@@ -238,6 +238,9 @@ public class LoginMainScreen extends javax.swing.JFrame {
                  new HomeScreen().setVisible(true);
                  dispose();
             }
+            else{
+                FinalErrorCheckerLabel.setText("Username or password is incorrect");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(LoginMainScreen.class.getName()).log(Level.SEVERE, null, ex);
         }

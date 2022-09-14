@@ -15,6 +15,8 @@ public class HomeScreen extends javax.swing.JFrame {
      */
     public HomeScreen() {
         initComponents();
+        
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -51,7 +53,6 @@ public class HomeScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 204));
 
-        FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\friend_icon.png")); // NOI18N
         FriendsOrGroupToggleButton.setText("Friends");
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -61,7 +62,6 @@ public class HomeScreen extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        DeleteMessageButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\delete_message_icon.png")); // NOI18N
         DeleteMessageButton.setText("Delete message");
         DeleteMessageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,7 +69,6 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        BlockButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\block_icon.png")); // NOI18N
         BlockButton.setText("Block");
         BlockButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,16 +76,20 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        TagsLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\TagIcon.png")); // NOI18N
+        TagsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/TagIcon_icon.png"))); // NOI18N
         TagsLabel.setText("Tags");
 
         TagsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        TagsComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TagsComboBoxActionPerformed(evt);
+            }
+        });
 
         WelcomeBackLabel.setForeground(new java.awt.Color(51, 51, 55));
-        WelcomeBackLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\hand_wave_icon.png")); // NOI18N
+        WelcomeBackLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
         WelcomeBackLabel.setText("Welcome back ");
 
-        SettingButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\Setting.png")); // NOI18N
         SettingButton.setText("Settings");
         SettingButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,8 +97,7 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        AddOrRemoveToggleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\delete_icon.png")); // NOI18N
-        AddOrRemoveToggleButton.setText("Add");
+        AddOrRemoveToggleButton.setText("remove");
 
         javax.swing.GroupLayout loginBackground1Layout = new javax.swing.GroupLayout(loginBackground1);
         loginBackground1.setLayout(loginBackground1Layout);
@@ -122,12 +124,11 @@ public class HomeScreen extends javax.swing.JFrame {
                                     .addComponent(DeleteMessageButton))
                                 .addComponent(FriendsOrGroupToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
-                        .addComponent(AddOrRemoveToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                        .addComponent(AddOrRemoveToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(loginBackground1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(SettingButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(SettingButton)))
+                .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginBackground1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(WelcomeBackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -148,7 +149,7 @@ public class HomeScreen extends javax.swing.JFrame {
                     .addComponent(TagsLabel))
                 .addGap(18, 18, 18)
                 .addComponent(Separator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(AddOrRemoveToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(FriendsOrGroupToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -177,14 +178,18 @@ public class HomeScreen extends javax.swing.JFrame {
             signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
                 .addContainerGap(147, Short.MAX_VALUE)
-                .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(signUpBackground1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
-                        .addComponent(SendMessageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(SendMessgeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(TalkToLabel)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(65, 65, 65))
+                        .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
+                                .addComponent(SendMessageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(73, 73, 73)
+                                .addComponent(SendMessgeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TalkToLabel))
+                        .addGap(65, 65, 65))))
         );
         signUpBackground1Layout.setVerticalGroup(
             signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,6 +237,11 @@ public class HomeScreen extends javax.swing.JFrame {
     private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SettingButtonActionPerformed
+
+    private void TagsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TagsComboBoxActionPerformed
+        // TODO add your handling code here:
+ 
+    }//GEN-LAST:event_TagsComboBoxActionPerformed
 
     /**
      * @param args the command line arguments

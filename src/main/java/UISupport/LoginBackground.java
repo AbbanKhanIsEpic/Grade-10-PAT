@@ -20,9 +20,10 @@ public class LoginBackground extends javax.swing.JPanel {
      * Creates new form LoginBackground
      */
     
-    //From 28 to 38 is stolen
+    //From 29 to 39 is stolen
     //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
     //This jPanel is meant to be only for login-related screen but changed my mind
+    //The reason for the colour is because blue represent a feeling of welcoming. The login screen is welcoming the user back to the program(for the LoginMainScreen)
     public LoginBackground() {
         initComponents();
         setOpaque(false);

@@ -15,6 +15,10 @@ public class ProfileScreen extends javax.swing.JFrame {
      */
     public ProfileScreen() {
         initComponents();
+        
+    }
+    public ProfileScreen(boolean edit) {
+        initComponents();
     }
 
     /**
@@ -26,17 +30,109 @@ public class ProfileScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        profileBackground1 = new UISupport.ProfileBackground();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        profileBackground2 = new UISupport.ProfileBackground();
+        ProfileIconLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        BioTextArea = new javax.swing.JTextArea();
+        BioLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        TagComboBox = new javax.swing.JComboBox<>();
+        DisplayNameLabel = new javax.swing.JLabel();
+        usernameLabel = new javax.swing.JLabel();
+
+        javax.swing.GroupLayout profileBackground1Layout = new javax.swing.GroupLayout(profileBackground1);
+        profileBackground1.setLayout(profileBackground1Layout);
+        profileBackground1Layout.setHorizontalGroup(
+            profileBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        profileBackground1Layout.setVerticalGroup(
+            profileBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        ProfileIconLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\account_icon.png")); // NOI18N
+
+        BioTextArea.setEditable(false);
+        BioTextArea.setColumns(20);
+        BioTextArea.setRows(5);
+        jScrollPane1.setViewportView(BioTextArea);
+
+        BioLabel.setText("Bio:");
+
+        jLabel2.setText("Current tag:");
+
+        TagComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        DisplayNameLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        DisplayNameLabel.setText("KingKhanTheGreat");
+
+        usernameLabel.setText("@AmongusFart");
+
+        javax.swing.GroupLayout profileBackground2Layout = new javax.swing.GroupLayout(profileBackground2);
+        profileBackground2.setLayout(profileBackground2Layout);
+        profileBackground2Layout.setHorizontalGroup(
+            profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, profileBackground2Layout.createSequentialGroup()
+                .addContainerGap(137, Short.MAX_VALUE)
+                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BioLabel))
+                .addGap(121, 121, 121))
+            .addGroup(profileBackground2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(TagComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
+                .addGap(202, 202, 202)
+                .addComponent(ProfileIconLabel)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(profileBackground2Layout.createSequentialGroup()
+                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(profileBackground2Layout.createSequentialGroup()
+                        .addGap(280, 280, 280)
+                        .addComponent(DisplayNameLabel))
+                    .addGroup(profileBackground2Layout.createSequentialGroup()
+                        .addGap(300, 300, 300)
+                        .addComponent(usernameLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        profileBackground2Layout.setVerticalGroup(
+            profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(profileBackground2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, profileBackground2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TagComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ProfileIconLabel, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(18, 18, 18)
+                .addComponent(DisplayNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(usernameLabel)
+                .addGap(28, 28, 28)
+                .addComponent(BioLabel)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(85, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(profileBackground2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(profileBackground2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -46,6 +142,8 @@ public class ProfileScreen extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -68,7 +166,7 @@ public class ProfileScreen extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ProfileScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -78,5 +176,16 @@ public class ProfileScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BioLabel;
+    private javax.swing.JTextArea BioTextArea;
+    private javax.swing.JLabel DisplayNameLabel;
+    private javax.swing.JLabel ProfileIconLabel;
+    private javax.swing.JComboBox<String> TagComboBox;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private UISupport.ProfileBackground profileBackground1;
+    private UISupport.ProfileBackground profileBackground2;
+    private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }

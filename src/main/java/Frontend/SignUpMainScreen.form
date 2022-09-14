@@ -58,16 +58,16 @@
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <Component id="UsernameErrorCheckerLabel" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <Component id="PasswordTextField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel1" max="32767" attributes="0"/>
                               <Component id="UsernameTextField" alignment="0" max="32767" attributes="0"/>
                               <Component id="SignUpButton" alignment="0" max="32767" attributes="0"/>
-                              <Component id="ConfirmedPasswordTextField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="passwordPasswordField" max="32767" attributes="0"/>
+                              <Component id="confirmPasswordPasswordField" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jToggleButton2" min="-2" pref="81" max="-2" attributes="0"/>
-                              <Component id="jToggleButton1" min="-2" pref="81" max="-2" attributes="0"/>
+                              <Component id="ConfirmPasswordVisibleToggleButton" min="-2" pref="81" max="-2" attributes="0"/>
+                              <Component id="PasswordVisibleToggleButton" min="-2" pref="81" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -90,25 +90,25 @@
                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jToggleButton1" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="PasswordTextField" min="-2" max="-2" attributes="0"/>
+                      <Component id="PasswordVisibleToggleButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="passwordPasswordField" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="PasswordErrorCheckerLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jToggleButton2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="ConfirmedPasswordTextField" min="-2" max="-2" attributes="0"/>
+                      <Component id="ConfirmPasswordVisibleToggleButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="confirmPasswordPasswordField" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="ConfirmedPasswordErrorCheckerLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="SignUpButton" min="-2" pref="34" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Component id="FinalErrorCheckerLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="73" max="32767" attributes="0"/>
+                  <EmptySpace pref="44" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -171,11 +171,6 @@
             <Property name="text" type="java.lang.String" value="Password:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="PasswordTextField">
-          <Events>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="PasswordTextFieldFocusLost"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JLabel" name="PasswordErrorCheckerLabel">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -200,11 +195,6 @@
             <Property name="text" type="java.lang.String" value="Confirm password:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="ConfirmedPasswordTextField">
-          <Events>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ConfirmedPasswordTextFieldKeyReleased"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JLabel" name="ConfirmedPasswordErrorCheckerLabel">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -228,19 +218,25 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SignUpButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+        <Component class="javax.swing.JToggleButton" name="PasswordVisibleToggleButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\abban\Documents\NetBeansProjects\Random things\Messages\src\main\Images\open_eye.png"/>
+              <Image iconType="3" name="/Images/close_eye_icon.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="PasswordVisibleToggleButtonItemStateChanged"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton2">
+        <Component class="javax.swing.JToggleButton" name="ConfirmPasswordVisibleToggleButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\abban\Documents\NetBeansProjects\Random things\Messages\src\main\Images\close_eye_icon.png"/>
+              <Image iconType="3" name="/Images/close_eye_icon.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="ConfirmPasswordVisibleToggleButtonItemStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="FinalErrorCheckerLabel">
           <Properties>
@@ -248,6 +244,16 @@
               <Color blue="0" green="0" red="ff" type="rgb"/>
             </Property>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="passwordPasswordField">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="passwordPasswordFieldKeyReleased"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="confirmPasswordPasswordField">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="confirmPasswordPasswordFieldKeyReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

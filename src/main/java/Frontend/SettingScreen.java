@@ -38,19 +38,22 @@ public class SettingScreen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        returnButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\left_arrow_icon.png")); // NOI18N
+        returnButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/left_arrow_icon.png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\account_icon.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_small_icon.png"))); // NOI18N
         jLabel1.setText("Account:");
 
         SettingLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        SettingLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Setting_icon.png"))); // NOI18N
         SettingLabel.setText("Setting");
 
         HelpLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        HelpLabel.setText("Help:");
+        HelpLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/House_icon.png"))); // NOI18N
+        HelpLabel.setText("      Help:");
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png"))); // NOI18N
         jLabel2.setText("Display:");
 
         openAccountButton.setText(">");
@@ -77,36 +80,32 @@ public class SettingScreen extends javax.swing.JFrame {
                 .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(settingPanel1Layout.createSequentialGroup()
                         .addGap(134, 134, 134)
-                        .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel1))
+                        .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
                             .addGroup(settingPanel1Layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
-                                .addComponent(HelpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(12, 12, 12)
+                                .addComponent(HelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(137, 137, 137)
+                        .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(openHelpButton)
+                            .addComponent(openAccountButton)
+                            .addComponent(openDisplayButton)))
                     .addGroup(settingPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(returnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(191, 191, 191)
+                        .addGap(197, 197, 197)
                         .addComponent(SettingLabel)))
-                .addGap(62, 62, 62)
-                .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(openHelpButton)
-                    .addComponent(openAccountButton)
-                    .addComponent(openDisplayButton))
                 .addContainerGap(189, Short.MAX_VALUE))
         );
         settingPanel1Layout.setVerticalGroup(
             settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingPanel1Layout.createSequentialGroup()
-                .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(settingPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(returnButton))
-                    .addGroup(settingPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(SettingLabel)))
-                .addGap(50, 50, 50)
+                .addContainerGap()
+                .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(returnButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SettingLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(52, 52, 52)
                 .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(openAccountButton))

@@ -18,6 +18,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
     /**
      * Creates new form LoginMainScreeb
      */
+    private String visiblePassword = "";
     public LoginMainScreen() {
         initComponents();
     }
@@ -37,10 +38,10 @@ public class LoginMainScreen extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         UsernameTextField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        PasswordTextField = new javax.swing.JTextField();
         LoginButton = new javax.swing.JButton();
         FinalErrorCheckerLabel = new javax.swing.JLabel();
         PasswordVisibleToggleButton = new javax.swing.JToggleButton();
+        passwordPasswordField = new javax.swing.JPasswordField();
         signUpScreen1 = new UISupport.SignUpBackground();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -82,7 +83,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         FinalErrorCheckerLabel.setBackground(new java.awt.Color(255, 0, 0));
         FinalErrorCheckerLabel.setForeground(new java.awt.Color(255, 0, 0));
 
-        PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\open_eye.png")); // NOI18N
+        PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png"))); // NOI18N
         PasswordVisibleToggleButton.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 PasswordVisibleToggleButtonItemStateChanged(evt);
@@ -94,7 +95,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         loginBackground1Layout.setHorizontalGroup(
             loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginBackground1Layout.createSequentialGroup()
-                .addGap(74, 74, 74)
+                .addGap(80, 80, 80)
                 .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(FinalErrorCheckerLabel)
                     .addGroup(loginBackground1Layout.createSequentialGroup()
@@ -103,9 +104,9 @@ public class LoginMainScreen extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
-                            .addComponent(PasswordTextField)
                             .addComponent(UsernameTextField)
-                            .addComponent(LoginButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
+                            .addComponent(LoginButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                            .addComponent(passwordPasswordField))
                         .addGap(18, 18, 18)
                         .addComponent(PasswordVisibleToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(185, Short.MAX_VALUE))
@@ -122,16 +123,17 @@ public class LoginMainScreen extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(PasswordVisibleToggleButton))
-                .addGap(19, 19, 19)
+                .addGap(42, 42, 42)
                 .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(FinalErrorCheckerLabel)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -164,7 +166,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         signUpScreen1Layout.setHorizontalGroup(
             signUpScreen1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpScreen1Layout.createSequentialGroup()
-                .addContainerGap(87, Short.MAX_VALUE)
+                .addContainerGap(81, Short.MAX_VALUE)
                 .addGroup(signUpScreen1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel6)
@@ -215,20 +217,22 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
     private void PasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PasswordVisibleToggleButtonItemStateChanged
         // This code change the visuial of the toggle button
-        if(evt.getStateChange() == 2){
-            
+        if(evt.getStateChange() == 1){
+            PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
+            passwordPasswordField.setEchoChar((char)0);
         }
         else{
-            PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));//This code is taken from:
-            //https://github.com/ReddIT-SA/PATExample/blob/master/src/main/java/UI/MainMenuUI.java
-            //Line 53
+            PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
+            passwordPasswordField.setEchoChar('*');
         }
+        
+        //The setEchoChar code was found from https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing
     }//GEN-LAST:event_PasswordVisibleToggleButtonItemStateChanged
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         // TODO add your handling code here:
         String username = UsernameTextField.getText() + "main";
-        String password = PasswordTextField.getText();
+        String password = passwordPasswordField.getText();
         
         
         String query = "SELECT count(*) FROM abbankDB.TableOfUsers WHERE Username = '"+username+"' and User_password = '"+ password + "';";
@@ -285,7 +289,6 @@ public class LoginMainScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel FinalErrorCheckerLabel;
     private javax.swing.JButton LoginButton;
-    private javax.swing.JTextField PasswordTextField;
     private javax.swing.JToggleButton PasswordVisibleToggleButton;
     private javax.swing.JButton SignUpButton;
     private javax.swing.JTextField UsernameTextField;
@@ -298,6 +301,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private UISupport.LoginBackground loginBackground1;
+    private javax.swing.JPasswordField passwordPasswordField;
     private UISupport.SignUpBackground signUpScreen1;
     // End of variables declaration//GEN-END:variables
 }

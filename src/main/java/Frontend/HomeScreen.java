@@ -53,6 +53,7 @@ public class HomeScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 204));
 
+        FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png"))); // NOI18N
         FriendsOrGroupToggleButton.setText("Friends");
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -62,6 +63,7 @@ public class HomeScreen extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
+        DeleteMessageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_message_icon.png"))); // NOI18N
         DeleteMessageButton.setText("Delete message");
         DeleteMessageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,6 +71,7 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
+        BlockButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/block_icon.png"))); // NOI18N
         BlockButton.setText("Block");
         BlockButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,6 +100,7 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
+        AddOrRemoveToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_icon.png"))); // NOI18N
         AddOrRemoveToggleButton.setText("remove");
 
         javax.swing.GroupLayout loginBackground1Layout = new javax.swing.GroupLayout(loginBackground1);
@@ -177,7 +181,7 @@ public class HomeScreen extends javax.swing.JFrame {
         signUpBackground1Layout.setHorizontalGroup(
             signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
-                .addContainerGap(147, Short.MAX_VALUE)
+                .addContainerGap(146, Short.MAX_VALUE)
                 .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(signUpBackground1Layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)

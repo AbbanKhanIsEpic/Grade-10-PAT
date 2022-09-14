@@ -132,6 +132,9 @@
       <SubComponents>
         <Component class="javax.swing.JToggleButton" name="FriendsOrGroupToggleButton">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/friend_icon.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Friends"/>
           </Properties>
         </Component>
@@ -162,6 +165,9 @@
         </Container>
         <Component class="javax.swing.JButton" name="DeleteMessageButton">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/delete_message_icon.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Delete message"/>
           </Properties>
           <Events>
@@ -170,6 +176,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="BlockButton">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/block_icon.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Block"/>
           </Properties>
           <Events>
@@ -229,6 +238,9 @@
         </Component>
         <Component class="javax.swing.JToggleButton" name="AddOrRemoveToggleButton">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/delete_icon.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="remove"/>
           </Properties>
         </Component>
@@ -240,7 +252,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="147" max="32767" attributes="0"/>
+                  <EmptySpace pref="146" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jScrollPane2" min="-2" pref="478" max="-2" attributes="0"/>

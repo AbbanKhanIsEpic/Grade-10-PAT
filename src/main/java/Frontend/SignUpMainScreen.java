@@ -39,15 +39,15 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         UsernameTextField = new javax.swing.JTextField();
         UsernameErrorCheckerLabel = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        PasswordTextField = new javax.swing.JTextField();
         PasswordErrorCheckerLabel = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        ConfirmedPasswordTextField = new javax.swing.JTextField();
         ConfirmedPasswordErrorCheckerLabel = new javax.swing.JLabel();
         SignUpButton = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
+        PasswordVisibleToggleButton = new javax.swing.JToggleButton();
+        ConfirmPasswordVisibleToggleButton = new javax.swing.JToggleButton();
         FinalErrorCheckerLabel = new javax.swing.JLabel();
+        passwordPasswordField = new javax.swing.JPasswordField();
+        confirmPasswordPasswordField = new javax.swing.JPasswordField();
         loginBackground1 = new UISupport.LoginBackground();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -81,12 +81,6 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Password:");
 
-        PasswordTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                PasswordTextFieldFocusLost(evt);
-            }
-        });
-
         PasswordErrorCheckerLabel.setBackground(new java.awt.Color(255, 0, 0));
         PasswordErrorCheckerLabel.setForeground(new java.awt.Color(255, 0, 0));
 
@@ -94,12 +88,6 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Confirm password:");
-
-        ConfirmedPasswordTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                ConfirmedPasswordTextFieldKeyReleased(evt);
-            }
-        });
 
         ConfirmedPasswordErrorCheckerLabel.setBackground(new java.awt.Color(255, 0, 0));
         ConfirmedPasswordErrorCheckerLabel.setForeground(new java.awt.Color(255, 0, 0));
@@ -112,11 +100,33 @@ public class SignUpMainScreen extends javax.swing.JFrame {
             }
         });
 
-        jToggleButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\open_eye.png")); // NOI18N
+        PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png"))); // NOI18N
+        PasswordVisibleToggleButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                PasswordVisibleToggleButtonItemStateChanged(evt);
+            }
+        });
 
-        jToggleButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\abban\\Documents\\NetBeansProjects\\Random things\\Messages\\src\\main\\Images\\close_eye_icon.png")); // NOI18N
+        ConfirmPasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png"))); // NOI18N
+        ConfirmPasswordVisibleToggleButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ConfirmPasswordVisibleToggleButtonItemStateChanged(evt);
+            }
+        });
 
         FinalErrorCheckerLabel.setForeground(new java.awt.Color(255, 0, 0));
+
+        passwordPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                passwordPasswordFieldKeyReleased(evt);
+            }
+        });
+
+        confirmPasswordPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                confirmPasswordPasswordFieldKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout signUpBackground1Layout = new javax.swing.GroupLayout(signUpBackground1);
         signUpBackground1.setLayout(signUpBackground1Layout);
@@ -134,15 +144,15 @@ public class SignUpMainScreen extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(UsernameErrorCheckerLabel)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(PasswordTextField)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(UsernameTextField)
                             .addComponent(SignUpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ConfirmedPasswordTextField))
+                            .addComponent(passwordPasswordField)
+                            .addComponent(confirmPasswordPasswordField))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(ConfirmPasswordVisibleToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PasswordVisibleToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(144, Short.MAX_VALUE))
         );
         signUpBackground1Layout.setVerticalGroup(
@@ -160,23 +170,23 @@ public class SignUpMainScreen extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addGap(18, 18, 18)
                 .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToggleButton1)
-                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(PasswordVisibleToggleButton)
+                    .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addComponent(PasswordErrorCheckerLabel)
                 .addGap(29, 29, 29)
                 .addComponent(jLabel11)
                 .addGap(18, 18, 18)
                 .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToggleButton2)
-                    .addComponent(ConfirmedPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(ConfirmPasswordVisibleToggleButton)
+                    .addComponent(confirmPasswordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addComponent(ConfirmedPasswordErrorCheckerLabel)
-                .addGap(35, 35, 35)
+                .addGap(23, 23, 23)
                 .addComponent(SignUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(FinalErrorCheckerLabel)
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -245,55 +255,6 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void UsernameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UsernameTextFieldFocusLost
-        // TODO add your handling code here:
-            String username = UsernameTextField.getText() + "main";
-            String display = TextFieldManager.isUsernameAllowed(username);
-            if(display.equals("Everything looks alright")){
-                UsernameErrorCheckerLabel.setForeground(Color.darkGray);
-            } 
-            else{
-                UsernameErrorCheckerLabel.setForeground(Color.red);
-            }
-            UsernameErrorCheckerLabel.setText(display);
-    }//GEN-LAST:event_UsernameTextFieldFocusLost
-
-    private void PasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PasswordTextFieldFocusLost
-        // TODO add your handling code here:
-        String password = PasswordTextField.getText();
-        String username = UsernameTextField.getText();
-        String display = TextFieldManager.isPasswordSafe(password,username);
-        
-        if(display.equals("Everything looks alright")){
-            
-            PasswordErrorCheckerLabel.setForeground(Color.darkGray);
-        } 
-        else{
-            
-            PasswordErrorCheckerLabel.setForeground(Color.red);
-        }
-        
-        PasswordErrorCheckerLabel.setText(display);
-    }//GEN-LAST:event_PasswordTextFieldFocusLost
-
-    private void ConfirmedPasswordTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ConfirmedPasswordTextFieldKeyReleased
-        // TODO add your handling code here:
-        String display = "Everything looks alright";
-        if(!(ConfirmedPasswordTextField.getText().equals(PasswordTextField.getText()))){
-            display = "The password are not the same";
-        }
-        if(display.equals("Everything looks alright")){
-            
-            ConfirmedPasswordErrorCheckerLabel.setForeground(Color.darkGray);
-        } 
-        else{
-            
-            ConfirmedPasswordErrorCheckerLabel.setForeground(Color.red);
-        }
-        
-        ConfirmedPasswordErrorCheckerLabel.setText(display);
-    }//GEN-LAST:event_ConfirmedPasswordTextFieldKeyReleased
-
     private void SignUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpButtonActionPerformed
         // TODO add your handling code here:
         String usernameLabelColour = UsernameErrorCheckerLabel.getForeground().toString();
@@ -301,7 +262,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         String confirmedPasswordLabelColour = UsernameErrorCheckerLabel.getForeground().toString();
         
         String username = UsernameTextField.getText();
-        String password = PasswordTextField.getText();
+        String password = passwordPasswordField.getText();
         
         if(usernameLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")&&passwordLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")&&confirmedPasswordLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")){
             UserAccessManager.createAccount(username, password);
@@ -319,6 +280,76 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         new LoginMainScreen().setVisible(true);
         dispose();
     }//GEN-LAST:event_LoginButtonActionPerformed
+
+    private void PasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PasswordVisibleToggleButtonItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == 1){
+            PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
+            passwordPasswordField.setEchoChar((char)0);
+        }
+        else{
+            PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
+            passwordPasswordField.setEchoChar('*');
+        }
+        
+        //The setEchoChar code was found from https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing
+    }//GEN-LAST:event_PasswordVisibleToggleButtonItemStateChanged
+
+    private void ConfirmPasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ConfirmPasswordVisibleToggleButtonItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == 1){
+            ConfirmPasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
+            confirmPasswordPasswordField.setEchoChar((char)0);
+        }
+        else{
+            ConfirmPasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
+            confirmPasswordPasswordField.setEchoChar('*');
+            
+            //The setEchoChar code was found from https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing
+        }
+    }//GEN-LAST:event_ConfirmPasswordVisibleToggleButtonItemStateChanged
+
+    private void confirmPasswordPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_confirmPasswordPasswordFieldKeyReleased
+        // TODO add your handling code here:
+        if(confirmPasswordPasswordField.getText().equals(passwordPasswordField.getText())){
+            ConfirmedPasswordErrorCheckerLabel.setForeground(Color.darkGray);
+            ConfirmedPasswordErrorCheckerLabel.setText("Everything looks alright");
+        }
+        else{
+            ConfirmedPasswordErrorCheckerLabel.setForeground(Color.red);
+            ConfirmedPasswordErrorCheckerLabel.setText("Passwords must be the same");
+
+        }
+    }//GEN-LAST:event_confirmPasswordPasswordFieldKeyReleased
+
+    private void passwordPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordPasswordFieldKeyReleased
+        // TODO add your handling code here:
+        String username = UsernameTextField.getText();
+        String password = passwordPasswordField.getText();
+        
+        String display = TextFieldManager.isPasswordSafe(password, username);
+        
+        if(display.equals("Everything looks alright")){
+                PasswordErrorCheckerLabel.setForeground(Color.darkGray);
+            } 
+            else{
+                PasswordErrorCheckerLabel.setForeground(Color.red);
+            }
+            PasswordErrorCheckerLabel.setText(display);
+    }//GEN-LAST:event_passwordPasswordFieldKeyReleased
+
+    private void UsernameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UsernameTextFieldFocusLost
+        // TODO add your handling code here
+            String username = UsernameTextField.getText() + "main";
+            String display = TextFieldManager.isUsernameAllowed(username);
+            if(display.equals("Everything looks alright")){
+                UsernameErrorCheckerLabel.setForeground(Color.darkGray);
+            } 
+            else{
+                UsernameErrorCheckerLabel.setForeground(Color.red);
+            }
+            UsernameErrorCheckerLabel.setText(display);
+    }//GEN-LAST:event_UsernameTextFieldFocusLost
 
     /**
      * @param args the command line arguments
@@ -356,15 +387,16 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton ConfirmPasswordVisibleToggleButton;
     private javax.swing.JLabel ConfirmedPasswordErrorCheckerLabel;
-    private javax.swing.JTextField ConfirmedPasswordTextField;
     private javax.swing.JLabel FinalErrorCheckerLabel;
     private javax.swing.JButton LoginButton;
     private javax.swing.JLabel PasswordErrorCheckerLabel;
-    private javax.swing.JTextField PasswordTextField;
+    private javax.swing.JToggleButton PasswordVisibleToggleButton;
     private javax.swing.JButton SignUpButton;
     private javax.swing.JLabel UsernameErrorCheckerLabel;
     private javax.swing.JTextField UsernameTextField;
+    private javax.swing.JPasswordField confirmPasswordPasswordField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -372,9 +404,8 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToggleButton jToggleButton2;
     private UISupport.LoginBackground loginBackground1;
+    private javax.swing.JPasswordField passwordPasswordField;
     private UISupport.SignUpBackground signUpBackground1;
     // End of variables declaration//GEN-END:variables
 }

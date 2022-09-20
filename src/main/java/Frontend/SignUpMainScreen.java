@@ -4,7 +4,7 @@
  */
 package Frontend;
 
-import Backend.TextFieldManager;
+
 import Backend.UserAccessManager;
 import java.awt.Color;
 import java.sql.SQLException;
@@ -292,7 +292,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
             passwordPasswordField.setEchoChar('*');
         }
         
-        //The setEchoChar code was found from https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing
+        
     }//GEN-LAST:event_PasswordVisibleToggleButtonItemStateChanged
 
     private void ConfirmPasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ConfirmPasswordVisibleToggleButtonItemStateChanged
@@ -305,7 +305,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
             ConfirmPasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
             confirmPasswordPasswordField.setEchoChar('*');
             
-            //The setEchoChar code was found from https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing
+            
         }
     }//GEN-LAST:event_ConfirmPasswordVisibleToggleButtonItemStateChanged
 
@@ -327,7 +327,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         String username = UsernameTextField.getText();
         String password = passwordPasswordField.getText();
         
-        String display = TextFieldManager.isPasswordSafe(password, username);
+        String display = UserAccessManager.isPasswordSafe(password, username);
         
         if(display.equals("Everything looks alright")){
                 PasswordErrorCheckerLabel.setForeground(Color.darkGray);
@@ -341,7 +341,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     private void UsernameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UsernameTextFieldFocusLost
         // TODO add your handling code here
             String username = UsernameTextField.getText() + "main";
-            String display = TextFieldManager.isUsernameAllowed(username);
+            String display = UserAccessManager.isUsernameAllowed(username);
             if(display.equals("Everything looks alright")){
                 UsernameErrorCheckerLabel.setForeground(Color.darkGray);
             } 

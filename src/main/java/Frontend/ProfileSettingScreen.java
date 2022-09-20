@@ -147,7 +147,7 @@ public class ProfileSettingScreen extends javax.swing.JFrame {
                         .addComponent(DisplayNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(UpdateDisplayNameButton)))
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addContainerGap(281, Short.MAX_VALUE))
         );
         settingBackground1Layout.setVerticalGroup(
             settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,14 +207,24 @@ public class ProfileSettingScreen extends javax.swing.JFrame {
 
     private void DeleteTagButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteTagButtonActionPerformed
         // TODO add your handling code here:
-        TagDefaultList.removeElementAt(TagList.getSelectedIndex());
+        if(TagDefaultList.elementAt(TagList.getSelectedIndex()).equals("Main")){
+            
+        }else{
+            TagDefaultList.removeElementAt(TagList.getSelectedIndex());
+        }
+        
         
     }//GEN-LAST:event_DeleteTagButtonActionPerformed
 
     private void AddTagButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddTagButtonActionPerformed
         // TODO add your handling code here:
         String add = CreateTagTextField.getText();
-        TagDefaultList.addElement(CreateTagTextField.getText());
+        if(!(TagDefaultList.contains(add))){
+            TagDefaultList.addElement(add);
+        }
+        else{
+            
+        }
        
     }//GEN-LAST:event_AddTagButtonActionPerformed
 

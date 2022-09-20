@@ -18,10 +18,14 @@ public class LoginMainScreen extends javax.swing.JFrame {
     /**
      * Creates new form LoginMainScreeb
      */
-    private String visiblePassword = "";
     public LoginMainScreen() {
         initComponents();
     }
+    public LoginMainScreen(int usage) {
+        initComponents();
+    }
+    //if int usage = 0; means that the user is logining to the home screen
+    //if int usage = 1; means that the user is adding an account
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -226,7 +230,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
             passwordPasswordField.setEchoChar('*');
         }
         
-        //The setEchoChar code was found from https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing
+        
     }//GEN-LAST:event_PasswordVisibleToggleButtonItemStateChanged
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed

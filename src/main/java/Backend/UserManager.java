@@ -5,13 +5,9 @@
 package Backend;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import com.mysql.cj.protocol.Resultset;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,64 +15,15 @@ import java.util.logging.Logger;
  *
  * @author abban
  */
-public class UserAccessManager {
-    //Most of the code comes from https://github.com/cliftonbartholomew/SchoolPracticalsGr10/blob/master/src/main/java/SQL/DatabaseManager.java
-    private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String url = "jdbc:mysql://102.130.115.69:3306/abbankDB";
-    private static final String user = "abbank";
-    private static final String pass = "Reddam2021";
-    
-   	//INSERT, UPDATE or DELETE
-	public static void update(String update) throws SQLException {
-		Connection conn = DriverManager.getConnection(url, user, pass);
-
-		PreparedStatement statement = conn.prepareStatement(update);
-		statement.executeUpdate();
-		statement.close();
-	}
-
-	//SELECT
-	public static int countQuery(String stmt) throws SQLException {
-                int count = 0;
-		Connection conn = DriverManager.getConnection(url, user, pass);
-
-		PreparedStatement statement = conn.prepareStatement(stmt);
-               
-		ResultSet resultSet = statement.executeQuery();
-                while(resultSet.next()){
-                    count = resultSet.getInt("count(*)");
-                }
-               return count;
-	}
-        public static int countRequest(String query) throws SQLException {
-                int result = countQuery(query);
-                return result;
-       
-        }
-        public static void createAccount(String username,String password){
-        try {
-            String query = "Insert into abbankDB.TableOfUsers(Username,User_password,DisplayName,AccountCreated,IPAdress) Values ('"+username+"','"+password+"', '"+username+"',current_date(),null);";
-            update(query);
-            String table_name = username + "_msg";
-            query = " CREATE TABLE `" + table_name + "` ( \n" + 
-                    "`Friends` varchar(60) NOT NULL,\n " + 
-                    "`FriendsBlockOrNot` int(1) DEFAULT NULL,\n" + 
-                    "`FriendMessages` longtext NOT NULL,\n" + 
-                    "`GroupName` varchar(200) NOT NULL,\n" + 
-                    "`GroupList` varchar(200) NOT NULL,\n" + 
-                    " `GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
-                    " `GroupMessages` longtext NOT NULL,\n" +
-                    " PRIMARY KEY (`Friends`)\n" +
-                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+public class UserManager {
+        public static boolean isLoginValid(String username, String password) throws SQLException{
             
-            update(query);
-            
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(UserAccessManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }
-        public static String isUsernameAllowed(String username) {
+            ResultSet user = DB.query("SELECT COUNT(*) FROM TableOfUsers WHERE Username = '" + username +"' AND Password = '" + password +"';");
+            user.next();
+            int count = user.getInt(1);
+            return count==1;
+        }   
+        public static String isUsernameValid(String username){
             String result = "Everything looks alright";
             
             //Checking the length of the inputted username
@@ -93,8 +40,11 @@ public class UserAccessManager {
             
             //This check if the username is unique
             try {
-                int unique = countQuery("SELECT count(*) FROM abbankDB.TableOfUsers WHERE Username = '"+username+"';");
-                if(unique == 1){
+                ResultSet unique = DB.query("SELECT count(*) FROM abbankDB.TableOfUsers WHERE Username = '"+username+"';");
+                unique.next();
+                int uniqueInt = unique.getInt(1);
+                
+                if(uniqueInt == 1){
                      result = "This username alright exists";
                      return result;
                 
@@ -113,7 +63,8 @@ public class UserAccessManager {
           
             return result;
         }
-        public static String isPasswordSafe(String password,String username){
+        
+    public static String isPasswordSafe(String password,String username){
             String result = "Everything looks alright";
             
             //This check the length
@@ -170,4 +121,45 @@ public class UserAccessManager {
                     
             return result;
         }
+    public static void createAccount(String username, String password) throws SQLException{
+       DB.update("INSERT INTO abbankDB.TableOfUsers Values('"+username+"','"+password+"','"+username+"',current_date(),null);");
+       //msg is short for Messages
+       String table = username + "_msg";
+       
+       DB.update(" CREATE TABLE `" + table + "` ( \n" + 
+                    "`Friends` varchar(60) NOT NULL,\n " + 
+                    "`FriendsBlockOrNot` int(1) DEFAULT NULL,\n" + 
+                    "`FriendMessages` longtext NOT NULL,\n" + 
+                    "`GroupName` varchar(200) NOT NULL,\n" + 
+                    "`GroupMemember1` varchar(60) NOT NULL,\n" + 
+                    "`GroupMemember2` varchar(60) NOT NULL,\n" + 
+                    "`GroupMemember3` varchar(60) NOT NULL,\n" + 
+                    "`GroupMemember4` varchar(200) NOT NULL,\n" +
+                    "`GroupMemember5` varchar(200) NOT NULL,\n" + 
+                    " `GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
+                    " `GroupMessages` longtext NOT NULL,\n" +
+                    " PRIMARY KEY (`Friends`)\n" +
+                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
+       
+       //Set is short for setting
+       table = username + "_set";
+       DB.update(" CREATE TABLE `" + table + "` ( \n" + 
+                    "`ProfileIcon` int(1) NOT NULL,\n " + 
+                    "`Autobiography` varchar(255) DEFAULT NULL,\n" + 
+                    "`Account1` varchar(60) NOT NULL,\n" + 
+                    "`Account2` varchar(60) NOT NULL,\n" + 
+                    "`Account3` varchar(60) NOT NULL,\n" + 
+                    "`FistColourSideMenu` varchar(7) NOT NULL,\n" +
+                    "`LastColourSideMenu` varchar(7) NOT NULL,\n" + 
+                    "`FistColourTextingArea` varchar(7) NOT NULL,\n" +
+                    "`LastColourTextingArea` varchar(7) NOT NULL,\n" +
+                    "`FistColourProfileMenu` varchar(7) NOT NULL,\n" +
+                    "`LastColourProfileMenu` varchar(7) NOT NULL,\n" + 
+                    " `GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
+                    " `GroupMessages` longtext NOT NULL,\n" +
+                    " PRIMARY KEY (`Friends`)\n" +
+                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
+       
+       
+    }
 }

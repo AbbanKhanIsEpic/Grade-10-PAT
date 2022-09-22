@@ -340,7 +340,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
 
     private void UsernameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UsernameTextFieldFocusLost
         // TODO add your handling code here
-            String username = UsernameTextField.getText() + "main";
+            String username = UsernameTextField.getText();
             String display = UserAccessManager.isUsernameAllowed(username);
             if(display.equals("Everything looks alright")){
                 UsernameErrorCheckerLabel.setForeground(Color.darkGray);

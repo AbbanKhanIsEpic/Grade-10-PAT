@@ -4,6 +4,8 @@
  */
 package Frontend;
 
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author abban
@@ -13,10 +15,18 @@ public class HomeScreen extends javax.swing.JFrame {
     /**
      * Creates new form HomeScreen
      */
+    DefaultListModel TagDefaultList = new DefaultListModel();
+    String[] tags = {"Main"};
     public HomeScreen() {
         initComponents();
-        
+      
         setLocationRelativeTo(null);
+        
+        for(int i = 0; i < tags.length; i++){
+            TagDefaultList.addElement(tags[i]);
+            this.FriendORGroupList.setModel(TagDefaultList);
+        }
+
     }
 
     /**
@@ -32,13 +42,13 @@ public class HomeScreen extends javax.swing.JFrame {
         loginBackground1 = new UISupport.LoginBackground();
         FriendsOrGroupToggleButton = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        FriendORGroupList = new javax.swing.JList<>();
         DeleteMessageButton = new javax.swing.JButton();
         BlockButton = new javax.swing.JButton();
         Separator3 = new javax.swing.JSeparator();
         Separator2 = new javax.swing.JSeparator();
-        changeAccountLabel = new javax.swing.JLabel();
-        TagsComboBox = new javax.swing.JComboBox<>();
+        swapAccountLabel = new javax.swing.JLabel();
+        SwapAccountComboBox = new javax.swing.JComboBox<>();
         Separator1 = new javax.swing.JSeparator();
         WelcomeBackLabel = new javax.swing.JLabel();
         SettingButton = new javax.swing.JButton();
@@ -62,12 +72,12 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        FriendORGroupList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(FriendORGroupList);
 
         DeleteMessageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_message_icon.png"))); // NOI18N
         DeleteMessageButton.setText("Delete message");
@@ -85,13 +95,13 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        changeAccountLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/change_account_icon.png"))); // NOI18N
-        changeAccountLabel.setText("Change account");
+        swapAccountLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/change_account_icon.png"))); // NOI18N
+        swapAccountLabel.setText("swap account");
 
-        TagsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        TagsComboBox.addActionListener(new java.awt.event.ActionListener() {
+        SwapAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        SwapAccountComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TagsComboBoxActionPerformed(evt);
+                SwapAccountComboBoxActionPerformed(evt);
             }
         });
 
@@ -125,9 +135,9 @@ public class HomeScreen extends javax.swing.JFrame {
                             .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(loginBackground1Layout.createSequentialGroup()
                                     .addGap(58, 58, 58)
-                                    .addComponent(changeAccountLabel)
+                                    .addComponent(swapAccountLabel)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(TagsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(Separator3)
                                 .addComponent(jScrollPane1)
                                 .addComponent(Separator2)
@@ -159,8 +169,8 @@ public class HomeScreen extends javax.swing.JFrame {
                 .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TagsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(changeAccountLabel))
+                    .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(swapAccountLabel))
                 .addGap(18, 18, 18)
                 .addComponent(Separator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,10 +270,10 @@ public class HomeScreen extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_SettingButtonActionPerformed
 
-    private void TagsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TagsComboBoxActionPerformed
+    private void SwapAccountComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SwapAccountComboBoxActionPerformed
         // TODO add your handling code here:
  
-    }//GEN-LAST:event_TagsComboBoxActionPerformed
+    }//GEN-LAST:event_SwapAccountComboBoxActionPerformed
 
     private void FriendsOrGroupToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonActionPerformed
         // TODO add your handling code here:
@@ -320,6 +330,7 @@ public class HomeScreen extends javax.swing.JFrame {
     private javax.swing.JButton AddButton;
     private javax.swing.JButton BlockButton;
     private javax.swing.JButton DeleteMessageButton;
+    private javax.swing.JList<String> FriendORGroupList;
     private javax.swing.JToggleButton FriendsOrGroupToggleButton;
     private javax.swing.JButton RemoveButton;
     private javax.swing.JTextField SendMessageTextField;
@@ -329,15 +340,14 @@ public class HomeScreen extends javax.swing.JFrame {
     private javax.swing.JSeparator Separator3;
     private javax.swing.JSplitPane SeparatorSplitPane;
     private javax.swing.JButton SettingButton;
-    private javax.swing.JComboBox<String> TagsComboBox;
+    private javax.swing.JComboBox<String> SwapAccountComboBox;
     private javax.swing.JLabel TalkToLabel;
     private javax.swing.JTextArea ViewMessageTextArea;
     private javax.swing.JLabel WelcomeBackLabel;
-    private javax.swing.JLabel changeAccountLabel;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private UISupport.LoginBackground loginBackground1;
     private UISupport.SignUpBackground signUpBackground1;
+    private javax.swing.JLabel swapAccountLabel;
     // End of variables declaration//GEN-END:variables
 }

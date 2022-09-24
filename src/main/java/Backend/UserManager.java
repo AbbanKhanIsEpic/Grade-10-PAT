@@ -6,6 +6,8 @@ package Backend;
 
 
 import com.mysql.cj.protocol.Resultset;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import java.util.logging.Logger;
  * @author abban
  */
 public class UserManager {
+    
         public static boolean isLoginValid(String username, String password) throws SQLException{
             
             ResultSet user = DB.query("SELECT COUNT(*) FROM TableOfUsers WHERE Username = '" + username +"' AND Password = '" + password +"';");
@@ -23,6 +26,7 @@ public class UserManager {
             int count = user.getInt(1);
             return count==1;
         }   
+        
         public static String isUsernameValid(String username){
             String result = "Everything looks alright";
             
@@ -50,7 +54,7 @@ public class UserManager {
                 
             }
             } catch (SQLException ex) {
-                Logger.getLogger(UserAccessManager.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             //This check if the username is only letters and numbers
@@ -121,45 +125,69 @@ public class UserManager {
                     
             return result;
         }
+    
     public static void createAccount(String username, String password) throws SQLException{
        DB.update("INSERT INTO abbankDB.TableOfUsers Values('"+username+"','"+password+"','"+username+"',current_date(),null);");
-       //msg is short for Messages
-       String table = username + "_msg";
+       
+       DB.update("INSERT INTO abbankDB.userSettings Values('"+ username + "',1,null,null,null,null,'#1CB5E0','#000046','#90EE90','FA8C05','#1CB5E0','#000046','Dialog',11,'Dialog',11);");
+       //msg is short for friend messages
+       String table = username + "_fm";
        
        DB.update(" CREATE TABLE `" + table + "` ( \n" + 
                     "`Friends` varchar(60) NOT NULL,\n " + 
                     "`FriendsBlockOrNot` int(1) DEFAULT NULL,\n" + 
                     "`FriendMessages` longtext NOT NULL,\n" + 
+                    " PRIMARY KEY (`Friends`)\n" +
+                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
+       //msg is short for group messages
+       
+       table = username + "_gm";
+  
+       DB.update(" CREATE TABLE `" + table + "` ( \n" +
                     "`GroupName` varchar(200) NOT NULL,\n" + 
                     "`GroupMemember1` varchar(60) NOT NULL,\n" + 
                     "`GroupMemember2` varchar(60) NOT NULL,\n" + 
                     "`GroupMemember3` varchar(60) NOT NULL,\n" + 
                     "`GroupMemember4` varchar(200) NOT NULL,\n" +
                     "`GroupMemember5` varchar(200) NOT NULL,\n" + 
-                    " `GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
-                    " `GroupMessages` longtext NOT NULL,\n" +
-                    " PRIMARY KEY (`Friends`)\n" +
+                    "`GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
+                    "`GroupMessages` longtext NOT NULL,\n" +
+                    " PRIMARY KEY (`GroupName`)\n" +
                     " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
-       
-       //Set is short for setting
-       table = username + "_set";
-       DB.update(" CREATE TABLE `" + table + "` ( \n" + 
-                    "`ProfileIcon` int(1) NOT NULL,\n " + 
-                    "`Autobiography` varchar(255) DEFAULT NULL,\n" + 
-                    "`Account1` varchar(60) NOT NULL,\n" + 
-                    "`Account2` varchar(60) NOT NULL,\n" + 
-                    "`Account3` varchar(60) NOT NULL,\n" + 
-                    "`FistColourSideMenu` varchar(7) NOT NULL,\n" +
-                    "`LastColourSideMenu` varchar(7) NOT NULL,\n" + 
-                    "`FistColourTextingArea` varchar(7) NOT NULL,\n" +
-                    "`LastColourTextingArea` varchar(7) NOT NULL,\n" +
-                    "`FistColourProfileMenu` varchar(7) NOT NULL,\n" +
-                    "`LastColourProfileMenu` varchar(7) NOT NULL,\n" + 
-                    " `GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
-                    " `GroupMessages` longtext NOT NULL,\n" +
-                    " PRIMARY KEY (`Friends`)\n" +
-                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
-       
-       
+          
+    }
+    
+    public static String getIPAdress() throws UnknownHostException{
+        //Stole code from https://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java
+        
+        String ip = Inet4Address.getLocalHost().getHostAddress();
+        return ip;
+    }
+    
+    public static String isAutoLoginOn() {
+        String ipAdress = "";
+            try {
+                ipAdress = getIPAdress();
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        ResultSet resultSet = null;
+            try {
+                resultSet = DB.query("SELECT Username From abbankDB.TableOfUsers where IPAdress = '"+ ipAdress +"';");
+            } catch (SQLException ex) {
+                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                resultSet.next();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        String result = "";
+            try {
+                result = resultSet.getString(1);
+            } catch (SQLException ex) {
+                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return result;
     }
 }

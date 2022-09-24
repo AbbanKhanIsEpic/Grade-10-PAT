@@ -5,7 +5,8 @@
 package Frontend;
 
 
-import Backend.UserAccessManager;
+import Backend.Threads;
+import Backend.UserManager;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -67,9 +68,9 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Username:");
 
-        UsernameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                UsernameTextFieldFocusLost(evt);
+        UsernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                UsernameTextFieldKeyTyped(evt);
             }
         });
 
@@ -258,15 +259,19 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     private void SignUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpButtonActionPerformed
         // TODO add your handling code here:
         String usernameLabelColour = UsernameErrorCheckerLabel.getForeground().toString();
-        String passwordLabelColour = UsernameErrorCheckerLabel.getForeground().toString();
-        String confirmedPasswordLabelColour = UsernameErrorCheckerLabel.getForeground().toString();
+        String passwordLabelColour = PasswordErrorCheckerLabel.getForeground().toString();
+        String confirmedPasswordLabelColour = ConfirmedPasswordErrorCheckerLabel.getForeground().toString();
         
         String username = UsernameTextField.getText();
         String password = passwordPasswordField.getText();
         
         if(usernameLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")&&passwordLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")&&confirmedPasswordLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")){
-            UserAccessManager.createAccount(username, password);
-            new HomeScreen().setVisible(true);
+            try {
+                UserManager.createAccount(username, password);
+            } catch (SQLException ex) {
+                Logger.getLogger(SignUpMainScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            new HomeScreen(username).setVisible(true);
             dispose();
         }
         else{
@@ -324,32 +329,21 @@ public class SignUpMainScreen extends javax.swing.JFrame {
 
     private void passwordPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordPasswordFieldKeyReleased
         // TODO add your handling code here:
-        String username = UsernameTextField.getText();
-        String password = passwordPasswordField.getText();
+        Runnable isPasswordSafe = new Threads(passwordPasswordField.getText(),UsernameTextField.getText(),PasswordErrorCheckerLabel);
         
-        String display = UserAccessManager.isPasswordSafe(password, username);
+        Thread thread = new Thread(isPasswordSafe);
         
-        if(display.equals("Everything looks alright")){
-                PasswordErrorCheckerLabel.setForeground(Color.darkGray);
-            } 
-            else{
-                PasswordErrorCheckerLabel.setForeground(Color.red);
-            }
-            PasswordErrorCheckerLabel.setText(display);
+        thread.start();
     }//GEN-LAST:event_passwordPasswordFieldKeyReleased
 
-    private void UsernameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UsernameTextFieldFocusLost
-        // TODO add your handling code here
-            String username = UsernameTextField.getText();
-            String display = UserAccessManager.isUsernameAllowed(username);
-            if(display.equals("Everything looks alright")){
-                UsernameErrorCheckerLabel.setForeground(Color.darkGray);
-            } 
-            else{
-                UsernameErrorCheckerLabel.setForeground(Color.red);
-            }
-            UsernameErrorCheckerLabel.setText(display);
-    }//GEN-LAST:event_UsernameTextFieldFocusLost
+    private void UsernameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsernameTextFieldKeyTyped
+        // TODO add your handling code here:
+        Runnable isUsernameValid = new Threads(UsernameTextField.getText(),UsernameErrorCheckerLabel);
+        
+        Thread thread = new Thread(isUsernameValid);
+        
+        thread.start();
+    }//GEN-LAST:event_UsernameTextFieldKeyTyped
 
     /**
      * @param args the command line arguments

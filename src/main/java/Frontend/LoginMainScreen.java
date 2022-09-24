@@ -4,7 +4,8 @@
  */
 package Frontend;
 
-import Backend.UserAccessManager;
+import Backend.Threads;
+import Backend.UserManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,14 +19,27 @@ public class LoginMainScreen extends javax.swing.JFrame {
     /**
      * Creates new form LoginMainScreeb
      */
+    private int Usage;
+    
     public LoginMainScreen() {
         initComponents();
+        
+        Runnable isAutoLoginOn = new Threads();
+        
+        Thread thread = new Thread(isAutoLoginOn);
+        
+        thread.start();
+
+        
     }
+    
     public LoginMainScreen(int usage) {
         initComponents();
+        Usage = usage;
     }
     //if int usage = 0; means that the user is logining to the home screen
     //if int usage = 1; means that the user is adding an account
+    //if int usage = 2; means that the user is removing an account
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -235,14 +249,12 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         // TODO add your handling code here:
-        String username = UsernameTextField.getText() + "main";
+        String username = UsernameTextField.getText();
         String password = passwordPasswordField.getText();
-        
-        
-        String query = "SELECT count(*) FROM abbankDB.TableOfUsers WHERE Username = '"+username+"' and User_password = '"+ password + "';";
+       
         try {
-            int result = UserAccessManager.countRequest(query);
-            if(result == 1){
+            boolean result =  UserManager.isLoginValid(username, password);
+            if(result){
                  new HomeScreen().setVisible(true);
                  dispose();
             }
@@ -282,6 +294,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

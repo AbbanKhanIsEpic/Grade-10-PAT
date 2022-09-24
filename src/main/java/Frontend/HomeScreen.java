@@ -17,9 +17,15 @@ public class HomeScreen extends javax.swing.JFrame {
      */
     DefaultListModel TagDefaultList = new DefaultListModel();
     String[] tags = {"Main"};
+    
     public HomeScreen() {
         initComponents();
-      
+    }
+    public HomeScreen(String username) {
+        initComponents();
+        
+        WelcomeLabel.setText("Welcome: " + username);
+        
         setLocationRelativeTo(null);
         
         for(int i = 0; i < tags.length; i++){
@@ -50,7 +56,7 @@ public class HomeScreen extends javax.swing.JFrame {
         swapAccountLabel = new javax.swing.JLabel();
         SwapAccountComboBox = new javax.swing.JComboBox<>();
         Separator1 = new javax.swing.JSeparator();
-        WelcomeBackLabel = new javax.swing.JLabel();
+        WelcomeLabel = new javax.swing.JLabel();
         SettingButton = new javax.swing.JButton();
         RemoveButton = new javax.swing.JButton();
         AddButton = new javax.swing.JButton();
@@ -105,9 +111,9 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        WelcomeBackLabel.setForeground(new java.awt.Color(51, 51, 55));
-        WelcomeBackLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
-        WelcomeBackLabel.setText("Welcome back ");
+        WelcomeLabel.setForeground(new java.awt.Color(51, 51, 55));
+        WelcomeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
+        WelcomeLabel.setText("Welcome back ");
 
         SettingButton.setText("Settings");
         SettingButton.addActionListener(new java.awt.event.ActionListener() {
@@ -121,6 +127,11 @@ public class HomeScreen extends javax.swing.JFrame {
 
         AddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Add_icon.png"))); // NOI18N
         AddButton.setText("Add");
+        AddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout loginBackground1Layout = new javax.swing.GroupLayout(loginBackground1);
         loginBackground1.setLayout(loginBackground1Layout);
@@ -155,7 +166,7 @@ public class HomeScreen extends javax.swing.JFrame {
                         .addComponent(SettingButton))
                     .addGroup(loginBackground1Layout.createSequentialGroup()
                         .addGap(238, 238, 238)
-                        .addComponent(WelcomeBackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(WelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(76, Short.MAX_VALUE))
         );
         loginBackground1Layout.setVerticalGroup(
@@ -164,7 +175,7 @@ public class HomeScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(SettingButton)
                 .addGap(10, 10, 10)
-                .addComponent(WelcomeBackLabel)
+                .addComponent(WelcomeLabel)
                 .addGap(18, 18, 18)
                 .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -201,6 +212,11 @@ public class HomeScreen extends javax.swing.JFrame {
         jScrollPane2.setViewportView(ViewMessageTextArea);
 
         SendMessgeButton.setText("Send");
+        SendMessgeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendMessgeButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout signUpBackground1Layout = new javax.swing.GroupLayout(signUpBackground1);
         signUpBackground1.setLayout(signUpBackground1Layout);
@@ -291,6 +307,24 @@ public class HomeScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_FriendsOrGroupToggleButtonActionPerformed
 
+    private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
+        // TODO add your handling code here:
+        String input = ViewMessageTextArea.getText();
+        String output = "\n" + SendMessageTextField.getText();
+        ViewMessageTextArea.setText(input + output);
+    }//GEN-LAST:event_SendMessgeButtonActionPerformed
+
+    private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+        // TODO add your handling code here:
+        String addWhat = FriendsOrGroupToggleButton.getText();
+        if(addWhat.equals("Friends")){
+            new AddFriendScreen().setVisible(true);
+            dispose();
+        }else{
+            
+        }
+    }//GEN-LAST:event_AddButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -343,7 +377,7 @@ public class HomeScreen extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> SwapAccountComboBox;
     private javax.swing.JLabel TalkToLabel;
     private javax.swing.JTextArea ViewMessageTextArea;
-    private javax.swing.JLabel WelcomeBackLabel;
+    private javax.swing.JLabel WelcomeLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private UISupport.LoginBackground loginBackground1;

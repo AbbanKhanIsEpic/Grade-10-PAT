@@ -5,6 +5,9 @@
 package Frontend;
 
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.SwingConstants;
 
@@ -17,15 +20,27 @@ public class SettingScreen extends javax.swing.JFrame {
     /**
      * Creates new form SettingScreen
      */
-    DefaultListModel TagDefaultList = new DefaultListModel();
+    DefaultListModel AccountDefaultList = new DefaultListModel();
     String[] tags = {"Main"};
+    
+    //Code to get currently available font is from https://alvinalexander.com/blog/post/jfc-swing/swing-faq-list-fonts-current-platform/ 
+    String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+    
+    DefaultComboBoxModel FontProfileDefaultList = new DefaultComboBoxModel();
+    
+    
     
     public SettingScreen() {
         initComponents();
         
         for(int i = 0; i < tags.length; i++){
-            TagDefaultList.addElement(tags[i]);
-            this.AccountList.setModel(TagDefaultList);
+            AccountDefaultList.addElement(tags[i]);
+            this.AccountList.setModel(AccountDefaultList);
+        }
+        for(int i = 0; i < fonts.length; i++){
+            FontProfileDefaultList.addElement(fonts[i]);
+            this.fontBioComboBox.setModel(FontProfileDefaultList);
+            this.fontMessageComboBox.setModel(FontProfileDefaultList);
         }
     }
 
@@ -68,22 +83,19 @@ public class SettingScreen extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        UpdateBioDisplayButton = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        fontBioComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        fontMessageComboBox = new javax.swing.JComboBox<>();
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
         SideMenuColourError = new javax.swing.JLabel();
+        UpdateBioDisplayButton = new javax.swing.JButton();
+        UpdateMessageButton = new javax.swing.JButton();
+        sizeBioSpinner = new javax.swing.JSpinner();
+        sizeMessageSpinner = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         ProfileLayeredPane = new javax.swing.JLayeredPane();
         DisplayNameLabel = new javax.swing.JLabel();
@@ -193,37 +205,28 @@ public class SettingScreen extends javax.swing.JFrame {
 
         jLabel18.setText("Text size of bio:");
 
-        jLabel19.setText("Text colour of bio:");
-
-        UpdateBioDisplayButton.setText("Update");
-
         jLabel20.setText("Text font of messages:");
 
         jLabel21.setText("Text size of messages:");
 
-        jLabel22.setText("Text colour of messages:");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fontBioComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel5.setText("This is how it looks like:");
 
-        jLabel24.setText("jLabel24");
+        jLabel24.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 11)); // NOI18N
+        jLabel24.setText("words");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fontMessageComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel25.setText("This is how it looks like: ");
 
-        jLabel26.setText("jLabel26");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLabel26.setText("words");
 
         SideMenuColourError.setText("jLabel2");
+
+        UpdateBioDisplayButton.setText("Update");
+
+        UpdateMessageButton.setText("Update");
 
         DisplayLayerPane.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -249,22 +252,19 @@ public class SettingScreen extends javax.swing.JFrame {
         DisplayLayerPane.setLayer(jLabel16, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel17, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel18, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jLabel19, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(UpdateBioDisplayButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel20, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel21, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jLabel22, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jComboBox1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(fontBioComboBox, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel24, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jComboBox2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(fontMessageComboBox, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel25, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel26, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jComboBox3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jComboBox4, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jComboBox5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jComboBox6, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(SideMenuColourError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(UpdateBioDisplayButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(UpdateMessageButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(sizeBioSpinner, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(sizeMessageSpinner, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout DisplayLayerPaneLayout = new javax.swing.GroupLayout(DisplayLayerPane);
         DisplayLayerPane.setLayout(DisplayLayerPaneLayout);
@@ -282,7 +282,7 @@ public class SettingScreen extends javax.swing.JFrame {
                                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(FirstColourSideMenuTextField)
                                     .addComponent(LastColourSideMenuTextField))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                                 .addComponent(loginBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
@@ -292,56 +292,50 @@ public class SettingScreen extends javax.swing.JFrame {
                         .addGap(96, 96, 96))
                     .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
                         .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(UpdateBioDisplayButton)
+                            .addComponent(UpdateMessageButton)
+                            .addComponent(jLabel21)
+                            .addComponent(sizeBioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sizeMessageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DisplayLayerPaneLayout.createSequentialGroup()
+                        .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
-                                .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18)
-                                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel20)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel5))
+                                .addComponent(jLabel25))
                             .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
-                                .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel17)
-                                    .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel11)
-                                        .addComponent(FirstColourTextingScreenTextField)
-                                        .addComponent(jLabel12)
-                                        .addComponent(LastColourTextingScreenTextField))
-                                    .addComponent(UpdateTextingScreenButton)
-                                    .addComponent(jLabel14)
-                                    .addComponent(jLabel15)
-                                    .addComponent(UpdateProfileScreen)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jLabel19)
-                                    .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(LastColourProfileScreenButton, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(FirstcColourProfileScreen, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5)))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel24)
+                        .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel26))
                         .addGap(86, 86, 86))
                     .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
                         .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel21)
-                            .addComponent(jLabel20)
-                            .addComponent(jLabel22))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel25)
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel26)
-                        .addGap(72, 72, 72))
-                    .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
-                        .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(UpdateBioDisplayButton)
+                            .addComponent(jLabel18)
+                            .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel11)
+                                .addComponent(FirstColourTextingScreenTextField)
+                                .addComponent(jLabel12)
+                                .addComponent(LastColourTextingScreenTextField))
+                            .addComponent(UpdateTextingScreenButton)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15)
+                            .addComponent(UpdateProfileScreen)
+                            .addComponent(jLabel16)
+                            .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(LastColourProfileScreenButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(FirstcColourProfileScreen, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(fontBioComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fontMessageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(UpdateSideMenuButton)
                             .addComponent(SideMenuColourError))
-                        .addGap(0, 373, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         DisplayLayerPaneLayout.setVerticalGroup(
             DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -398,42 +392,32 @@ public class SettingScreen extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addComponent(jLabel16)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel17)
-                .addGap(7, 7, 7)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DisplayLayerPaneLayout.createSequentialGroup()
-                        .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel24))
-                        .addGap(34, 34, 34)))
-                .addComponent(jLabel19)
-                .addGap(7, 7, 7)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel20)
-                .addGap(7, 7, 7)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel24))
+                .addGap(7, 7, 7)
+                .addComponent(fontBioComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel18)
+                .addGap(5, 5, 5)
+                .addComponent(sizeBioSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(UpdateBioDisplayButton)
+                .addGap(18, 18, 18)
+                .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
                     .addComponent(jLabel25)
                     .addComponent(jLabel26))
-                .addGap(13, 13, 13)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(UpdateBioDisplayButton)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fontMessageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel21)
+                .addGap(18, 18, 18)
+                .addComponent(sizeMessageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(UpdateMessageButton)
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/display_icon.png"))); // NOI18N
@@ -706,7 +690,9 @@ public class SettingScreen extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 2188, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 2453, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -714,10 +700,10 @@ public class SettingScreen extends javax.swing.JFrame {
 
     private void RemoveAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveAccountButtonActionPerformed
         // TODO add your handling code here:
-         if(TagDefaultList.elementAt(AccountList.getSelectedIndex()).equals("Main")){
+        if(AccountDefaultList.elementAt(AccountList.getSelectedIndex()).equals("Main")){
             
         }else{
-            TagDefaultList.removeElementAt(AccountList.getSelectedIndex());
+            AccountDefaultList.removeElementAt(AccountList.getSelectedIndex());
         }
     }//GEN-LAST:event_RemoveAccountButtonActionPerformed
 
@@ -725,8 +711,8 @@ public class SettingScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         String add = AddAccountTextField.getText();
         
-        if(TagDefaultList.contains(add)){
-            TagDefaultList.addElement(add);
+        if(AccountDefaultList.contains(add)){
+            AccountDefaultList.addElement(add);
         }
         else{
             
@@ -807,16 +793,13 @@ public class SettingScreen extends javax.swing.JFrame {
     private javax.swing.JButton UpdateBioDisplayButton;
     private javax.swing.JButton UpdateDisplayNameButton;
     private javax.swing.JButton UpdateIconButton;
+    private javax.swing.JButton UpdateMessageButton;
     private javax.swing.JButton UpdateProfileScreen;
     private javax.swing.JButton UpdateSideMenuButton;
     private javax.swing.JButton UpdateTagsButton;
     private javax.swing.JButton UpdateTextingScreenButton;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
+    private javax.swing.JComboBox<String> fontBioComboBox;
+    private javax.swing.JComboBox<String> fontMessageComboBox;
     private javax.swing.JComboBox<String> jComboBox7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -828,10 +811,8 @@ public class SettingScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
@@ -854,5 +835,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private UISupport.ProfileBackground profileBackground1;
     private UISupport.SettingBackground settingPanel1;
     private UISupport.SignUpBackground signUpBackground1;
+    private javax.swing.JSpinner sizeBioSpinner;
+    private javax.swing.JSpinner sizeMessageSpinner;
     // End of variables declaration//GEN-END:variables
 }

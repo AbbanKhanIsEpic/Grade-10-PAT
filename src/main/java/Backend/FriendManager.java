@@ -13,12 +13,14 @@ import java.util.Arrays;
  * @author abban
  */
 public class FriendManager {
+    
     public static int numberOfFriends(String table) throws SQLException{
         ResultSet numberOfFriends = DB.query("SELECT count(Friends) FROM abbankDB."+table+";");
         numberOfFriends.next();
         int numberOfFriendsInt = numberOfFriends.getInt(1);
         return numberOfFriendsInt;
     }
+    
     public static String[] getFriends(String table) throws SQLException{
         int numberOfFriends = numberOfFriends(table);
         

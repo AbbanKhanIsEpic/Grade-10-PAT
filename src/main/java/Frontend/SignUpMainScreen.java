@@ -69,8 +69,8 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         jLabel3.setText("Username:");
 
         UsernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                UsernameTextFieldKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                UsernameTextFieldKeyReleased(evt);
             }
         });
 
@@ -336,14 +336,14 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         thread.start();
     }//GEN-LAST:event_passwordPasswordFieldKeyReleased
 
-    private void UsernameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsernameTextFieldKeyTyped
+    private void UsernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsernameTextFieldKeyReleased
         // TODO add your handling code here:
         Runnable isUsernameValid = new Threads(UsernameTextField.getText(),UsernameErrorCheckerLabel);
         
         Thread thread = new Thread(isUsernameValid);
         
         thread.start();
-    }//GEN-LAST:event_UsernameTextFieldKeyTyped
+    }//GEN-LAST:event_UsernameTextFieldKeyReleased
 
     /**
      * @param args the command line arguments

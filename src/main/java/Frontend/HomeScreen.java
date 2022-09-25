@@ -4,7 +4,10 @@
  */
 package Frontend;
 
-import javax.swing.DefaultListModel;
+import Backend.Threads;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -15,23 +18,34 @@ public class HomeScreen extends javax.swing.JFrame {
     /**
      * Creates new form HomeScreen
      */
-    DefaultListModel TagDefaultList = new DefaultListModel();
-    String[] tags = {"Main"};
+    
+    private String Username;
     
     public HomeScreen() {
         initComponents();
     }
+    
     public HomeScreen(String username) {
         initComponents();
+        
+        Username = username;
         
         WelcomeLabel.setText("Welcome: " + username);
         
         setLocationRelativeTo(null);
         
-        for(int i = 0; i < tags.length; i++){
-            TagDefaultList.addElement(tags[i]);
-            this.FriendORGroupList.setModel(TagDefaultList);
-        }
+        String table  = username + "_fm";
+        
+        Runnable getFriends = new Threads(table,"Friends",FriendORGroupList);
+        Runnable getConnectedAccount = new Threads(username,SwapAccountComboBox);
+            
+        Thread thread1 = new Thread(getFriends);
+        Thread thread2 = new Thread(getConnectedAccount);
+        
+        thread1.start();
+        thread2.start();
+        
+        
 
     }
 
@@ -79,7 +93,7 @@ public class HomeScreen extends javax.swing.JFrame {
         });
 
         FriendORGroupList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = {  };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -102,14 +116,9 @@ public class HomeScreen extends javax.swing.JFrame {
         });
 
         swapAccountLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/change_account_icon.png"))); // NOI18N
-        swapAccountLabel.setText("swap account");
+        swapAccountLabel.setText("Swap account:");
 
         SwapAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        SwapAccountComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SwapAccountComboBoxActionPerformed(evt);
-            }
-        });
 
         WelcomeLabel.setForeground(new java.awt.Color(51, 51, 55));
         WelcomeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
@@ -286,11 +295,6 @@ public class HomeScreen extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_SettingButtonActionPerformed
 
-    private void SwapAccountComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SwapAccountComboBoxActionPerformed
-        // TODO add your handling code here:
- 
-    }//GEN-LAST:event_SwapAccountComboBoxActionPerformed
-
     private void FriendsOrGroupToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonActionPerformed
         // TODO add your handling code here:
         String text = FriendsOrGroupToggleButton.getText();
@@ -308,18 +312,17 @@ public class HomeScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_FriendsOrGroupToggleButtonActionPerformed
 
     private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
-        // TODO add your handling code here:
-        String input = ViewMessageTextArea.getText();
-        String output = "\n" + SendMessageTextField.getText();
-        ViewMessageTextArea.setText(input + output);
+       
     }//GEN-LAST:event_SendMessgeButtonActionPerformed
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
         // TODO add your handling code here:
         String addWhat = FriendsOrGroupToggleButton.getText();
         if(addWhat.equals("Friends")){
-            new AddFriendScreen().setVisible(true);
+            
+            new AddFriendScreen(Username).setVisible(true);
             dispose();
+            
         }else{
             
         }

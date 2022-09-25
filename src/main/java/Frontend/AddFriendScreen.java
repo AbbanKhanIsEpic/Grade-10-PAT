@@ -4,6 +4,12 @@
  */
 package Frontend;
 
+import Backend.FriendManager;
+import Backend.Threads;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author abban
@@ -13,10 +19,24 @@ public class AddFriendScreen extends javax.swing.JFrame {
     /**
      * Creates new form AddFriendScreen
      */
+    
+    private String Username;
+    
     public AddFriendScreen() {
         initComponents();
         
         
+    }
+    public AddFriendScreen(String username) {
+        initComponents();
+        
+        Username = username;
+        
+        Runnable getReceivingFriendRequest = new Threads(RecievedFriendRequestList, Username);
+        
+        Thread thread = new Thread(getReceivingFriendRequest);
+        
+        thread.start();
     }
 
     /**
@@ -38,7 +58,7 @@ public class AddFriendScreen extends javax.swing.JFrame {
         SendFriendRequestButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        RecievedFriendRequest = new javax.swing.JList<>();
+        RecievedFriendRequestList = new javax.swing.JList<>();
         AcceptFriendRequestButton = new javax.swing.JButton();
         GoBackButton = new javax.swing.JButton();
 
@@ -49,26 +69,42 @@ public class AddFriendScreen extends javax.swing.JFrame {
 
         jLabel2.setText("Search");
 
+        SearchFriendTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                SearchFriendTextFieldKeyReleased(evt);
+            }
+        });
+
         SendFriendRequestList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(SendFriendRequestList);
 
         SendFriendRequestButton.setText("Send");
+        SendFriendRequestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendFriendRequestButtonActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Accept Friend Request");
 
-        RecievedFriendRequest.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+        RecievedFriendRequestList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {  };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(RecievedFriendRequest);
+        jScrollPane2.setViewportView(RecievedFriendRequestList);
 
         AcceptFriendRequestButton.setText("Accept");
+        AcceptFriendRequestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AcceptFriendRequestButtonActionPerformed(evt);
+            }
+        });
 
         GoBackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/left_arrow_icon.png"))); // NOI18N
         GoBackButton.addActionListener(new java.awt.event.ActionListener() {
@@ -148,9 +184,42 @@ public class AddFriendScreen extends javax.swing.JFrame {
 
     private void GoBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GoBackButtonActionPerformed
         // TODO add your handling code here:
-        new HomeScreen().setVisible(true);
+        new HomeScreen(Username).setVisible(true);
         dispose();
     }//GEN-LAST:event_GoBackButtonActionPerformed
+
+    private void SearchFriendTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchFriendTextFieldKeyReleased
+        // TODO add your handling code here:
+        Runnable getSendFriendRequest = new Threads(SendFriendRequestList,SearchFriendTextField.getText(),Username);
+        
+        Thread thread = new Thread(getSendFriendRequest);
+        
+        thread.start();
+    }//GEN-LAST:event_SearchFriendTextFieldKeyReleased
+
+    private void SendFriendRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendFriendRequestButtonActionPerformed
+        // TODO add your handling code here:
+        String to = SendFriendRequestList.getSelectedValue();
+        try {
+            
+            FriendManager.sendFriendRequest(Username, to);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_SendFriendRequestButtonActionPerformed
+
+    private void AcceptFriendRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptFriendRequestButtonActionPerformed
+        // TODO add your handling code here:
+        String from = RecievedFriendRequestList.getSelectedValue();
+        try {
+            
+            FriendManager.acceptFriendRequest(Username, from);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_AcceptFriendRequestButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,7 +259,7 @@ public class AddFriendScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AcceptFriendRequestButton;
     private javax.swing.JButton GoBackButton;
-    private javax.swing.JList<String> RecievedFriendRequest;
+    private javax.swing.JList<String> RecievedFriendRequestList;
     private javax.swing.JTextField SearchFriendTextField;
     private javax.swing.JButton SendFriendRequestButton;
     private javax.swing.JList<String> SendFriendRequestList;

@@ -19,7 +19,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
     /**
      * Creates new form LoginMainScreeb
      */
-    private int Usage;
+    private int Usage = 0;
     
     public LoginMainScreen() {
         initComponents();
@@ -35,6 +35,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
     
     public LoginMainScreen(int usage) {
         initComponents();
+        
         Usage = usage;
     }
     //if int usage = 0; means that the user is logining to the home screen
@@ -254,9 +255,15 @@ public class LoginMainScreen extends javax.swing.JFrame {
        
         try {
             boolean result =  UserManager.isLoginValid(username, password);
-            if(result){
-                 new HomeScreen().setVisible(true);
+            if(result && Usage == 0){
+                 new HomeScreen(username).setVisible(true);
                  dispose();
+            }
+            else if(result && Usage == 1){
+                
+            }
+            else if(result && Usage == 2){
+                
             }
             else{
                 FinalErrorCheckerLabel.setText("Username or password is incorrect");

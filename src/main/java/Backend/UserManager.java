@@ -9,7 +9,9 @@ import com.mysql.cj.protocol.Resultset;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -164,30 +166,57 @@ public class UserManager {
         return ip;
     }
     
-    public static String isAutoLoginOn() {
+    public static String isAutoLoginOn() throws SQLException, UnknownHostException {
         String ipAdress = "";
-            try {
-                ipAdress = getIPAdress();
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        ipAdress = getIPAdress();
+
         ResultSet resultSet = null;
-            try {
-                resultSet = DB.query("SELECT Username From abbankDB.TableOfUsers where IPAdress = '"+ ipAdress +"';");
-            } catch (SQLException ex) {
-                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                resultSet.next();
-            } catch (SQLException ex) {
-                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+        resultSet = DB.query("SELECT Username From abbankDB.TableOfUsers where IPAdress = '"+ ipAdress +"';");
+
+
+        resultSet.next();
+
+
         String result = "";
-            try {
-                result = resultSet.getString(1);
-            } catch (SQLException ex) {
-                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
+        result = resultSet.getString(1);
+
         return result;
+    }
+    
+    public static String[] getConnectedAccount(String username) throws SQLException {
+        String[] account;
+        
+        ResultSet result = DB.query("Select Account1,Account2,Account3 from abbankDB.userSettings where Username = '" + username + "';");
+        
+        int length = 1;
+        
+        result.next();
+        
+        for(int i = 1; i <= 3; i++){
+            
+            String accountAdded = result.getString(i);
+            
+            if(accountAdded != null){
+                length++;
+            }
+        }
+        
+        account = new String[length];
+        
+        account[0] = username;
+        
+        for(int i = 1; i <= 3; i++){
+            
+            String accountAdded = result.getString(i);
+            
+            if(accountAdded != null){
+                account[i] = accountAdded;
+            }
+        }
+      
+                                
+        return account;
     }
 }

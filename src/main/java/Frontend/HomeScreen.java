@@ -5,9 +5,7 @@
 package Frontend;
 
 import Backend.Threads;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import javax.swing.JList;
 
 /**
  *
@@ -20,6 +18,7 @@ public class HomeScreen extends javax.swing.JFrame {
      */
     
     private String Username;
+    private String selectedFriend;
     
     public HomeScreen() {
         initComponents();
@@ -34,9 +33,8 @@ public class HomeScreen extends javax.swing.JFrame {
         
         setLocationRelativeTo(null);
         
-        String table  = username + "_fm";
         
-        Runnable getFriends = new Threads(table,"Friends",FriendORGroupList);
+        Runnable getFriends = new Threads(username,"Friends",FriendORGroupList);
         Runnable getConnectedAccount = new Threads(username,SwapAccountComboBox);
             
         Thread thread1 = new Thread(getFriends);
@@ -86,6 +84,11 @@ public class HomeScreen extends javax.swing.JFrame {
 
         FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png"))); // NOI18N
         FriendsOrGroupToggleButton.setText("Friends");
+        FriendsOrGroupToggleButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                FriendsOrGroupToggleButtonItemStateChanged(evt);
+            }
+        });
         FriendsOrGroupToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FriendsOrGroupToggleButtonActionPerformed(evt);
@@ -96,6 +99,16 @@ public class HomeScreen extends javax.swing.JFrame {
             String[] strings = {  };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
+        });
+        FriendORGroupList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FriendORGroupListMouseClicked(evt);
+            }
+        });
+        FriendORGroupList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                FriendORGroupListValueChanged(evt);
+            }
         });
         jScrollPane1.setViewportView(FriendORGroupList);
 
@@ -216,6 +229,7 @@ public class HomeScreen extends javax.swing.JFrame {
 
         TalkToLabel.setText("You are currently talking to: ");
 
+        ViewMessageTextArea.setEditable(false);
         ViewMessageTextArea.setColumns(20);
         ViewMessageTextArea.setRows(5);
         jScrollPane2.setViewportView(ViewMessageTextArea);
@@ -299,25 +313,30 @@ public class HomeScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         String text = FriendsOrGroupToggleButton.getText();
         
-        if(text.equals("Friends")){
-            FriendsOrGroupToggleButton.setText("Groups");
-            FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/group_icon.png")));
-            FriendsOrGroupToggleButton.setSelected(false);
-        }
-        else{
-            FriendsOrGroupToggleButton.setText("Friends");
-            FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
-            FriendsOrGroupToggleButton.setSelected(false);
-        }
+        Runnable toggleFriendAndGroup = new Threads(FriendsOrGroupToggleButton,text,FriendORGroupList,Username);
+        
+        Thread thread = new Thread(toggleFriendAndGroup);
+        
+        thread.start();
+        
     }//GEN-LAST:event_FriendsOrGroupToggleButtonActionPerformed
 
     private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
-       
+
+       String messageSend = SendMessageTextField.getText();
+       String messageRecieved = ViewMessageTextArea.getText();
+        
+        Runnable sendFriendMessage = new Threads(ViewMessageTextArea,Username,selectedFriend,messageSend,messageRecieved);
+        
+        Thread thread = new Thread(sendFriendMessage);
+        
+        thread.start();
     }//GEN-LAST:event_SendMessgeButtonActionPerformed
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
         // TODO add your handling code here:
         String addWhat = FriendsOrGroupToggleButton.getText();
+        
         if(addWhat.equals("Friends")){
             
             new AddFriendScreen(Username).setVisible(true);
@@ -325,8 +344,38 @@ public class HomeScreen extends javax.swing.JFrame {
             
         }else{
             
+            new AddGroupScreen(Username).setVisible(true);
+            dispose();
+            
         }
     }//GEN-LAST:event_AddButtonActionPerformed
+
+    private void FriendORGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_FriendORGroupListValueChanged
+        // TODO add your handling code here:
+        selectedFriend = FriendORGroupList.getSelectedValue();
+        
+        Runnable getFriendMessage = new Threads(ViewMessageTextArea,Username,selectedFriend);
+        
+        Thread thread = new Thread(getFriendMessage);
+        
+        thread.start();
+    }//GEN-LAST:event_FriendORGroupListValueChanged
+
+    private void FriendsOrGroupToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonItemStateChanged
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_FriendsOrGroupToggleButtonItemStateChanged
+
+    private void FriendORGroupListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FriendORGroupListMouseClicked
+        // https://stackoverflow.com/questions/4344682/double-click-event-on-jlist-element
+        JList list = (JList)evt.getSource();
+        if (evt.getClickCount() == 2) {
+            
+            int index = list.locationToIndex(evt.getPoint());
+            System.out.println("index: "+index);
+            
+         }
+    }//GEN-LAST:event_FriendORGroupListMouseClicked
 
     /**
      * @param args the command line arguments

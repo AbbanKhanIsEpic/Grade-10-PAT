@@ -6,6 +6,7 @@ package Frontend;
 
 import Backend.FriendManager;
 import Backend.Threads;
+import java.awt.Color;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,8 @@ public class AddFriendScreen extends javax.swing.JFrame {
         
         thread.start();
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -61,6 +64,7 @@ public class AddFriendScreen extends javax.swing.JFrame {
         RecievedFriendRequestList = new javax.swing.JList<>();
         AcceptFriendRequestButton = new javax.swing.JButton();
         GoBackButton = new javax.swing.JButton();
+        SuccessLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,6 +101,11 @@ public class AddFriendScreen extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        RecievedFriendRequestList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                RecievedFriendRequestListFocusLost(evt);
+            }
+        });
         jScrollPane2.setViewportView(RecievedFriendRequestList);
 
         AcceptFriendRequestButton.setText("Accept");
@@ -120,6 +129,9 @@ public class AddFriendScreen extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingBackground1Layout.createSequentialGroup()
                 .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(settingBackground1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(GoBackButton))
+                    .addGroup(settingBackground1Layout.createSequentialGroup()
                         .addGap(112, 112, 112)
                         .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -127,11 +139,9 @@ public class AddFriendScreen extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addComponent(SearchFriendTextField)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
-                            .addComponent(SendFriendRequestButton)))
-                    .addGroup(settingBackground1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(GoBackButton)))
-                .addGap(102, 102, 102)
+                            .addComponent(SendFriendRequestButton)
+                            .addComponent(SuccessLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(83, 83, 83)
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -165,7 +175,9 @@ public class AddFriendScreen extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(AcceptFriendRequestButton)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(SuccessLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -202,16 +214,39 @@ public class AddFriendScreen extends javax.swing.JFrame {
         String to = SendFriendRequestList.getSelectedValue();
         try {
             
-            FriendManager.sendFriendRequest(Username, to);
+            boolean result = FriendManager.sendFriendRequest(Username, to);
+            
+            if(result){
+                
+                SuccessLabel.setForeground(Color.green);
+                SuccessLabel.setText("Friend request sent");
+                
+            }
+            else{
+                
+                SuccessLabel.setForeground(Color.red);
+                SuccessLabel.setText("Friend request failed");
+                        
+            }
+            
             
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Runnable getReceivingFriendRequest = new Threads(RecievedFriendRequestList, Username);
+        
+        Thread thread = new Thread(getReceivingFriendRequest);
+        
+        thread.start();
+        
+        
     }//GEN-LAST:event_SendFriendRequestButtonActionPerformed
 
     private void AcceptFriendRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptFriendRequestButtonActionPerformed
         // TODO add your handling code here:
         String from = RecievedFriendRequestList.getSelectedValue();
+        
         try {
             
             FriendManager.acceptFriendRequest(Username, from);
@@ -220,6 +255,15 @@ public class AddFriendScreen extends javax.swing.JFrame {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_AcceptFriendRequestButtonActionPerformed
+
+    private void RecievedFriendRequestListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_RecievedFriendRequestListFocusLost
+        // TODO add your handling code here:
+        Runnable getReceivingFriendRequest = new Threads(RecievedFriendRequestList, Username);
+        
+        Thread thread = new Thread(getReceivingFriendRequest);
+        
+        thread.start();
+    }//GEN-LAST:event_RecievedFriendRequestListFocusLost
 
     /**
      * @param args the command line arguments
@@ -247,7 +291,6 @@ public class AddFriendScreen extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(AddFriendScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -263,6 +306,7 @@ public class AddFriendScreen extends javax.swing.JFrame {
     private javax.swing.JTextField SearchFriendTextField;
     private javax.swing.JButton SendFriendRequestButton;
     private javax.swing.JList<String> SendFriendRequestList;
+    private javax.swing.JLabel SuccessLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

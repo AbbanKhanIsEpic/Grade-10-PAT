@@ -4,6 +4,7 @@
  */
 package Backend;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,19 +16,38 @@ import java.time.format.DateTimeFormatter;
  */
 public class MessageManager {
     
-    public static String sendMessage(String from, String to, String message) throws SQLException{
+    public static String getFriendMessages(String from,String to) throws SQLException{
+        
+        String table = from + "_fm";
+        ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + to + "'");
+        
+        result.next();
+        
+        String returnString = result.getString(1);
+        
+        return returnString;
+        
+    }
+    
+    public static String sendFriendMessage(String from, String to, String sendmessage,String messageFromTextArea) throws SQLException{
 
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
         
         String time = formatTime.format(LocalTime.now());
         String date = LocalDate.now().toString();
         
-        message = "\n" + "< " + date + " | " + time + " > " + from + ": " + message;
         
-        DB.update("UPDATE abbankDB." + to + "SET FriendMessages = " + message + "WHERE Friends = " + from);
-        DB.update("UPDATE abbankDB." + from + "SET FriendMessages = " + message + "WHERE Friends = " + to);
+        String sendMessage =  messageFromTextArea + "\n" + "< " + date + " | " + time + " > " + from + ": " + sendmessage;
         
-        return message;
+        String table = to + "_fm";
+        DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + from + "'");
+        
+        table = from + "_fm";
+        DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + to + "'");
+        
+        return sendMessage;
         
     }
+    
+    
 }

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
 /**
@@ -17,31 +18,29 @@ import javax.swing.DefaultListModel;
  * @author abban
  */
 public class FriendManager {
-    
-    public static int numberOfFriends(String table) throws SQLException{
-        ResultSet numberOfFriends = DB.query("SELECT count(Friends) FROM abbankDB."+table+";");
-        numberOfFriends.next();
-        int numberOfFriendsInt = numberOfFriends.getInt(1);
-        return numberOfFriendsInt;
-    }
-    
+
     public static String[] getFriends(String table) throws SQLException{
-        
-            int numberOfFriends = numberOfFriends(table);
             
-            String[] friends = new String[numberOfFriends];
+            table = table + "_fm";
             
-            ResultSet getFriends = DB.query("SELECT Friends FROM abbankDB."+table+";");
+            ResultSet result = DB.query("SELECT count(*) FROM abbankDB."+table+";");
             
-            for(int i = 0; i < numberOfFriends; i++){
+            result.next();
+            
+            int length = result.getInt(1);
+            
+            result = DB.query("SELECT Friends FROM abbankDB."+table+";");
+            
+            String[] listOfFriends = new String[length];
+            
+            for(int i = 0; i < length; i++){
                 
-                getFriends.next();
-                String indiviulaFriends = getFriends.getString(1);
-                friends[i] = indiviulaFriends;
+                result.next();
+                listOfFriends[i] = result.getString(1);
                 
             }
-            
-            return friends;
+
+        return listOfFriends;
 
     }
     
@@ -83,15 +82,39 @@ public class FriendManager {
         return DefaultListModel;
     }
     
-    public static void sendFriendRequest(String from, String to) throws SQLException{
+    public static boolean sendFriendRequest(String from, String to) throws SQLException{
         
-        ResultSet result = DB.query("select count(*) from abbankDB.friendRquest");
+        String table = from + "_fm";
+        
+        ResultSet result = DB.query("Select count(*) from abbankDB." + table + " Where Friends = '" + to +"'");
+        
+        result.next();
+        
+        int count1 = result.getInt(1);
+        
+        result = DB.query("Select count(*) from abbankDB.friendRquest Where fromWho = '" + from + "' AND '" + to + "'" );
+        
+        result.next();
+        
+        int count2 = result.getInt(1);
+        
+        if(count1 == 0 && count2 == 0){
+            
+        result = DB.query("select count(*) from abbankDB.friendRquest");
         
         result.next();
         
         int id = result.getInt(1) + 1;
         
+        
+        
         DB.update("Insert into abbankDB.friendRquest Values(" + id + ", '" + from + "', '" + to + "')");
+        
+        return true;
+        
+        }
+        
+        return false;
         
         
     }
@@ -108,4 +131,5 @@ public class FriendManager {
         DB.update("INSERT INTO abbankDB." + tableTo + " Values('" + from + "',0,'');");
         
     }
+    
 }

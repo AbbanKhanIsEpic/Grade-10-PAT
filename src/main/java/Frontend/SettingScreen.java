@@ -132,6 +132,11 @@ public class SettingScreen extends javax.swing.JFrame {
         SettingLabel.setText("Setting");
 
         ReturnButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/left_arrow_icon.png"))); // NOI18N
+        ReturnButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReturnButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_small_icon.png"))); // NOI18N
         jLabel1.setText("Profile:");
@@ -729,6 +734,12 @@ public class SettingScreen extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_FirstColourSideMenuTextFieldKeyReleased
+
+    private void ReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnButtonActionPerformed
+        // TODO add your handling code here:
+        new HomeScreen().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_ReturnButtonActionPerformed
 
     /**
      * @param args the command line arguments

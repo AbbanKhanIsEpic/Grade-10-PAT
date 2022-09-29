@@ -32,6 +32,11 @@ public class Threads implements Runnable{
     private String MessageTo1= "";
     private String sendMessage = "";
     private String previousMessage = "";
+    private String groupMember1 = "";
+    private String groupMember2 = "";
+    private String groupMember3 = "";
+    private String groupMember4 = "";
+    private String groupMember5 = "";
 
     
     private JLabel label;
@@ -101,23 +106,40 @@ public class Threads implements Runnable{
         
     }
     
-    public Threads(JTextArea jTextArea, String from, String to, String Message1,String Message2){
+    public Threads(JTextArea jTextArea, String from, String to, String Message1,String Message2,boolean friend){
         
-        purpose = "sendFriendMessage";
+        
         textArea = jTextArea;
         MessageFrom = from;
         MessageTo1 = to;
         sendMessage = Message1; 
         previousMessage = Message2;
-        
+        if(friend){
+            purpose = "sendFriendMessage";
+        }
+        else{
+            purpose = "sendGroupMessage";
+        }
     }
     
-    public Threads(JTextArea jTextArea, String from, String to){
+    public Threads(JTextArea jTextArea, String from, String to,JToggleButton jToggleButton){
         
-        purpose = "getFriendMessages";
-        textArea = jTextArea;
         MessageFrom = from;
         MessageTo1 = to;
+        textArea = jTextArea;
+        toggleButton = jToggleButton;
+            
+        if(toggleButton.getText().equals("Friends")){
+            
+            purpose = "getFriendMessages";
+            
+            
+        }
+        else{
+            
+            purpose = "getGroupMessages";
+            
+        }
         
     }
     
@@ -140,20 +162,7 @@ public class Threads implements Runnable{
         
     }
     
-    public Threads(String groupName, JComboBox jComboBox1,JComboBox jComboBox2,JComboBox jComboBox3,JComboBox jComboBox4,JComboBox jComboBox5,JLabel jLabel){
-        
-        purpose = "createGroup";
-        userInput = groupName;
-        comboBox1 = jComboBox1;
-        comboBox2 = jComboBox2;
-        comboBox3 = jComboBox3;
-        comboBox4 = jComboBox4;
-        comboBox5 = jComboBox5;
-        label = jLabel;
-        
-    }
-    
-    public Threads(String username,JComboBox jComboBox1,JComboBox jComboBox2,JComboBox jComboBox3,JComboBox jComboBox4,JComboBox jComboBox5,JList jList){
+    public Threads(String username, JComboBox jComboBox1,JComboBox jComboBox2,JComboBox jComboBox3,JComboBox jComboBox4,JComboBox jComboBox5,JList jList){
         
         purpose = "setAddGroupScreen";
         Username = username;
@@ -163,6 +172,20 @@ public class Threads implements Runnable{
         comboBox4 = jComboBox4;
         comboBox5 = jComboBox5;
         list = jList;
+        
+    }
+    
+    public Threads(String username,String groupName,String member1,String member2,String member3,String member4,String member5,JLabel jLabel){
+        
+        purpose = "createGroup";
+        Username = username;
+        userInput = groupName;
+        groupMember1 = member1;
+        groupMember2 = member2;
+        groupMember3 = member3;
+        groupMember4 = member4;
+        groupMember5 = member5;
+        label = jLabel;
         
     }
     
@@ -305,23 +328,38 @@ public class Threads implements Runnable{
         
         else if(purpose.equals("getFriendMessages")){
             
-            while(true){
+            String result = "";
+            try {
                 
-                try {
-                
-                if(MessageTo1 != null){
-                    
-                    String result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
-                    textArea.setText(result);
-                    
-                }
-                
+                result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
+                textArea.setText(result);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-                
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            while(new HomeScreen().isShowing() && toggleButton.getText().equals("Friends")){
+                                    
+                    String display = textArea.getText();
+                    try {
+                        
+                        result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    if(!(display.equals(result))){
+                        
+                        textArea.setText(result);
+                        
+                    }
+
             }
             
             
@@ -375,54 +413,69 @@ public class Threads implements Runnable{
             
             int count = 0;
             
-            if(comboBox1.getSelectedItem().equals("No-one")){
-                
-                count++;
-                
-                
-            }
-            if(comboBox2.getSelectedItem().equals("No-one")){
+            if(groupMember2.equals("No-one")){
                 
                 count++;
                 
             }
-            if(comboBox3.getSelectedItem().equals("No-one")){
+            if(groupMember3.equals("No-one")){
                 
                 count++;
                 
             }
-            if(comboBox4.getSelectedItem().equals("No-one")){
+            if(groupMember4.equals("No-one")){
                 
                 count++;
                 
             }
-            if(comboBox5.getSelectedItem().equals("No-one")){
+            if(groupMember5.equals("No-one")){
                 
                 count++;
                 
             }
             
-            if(count > 3){
+            if(count >= 3){
                 
                 label.setForeground(Color.red);
-                label.setText("There has to be more than 3 member in a group");
+                label.setText("A group needs a min of 3 member");
                 
             }
             else{
                
-                boolean result = GroupManager.areMembersDifferent((String) comboBox1.getSelectedItem(), (String) comboBox2.getSelectedItem(), (String) comboBox3.getSelectedItem(), (String) comboBox4.getSelectedItem(), (String) comboBox5.getSelectedItem());
+                boolean result = GroupManager.areMembersDifferent(groupMember2,groupMember3,groupMember4,groupMember5);
                 
                 if(result){
                     
                     try {
-                        
+
                         result = GroupManager.isGroupNameUnique(userInput, Username);
                         
                         if(result){
                             
-                            GroupManager.createGroup(userInput, (String) comboBox1.getSelectedItem(), (String) comboBox2.getSelectedItem(), (String) comboBox3.getSelectedItem(), (String) comboBox4.getSelectedItem(), (String) comboBox5.getSelectedItem());
-                            label.setForeground(Color.GREEN);
-                            label.setText("Group created");
+                            if(userInput.isEmpty()){
+                                
+                             label.setForeground(Color.red);
+                             label.setText("Group name can't be blank");
+                                
+                            }
+                            else{
+                                
+                                if(userInput.length() > 200){
+                                    
+                                    label.setForeground(Color.red);
+                                    label.setText("Group name too long");
+                                    
+                                }
+                                else{
+                                    
+                                    label.setForeground(Color.GREEN);
+                                    label.setText("Group created");
+                                    GroupManager.createGroup(userInput,groupMember1,groupMember2,groupMember3,groupMember4,groupMember5);
+                                   
+                                    
+                                }
+                            
+                            }
                             
                         }
                         else{
@@ -450,27 +503,36 @@ public class Threads implements Runnable{
         else if(purpose.equals("setAddGroupScreen")){
  
             try {
-                DefaultComboBoxModel DefaultComboBoxModel = new DefaultComboBoxModel();
+                DefaultComboBoxModel DefaultComboBoxModel1 = new DefaultComboBoxModel();
+                DefaultComboBoxModel DefaultComboBoxModel2 = new DefaultComboBoxModel();
+                DefaultComboBoxModel DefaultComboBoxModel3 = new DefaultComboBoxModel();
+                DefaultComboBoxModel DefaultComboBoxModel4 = new DefaultComboBoxModel();
+                DefaultComboBoxModel DefaultComboBoxModel5 = new DefaultComboBoxModel();
                 
-                DefaultComboBoxModel.addElement(Username);
+                DefaultComboBoxModel1.addElement(Username);
                 
-                comboBox1.setModel(DefaultComboBoxModel);
-                
-                DefaultComboBoxModel.removeAllElements();
-                
-                DefaultComboBoxModel.addElement("No-one");
+                comboBox1.setModel(DefaultComboBoxModel1);
+
+                DefaultComboBoxModel2.addElement("No-one");
+                DefaultComboBoxModel3.addElement("No-one");
+                DefaultComboBoxModel4.addElement("No-one");
+                DefaultComboBoxModel5.addElement("No-one");
                 
                 String[] listOfFriends = FriendManager.getFriends(Username);
                 
                 for(int i = 0; i < listOfFriends.length; i++){
                     
-                    DefaultComboBoxModel.addElement(listOfFriends[i]);
-                    comboBox2.setModel(DefaultComboBoxModel);
-                    comboBox3.setModel(DefaultComboBoxModel);
-                    comboBox4.setModel(DefaultComboBoxModel);
-                    comboBox5.setModel(DefaultComboBoxModel);
+                    DefaultComboBoxModel2.addElement(listOfFriends[i]);
+                    DefaultComboBoxModel3.addElement(listOfFriends[i]);
+                    DefaultComboBoxModel4.addElement(listOfFriends[i]);
+                    DefaultComboBoxModel5.addElement(listOfFriends[i]);
 
-                }  
+                } 
+                
+                comboBox2.setModel(DefaultComboBoxModel2);
+                comboBox3.setModel(DefaultComboBoxModel3);
+                comboBox4.setModel(DefaultComboBoxModel4);
+                comboBox5.setModel(DefaultComboBoxModel5);
             
                 DefaultListModel DefaultListModel = GroupManager.getGroups(Username);
 
@@ -481,5 +543,52 @@ public class Threads implements Runnable{
             }
             
         }
+        
+        else if(purpose.equals("getGroupMessages")){
+            String result = "";
+            try {
+                
+                result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
+                textArea.setText(result);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            while(new HomeScreen().isShowing() && toggleButton.getText().equals("Groups")){
+                                    
+                    String display = textArea.getText();
+                    try {
+                        
+                        result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    if(!(display.equals(result))){
+                        
+                        textArea.setText(result);
+                        
+                    }
+
+            }
+            
+            
+        }
+        
+        else if(purpose.equals("sendGroupMessage")){
+            
+            try {
+                
+                String text = MessageManager.sendGroupMessages(MessageFrom, MessageTo1, sendMessage,previousMessage);
+                textArea.setText(text);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
     }
 }

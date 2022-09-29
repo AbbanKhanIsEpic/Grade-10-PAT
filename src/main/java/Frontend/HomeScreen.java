@@ -18,7 +18,7 @@ public class HomeScreen extends javax.swing.JFrame {
      */
     
     private String Username;
-    private String selectedFriend;
+    private String selectedFriendOrGroup;
     
     public HomeScreen() {
         initComponents();
@@ -84,11 +84,6 @@ public class HomeScreen extends javax.swing.JFrame {
 
         FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png"))); // NOI18N
         FriendsOrGroupToggleButton.setText("Friends");
-        FriendsOrGroupToggleButton.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                FriendsOrGroupToggleButtonItemStateChanged(evt);
-            }
-        });
         FriendsOrGroupToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FriendsOrGroupToggleButtonActionPerformed(evt);
@@ -280,15 +275,15 @@ public class HomeScreen extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(loginBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addComponent(signUpBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(SeparatorSplitPane)
             .addComponent(loginBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(signUpBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -319,14 +314,17 @@ public class HomeScreen extends javax.swing.JFrame {
         
         thread.start();
         
+        ViewMessageTextArea.setText("");
+        
     }//GEN-LAST:event_FriendsOrGroupToggleButtonActionPerformed
 
     private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
 
        String messageSend = SendMessageTextField.getText();
        String messageRecieved = ViewMessageTextArea.getText();
+       boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
         
-        Runnable sendFriendMessage = new Threads(ViewMessageTextArea,Username,selectedFriend,messageSend,messageRecieved);
+        Runnable sendFriendMessage = new Threads(ViewMessageTextArea,Username,selectedFriendOrGroup,messageSend,messageRecieved,friend);
         
         Thread thread = new Thread(sendFriendMessage);
         
@@ -352,19 +350,16 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void FriendORGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_FriendORGroupListValueChanged
         // TODO add your handling code here:
-        selectedFriend = FriendORGroupList.getSelectedValue();
+        selectedFriendOrGroup = FriendORGroupList.getSelectedValue();
         
-        Runnable getFriendMessage = new Threads(ViewMessageTextArea,Username,selectedFriend);
+        Runnable getFriendOrGroupMessage = new Threads(ViewMessageTextArea,Username,selectedFriendOrGroup,FriendsOrGroupToggleButton);
         
-        Thread thread = new Thread(getFriendMessage);
+        Thread thread = new Thread(getFriendOrGroupMessage);
         
         thread.start();
+        
+        TalkToLabel.setText("You are currently talking to: " + selectedFriendOrGroup);
     }//GEN-LAST:event_FriendORGroupListValueChanged
-
-    private void FriendsOrGroupToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonItemStateChanged
-        // TODO add your handling code here:
-       
-    }//GEN-LAST:event_FriendsOrGroupToggleButtonItemStateChanged
 
     private void FriendORGroupListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FriendORGroupListMouseClicked
         // https://stackoverflow.com/questions/4344682/double-click-event-on-jlist-element

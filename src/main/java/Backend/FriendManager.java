@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 
 /**
  *
@@ -119,7 +120,7 @@ public class FriendManager {
         
     }
     
-    public static void acceptFriendRequest(String from, String to) throws SQLException{
+    public static void acceptFriendRequest(String from, String to,JList jList) throws SQLException{
         
         DB.update("DELETE FROM abbankDB.friendRquest WHERE fromWho = '" + from + "' AND toWho = '" + to + "';");
         DB.update("DELETE FROM abbankDB.friendRquest WHERE fromWho = '" + to + "' AND toWho = '" + from + "';");
@@ -129,6 +130,10 @@ public class FriendManager {
         
         DB.update("INSERT INTO abbankDB." + tableFrom + " Values('" + to + "',0,'');");
         DB.update("INSERT INTO abbankDB." + tableTo + " Values('" + from + "',0,'');");
+        
+        DefaultListModel DefaultListModel = FriendManager.getReceivingFriendRequest(from);
+        
+        jList.setModel(DefaultListModel);
         
     }
     

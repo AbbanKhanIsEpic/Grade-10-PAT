@@ -167,17 +167,13 @@ public class UserManager {
         String ipAdress = "";
         ipAdress = getIPAdress();
 
-        ResultSet resultSet = null;
-
-        resultSet = DB.query("SELECT Username From abbankDB.TableOfUsers where IPAdress = '"+ ipAdress +"';");
+        ResultSet resultSet = resultSet = DB.query("SELECT Username From abbankDB.TableOfUsers where IPAdress = '"+ ipAdress +"';");
 
 
         resultSet.next();
 
 
-        String result = "";
-            
-        result = resultSet.getString(1);
+        String result = resultSet.getString(1);
 
         return result;
     }

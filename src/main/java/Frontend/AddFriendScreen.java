@@ -249,7 +249,7 @@ public class AddFriendScreen extends javax.swing.JFrame {
         
         try {
             
-            FriendManager.acceptFriendRequest(Username, from);
+            FriendManager.acceptFriendRequest(Username, from,RecievedFriendRequestList);
             
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);

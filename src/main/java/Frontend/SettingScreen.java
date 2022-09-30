@@ -20,6 +20,8 @@ public class SettingScreen extends javax.swing.JFrame {
     /**
      * Creates new form SettingScreen
      */
+    private String Username = "";
+    
     DefaultListModel AccountDefaultList = new DefaultListModel();
     String[] tags = {"Main"};
     
@@ -32,7 +34,6 @@ public class SettingScreen extends javax.swing.JFrame {
     
     public SettingScreen() {
         initComponents();
-        
         for(int i = 0; i < tags.length; i++){
             AccountDefaultList.addElement(tags[i]);
             this.AccountList.setModel(AccountDefaultList);
@@ -43,7 +44,10 @@ public class SettingScreen extends javax.swing.JFrame {
             this.fontMessageComboBox.setModel(FontProfileDefaultList);
         }
     }
-
+    
+     public SettingScreen(String username) {
+         Username = username;
+     }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -696,7 +700,7 @@ public class SettingScreen extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 2453, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 2292, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -737,7 +741,7 @@ public class SettingScreen extends javax.swing.JFrame {
 
     private void ReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnButtonActionPerformed
         // TODO add your handling code here:
-        new HomeScreen().setVisible(true);
+        new HomeScreen(Username).setVisible(true);
         dispose();
     }//GEN-LAST:event_ReturnButtonActionPerformed
 

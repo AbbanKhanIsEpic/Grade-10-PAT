@@ -4,15 +4,11 @@
  */
 package Backend;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -136,5 +132,32 @@ public class FriendManager {
         jList.setModel(DefaultListModel);
         
     }
+    public static void blockFriend(String username,String to) throws SQLException{
+        
+        String table = username + "_fm";
+        
+        DB.update("Update abbankDB." + table + " Set FriendsBlockOrNot = 1 Where Friends = '" + to +"'");
     
+    }
+    
+    public static void unblockFriend(String username,String to) throws SQLException{
+        
+        String table = username + "_fm";
+        
+        DB.update("Update abbankDB." + table + " Set FriendsBlockOrNot = 0 Where Friends = '" + to +"'");
+
+    }
+    
+    public static boolean isFriendBlock(String username, String to) throws SQLException{
+        
+        String table = username + "_fm";
+        
+        ResultSet result = DB.query("Select FriendsBlockOrNot from abbankDB." + table + " Where Friends = '" + to + "'");
+        
+        result.next();
+        
+        int block = result.getInt(1);
+        
+        return block == 1;
+    }
 }

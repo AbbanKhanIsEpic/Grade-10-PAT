@@ -4,7 +4,11 @@
  */
 package Frontend;
 
+import Backend.MessageManager;
 import Backend.Threads;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JList;
 
 /**
@@ -26,6 +30,8 @@ public class HomeScreen extends javax.swing.JFrame {
     
     public HomeScreen(String username) {
         initComponents();
+        
+        new HomeScreen().setTitle("Welcome to ChatBun");
         
         Username = username;
         
@@ -127,6 +133,11 @@ public class HomeScreen extends javax.swing.JFrame {
         swapAccountLabel.setText("Swap account:");
 
         SwapAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        SwapAccountComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                SwapAccountComboBoxItemStateChanged(evt);
+            }
+        });
 
         WelcomeLabel.setForeground(new java.awt.Color(51, 51, 55));
         WelcomeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
@@ -222,8 +233,6 @@ public class HomeScreen extends javax.swing.JFrame {
                 .addGap(58, 58, 58))
         );
 
-        TalkToLabel.setText("You are currently talking to: ");
-
         ViewMessageTextArea.setEditable(false);
         ViewMessageTextArea.setColumns(20);
         ViewMessageTextArea.setRows(5);
@@ -292,15 +301,39 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void DeleteMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMessageButtonActionPerformed
         // TODO add your handling code here:
+        if(FriendsOrGroupToggleButton.equals("Friends")){
+            try {
+                MessageManager.deleteFriendMessage(Username, FriendORGroupList.getSelectedValue());
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            try {
+                MessageManager.deleteGroupMessage(Username, FriendORGroupList.getSelectedValue());
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }//GEN-LAST:event_DeleteMessageButtonActionPerformed
 
     private void BlockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BlockButtonActionPerformed
         // TODO add your handling code here:
+        boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
+        boolean block = BlockButton.getText().equals("Block");
+        
+        Runnable blockFriend = new Threads(Username,selectedFriendOrGroup,friend,block,BlockButton);
+        
+        Thread thread = new Thread(blockFriend);
+        
+        thread.start();
+        
     }//GEN-LAST:event_BlockButtonActionPerformed
 
     private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
         // TODO add your handling code here:
-        new SettingScreen().setVisible(true);
+        new SettingScreen(Username).setVisible(true);
         dispose();
     }//GEN-LAST:event_SettingButtonActionPerformed
 
@@ -315,6 +348,8 @@ public class HomeScreen extends javax.swing.JFrame {
         thread.start();
         
         ViewMessageTextArea.setText("");
+        
+        TalkToLabel.setText("");
         
     }//GEN-LAST:event_FriendsOrGroupToggleButtonActionPerformed
 
@@ -352,11 +387,19 @@ public class HomeScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         selectedFriendOrGroup = FriendORGroupList.getSelectedValue();
         
-        Runnable getFriendOrGroupMessage = new Threads(ViewMessageTextArea,Username,selectedFriendOrGroup,FriendsOrGroupToggleButton);
+        boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
+        
+        Runnable getFriendOrGroupMessage = new Threads(ViewMessageTextArea,Username,selectedFriendOrGroup,FriendsOrGroupToggleButton,FriendORGroupList);
+        
+        Runnable setBlockButton = new Threads(Username,selectedFriendOrGroup,BlockButton,friend);
         
         Thread thread = new Thread(getFriendOrGroupMessage);
         
+        Thread thread2 = new Thread(setBlockButton);
+        
         thread.start();
+        
+        thread2.start();
         
         TalkToLabel.setText("You are currently talking to: " + selectedFriendOrGroup);
     }//GEN-LAST:event_FriendORGroupListValueChanged
@@ -366,11 +409,27 @@ public class HomeScreen extends javax.swing.JFrame {
         JList list = (JList)evt.getSource();
         if (evt.getClickCount() == 2) {
             
-            int index = list.locationToIndex(evt.getPoint());
-            System.out.println("index: "+index);
+            new ProfileScreen(Username).setVisible(true);
+            dispose();
             
          }
     }//GEN-LAST:event_FriendORGroupListMouseClicked
+
+    private void SwapAccountComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SwapAccountComboBoxItemStateChanged
+        // TODO add your handling code here:
+        String currentAccount =  (String) SwapAccountComboBox.getSelectedItem();
+        String toggleButtonText = FriendsOrGroupToggleButton.getText();
+        
+        Username = currentAccount;
+        
+        WelcomeLabel.setText("Welcome: " + Username);
+        
+        Runnable setNewList = new Threads(Username,toggleButtonText,FriendORGroupList);
+        
+        Thread thread = new Thread(setNewList);
+        
+        thread.start();
+    }//GEN-LAST:event_SwapAccountComboBoxItemStateChanged
 
     /**
      * @param args the command line arguments

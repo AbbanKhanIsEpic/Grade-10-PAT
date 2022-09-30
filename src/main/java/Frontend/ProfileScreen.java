@@ -13,12 +13,16 @@ public class ProfileScreen extends javax.swing.JFrame {
     /**
      * Creates new form ProfileScreen
      */
+    private String Username = "";
+    
     public ProfileScreen() {
         initComponents();
         
     }
-    public ProfileScreen(boolean edit) {
+    
+    public ProfileScreen(String username) {
         initComponents();
+        Username = username;
     }
 
     /**
@@ -40,6 +44,7 @@ public class ProfileScreen extends javax.swing.JFrame {
         DisplayNameLabel = new javax.swing.JLabel();
         usernameLabel = new javax.swing.JLabel();
         JoinedLabel = new javax.swing.JLabel();
+        GoBackButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout profileBackground1Layout = new javax.swing.GroupLayout(profileBackground1);
         profileBackground1.setLayout(profileBackground1Layout);
@@ -73,6 +78,13 @@ public class ProfileScreen extends javax.swing.JFrame {
 
         JoinedLabel.setText("Joined:");
 
+        GoBackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/left_arrow_icon.png"))); // NOI18N
+        GoBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GoBackButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout profileBackground2Layout = new javax.swing.GroupLayout(profileBackground2);
         profileBackground2.setLayout(profileBackground2Layout);
         profileBackground2Layout.setHorizontalGroup(
@@ -86,7 +98,9 @@ public class ProfileScreen extends javax.swing.JFrame {
             .addGroup(profileBackground2Layout.createSequentialGroup()
                 .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(profileBackground2Layout.createSequentialGroup()
-                        .addGap(318, 318, 318)
+                        .addContainerGap()
+                        .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(198, 198, 198)
                         .addComponent(ProfileIconLabel))
                     .addGroup(profileBackground2Layout.createSequentialGroup()
                         .addGap(244, 244, 244)
@@ -105,8 +119,13 @@ public class ProfileScreen extends javax.swing.JFrame {
         profileBackground2Layout.setVerticalGroup(
             profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(profileBackground2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(ProfileIconLabel)
+                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(profileBackground2Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(ProfileIconLabel))
+                    .addGroup(profileBackground2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(GoBackButton)))
                 .addGap(18, 18, 18)
                 .addComponent(DisplayNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -133,6 +152,12 @@ public class ProfileScreen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void GoBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GoBackButtonActionPerformed
+        // TODO add your handling code here:
+        new HomeScreen(Username).setVisible(true);
+        dispose();
+    }//GEN-LAST:event_GoBackButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,6 +200,7 @@ public class ProfileScreen extends javax.swing.JFrame {
     private javax.swing.JLabel BioLabel;
     private javax.swing.JTextArea BioTextArea;
     private javax.swing.JLabel DisplayNameLabel;
+    private javax.swing.JButton GoBackButton;
     private javax.swing.JLabel JoinedLabel;
     private javax.swing.JLabel ProfileIconLabel;
     private javax.swing.JComboBox<String> jComboBox1;

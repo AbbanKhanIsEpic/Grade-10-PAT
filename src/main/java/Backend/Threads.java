@@ -7,11 +7,13 @@ package Backend;
 import Frontend.HomeScreen;
 import java.awt.Color;
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,6 +50,7 @@ public class Threads implements Runnable{
     private JComboBox comboBox5;
     private JTextArea textArea;
     private JToggleButton toggleButton;
+    private JButton button;
     
     
     public Threads(String username,JLabel jLabel){
@@ -122,12 +125,13 @@ public class Threads implements Runnable{
         }
     }
     
-    public Threads(JTextArea jTextArea, String from, String to,JToggleButton jToggleButton){
+    public Threads(JTextArea jTextArea, String from, String to,JToggleButton jToggleButton,JList jList){
         
         MessageFrom = from;
         MessageTo1 = to;
         textArea = jTextArea;
         toggleButton = jToggleButton;
+        list = jList;
             
         if(toggleButton.getText().equals("Friends")){
             
@@ -166,6 +170,11 @@ public class Threads implements Runnable{
         
         purpose = "setAddGroupScreen";
         Username = username;
+        groupMember1 = (String) jComboBox1.getSelectedItem();
+        groupMember2 = (String) jComboBox2.getSelectedItem();
+        groupMember3 = (String) jComboBox3.getSelectedItem();
+        groupMember4 = (String) jComboBox4.getSelectedItem();
+        groupMember5 = (String) jComboBox5.getSelectedItem();
         comboBox1 = jComboBox1;
         comboBox2 = jComboBox2;
         comboBox3 = jComboBox3;
@@ -188,6 +197,72 @@ public class Threads implements Runnable{
         label = jLabel;
         
     }
+    
+    public Threads(String selectedGroupName,JList jList,String user){
+        
+        list = jList;
+        userInput = selectedGroupName;
+        purpose = "ShowMemberOfGroup";
+        Username = user;
+        
+    }
+    public Threads(String username,String to,boolean friend,boolean block,JButton jButton){
+        
+        Username = username;
+        userInput = to;
+        button = jButton;
+        
+        if(block){
+            
+            if(friend){
+            
+                purpose = "BlockFriend";
+            
+            }
+           else{
+            
+                purpose = "BlockGroup";
+            
+            }
+            
+        }
+        else{
+            
+             if(friend){
+            
+                purpose = "unblockFriend";
+            
+            }
+           else{
+            
+                purpose = "unblockGroup";
+            
+            }
+            
+        }
+        
+    }
+    
+    public Threads(String username,String to,JButton jButton,boolean friend){
+        
+        Username = username;
+        userInput = to;
+        button = jButton;
+        
+        if(friend){
+            
+            purpose = "IsFriendBlock";
+            
+        }
+        else{
+            
+            purpose = "IsGroupBlock";
+            
+        }
+        
+    }
+ 
+    
     
     @Override
     public void run() {
@@ -316,7 +391,7 @@ public class Threads implements Runnable{
                 
                 try {
                     
-                    String result = MessageManager.sendFriendMessage(MessageFrom, MessageTo1, sendMessage,previousMessage);
+                    String result = MessageManager.sendFriendMessage(MessageFrom, MessageTo1, sendMessage);
                     
                     textArea.setText(result);
                     
@@ -328,37 +403,35 @@ public class Threads implements Runnable{
         
         else if(purpose.equals("getFriendMessages")){
             
-            String result = "";
             try {
                 
-                result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
+                String result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
                 textArea.setText(result);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            while(new HomeScreen().isShowing() && toggleButton.getText().equals("Friends")){
+
+            while(new HomeScreen().isDisplayable() && list.getSelectedValue().toString().equals(MessageTo1) && toggleButton.getText().equals("Friends")){
                                     
                     String display = textArea.getText();
                     try {
                         
-                        result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
+                        String result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
                         
+                         if(!(display.equals(result))){
+                        
+                        textArea.setText(result);
+                        
+                        }
+                         
+                         
                     } catch (SQLException ex) {
                         Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                    if(!(display.equals(result))){
-                        
-                        textArea.setText(result);
-                        
-                    }
+                   
 
             }
             
@@ -442,7 +515,7 @@ public class Threads implements Runnable{
             }
             else{
                
-                boolean result = GroupManager.areMembersDifferent(groupMember2,groupMember3,groupMember4,groupMember5);
+                boolean result = GroupManager.areMembersDifferent(groupMember1,groupMember2,groupMember3,groupMember4,groupMember5);
                 
                 if(result){
                     
@@ -510,8 +583,6 @@ public class Threads implements Runnable{
                 DefaultComboBoxModel DefaultComboBoxModel5 = new DefaultComboBoxModel();
                 
                 DefaultComboBoxModel1.addElement(Username);
-                
-                comboBox1.setModel(DefaultComboBoxModel1);
 
                 DefaultComboBoxModel2.addElement("No-one");
                 DefaultComboBoxModel3.addElement("No-one");
@@ -529,6 +600,7 @@ public class Threads implements Runnable{
 
                 } 
                 
+                comboBox1.setModel(DefaultComboBoxModel1);
                 comboBox2.setModel(DefaultComboBoxModel2);
                 comboBox3.setModel(DefaultComboBoxModel3);
                 comboBox4.setModel(DefaultComboBoxModel4);
@@ -545,32 +617,35 @@ public class Threads implements Runnable{
         }
         
         else if(purpose.equals("getGroupMessages")){
-            String result = "";
             try {
                 
-                result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
+                String result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
                 textArea.setText(result);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
 
-            while(new HomeScreen().isShowing() && toggleButton.getText().equals("Groups")){
+            while(new HomeScreen().isDisplayable() && list.getSelectedValue().toString().equals(MessageTo1) && toggleButton.getText().equals("Friends")){
                                     
                     String display = textArea.getText();
                     try {
                         
-                        result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
+                        String result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
                         
+                         if(!(display.equals(result))){
+                        
+                        textArea.setText(result);
+                        
+                        }
+                         
+                         
                     } catch (SQLException ex) {
                         Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                    if(!(display.equals(result))){
-                        
-                        textArea.setText(result);
-                        
-                    }
+                   
 
             }
             
@@ -581,7 +656,7 @@ public class Threads implements Runnable{
             
             try {
                 
-                String text = MessageManager.sendGroupMessages(MessageFrom, MessageTo1, sendMessage,previousMessage);
+                String text = MessageManager.sendGroupMessages(MessageFrom, MessageTo1, sendMessage );
                 textArea.setText(text);
                 
             } catch (SQLException ex) {
@@ -590,5 +665,99 @@ public class Threads implements Runnable{
             
         }
         
+        else if(purpose.equals("ShowMemberOfGroup")){
+            
+            try {
+                
+                DefaultListModel DefaultListModel = GroupManager.getGroupMember(userInput, Username);
+                list.setModel(DefaultListModel);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        else if(purpose.equals("BlockFriend")){
+            
+            try {
+                FriendManager.blockFriend(Username, userInput);
+                button.setText("Unblock");
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        else if(purpose.equals("BlockGroup")){
+            
+            try {
+                GroupManager.blockGroup(Username, userInput);
+                button.setText("Unblock");
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        else if(purpose.equals("IsFriendBlock")){
+            
+            try {
+                
+                if(FriendManager.isFriendBlock(Username, userInput)){
+                    
+                    button.setText("Unblock");
+                    
+                }
+                else{
+                    
+                    button.setText("Block");
+                    
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        else if(purpose.equals("IsGroupBlock")){
+            try {
+                if(GroupManager.isGroupBlock(Username, userInput)){
+                    
+                    button.setText("Unblock");
+                    
+                }
+                else{
+                    
+                    button.setText("Block");
+                    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        else if(purpose.equals("unblockFriend")){
+            
+            try {
+                
+                FriendManager.unblockFriend(Username, userInput);
+                button.setText("Block");
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        else if(purpose.equals("unblockGroup")){
+            
+            try {
+                
+                GroupManager.unblockGroup(Username, userInput);
+                button.setText("Block");
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }
 }

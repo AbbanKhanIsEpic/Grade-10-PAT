@@ -29,7 +29,7 @@ public class MessageManager {
         
     }
     
-    public static String sendFriendMessage(String from, String to, String sendmessage,String messageFromTextArea) throws SQLException{
+    public static String sendFriendMessage(String from, String to, String sendmessage) throws SQLException{
 
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
         
@@ -37,13 +37,39 @@ public class MessageManager {
         String date = LocalDate.now().toString();
         
         
-        String sendMessage =  messageFromTextArea + "\n" + "< " + date + " | " + time + " > " + from + ": " + sendmessage;
         
         String table = to + "_fm";
-        DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + from + "'");
+        if(!(FriendManager.isFriendBlock(to, from))){
+            
+            ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + from + "'");
+            
+            result.next();
+            
+            String message = result.getString(1);
+            
+            String sendMessage =  message +  "< " + date + " | " + time + " > " + from + ": " + sendmessage + "\n";
+            
+            DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + from + "'");
+            
+        }
+        
+        String sendMessage = "";
         
         table = from + "_fm";
-        DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + to + "'");
+        if(!(FriendManager.isFriendBlock(from, to))){
+            
+            ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + to + "'");
+            
+            result.next();
+            
+            String message = result.getString(1);
+            
+            sendMessage =  message  + "< " + date + " | " + time + " > " + from + ": " + sendmessage + "\n";
+            
+            DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + to + "'");
+            
+        }
+        
         
         return sendMessage;
         
@@ -62,14 +88,14 @@ public class MessageManager {
         return message;
     }
     
-    public static String sendGroupMessages(String username, String groupName,String sendmessage,String messageFromTextArea) throws SQLException{
+    public static String sendGroupMessages(String username, String groupName,String sendmessage) throws SQLException{
         
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
         
         String time = formatTime.format(LocalTime.now());
         String date = LocalDate.now().toString();
         
-        String sendMessage =  messageFromTextArea + "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n" ;
+        String sendMessage =   "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n" ;
         
         String table = username + "_gm";
         
@@ -83,7 +109,7 @@ public class MessageManager {
         String member4 = result.getString(4);
         String member5 = result.getString(5);
         
-        if(!(member1.equals("null"))){
+        if(!(member1.equals("null")) && !(GroupManager.isGroupBlock(member1, groupName))){
             
             table = member1 + "_gm";
         
@@ -123,6 +149,22 @@ public class MessageManager {
         return sendMessage;
     }
     
+    public static void deleteGroupMessage(String username, String groupName) throws SQLException{
+        
+        String table = username + "_gm";
+            
+        DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '' Where GroupName = '" + groupName + "'");
+        
+    }
+    
+    public static void deleteFriendMessage(String username, String to) throws SQLException{
+        
+        String table = username + "_fm";
+        
+        DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '' WHERE Friends = '" + to + "'");
+        
+        
+    }
     
     
     

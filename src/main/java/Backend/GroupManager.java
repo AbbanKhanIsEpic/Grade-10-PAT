@@ -4,6 +4,7 @@
  */
 package Backend;
 
+import static java.lang.ProcessBuilder.Redirect.to;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
@@ -73,26 +74,133 @@ public class GroupManager {
         
     }
     
-    public static boolean areMembersDifferent(String selectedMember2,String selectedMember3,String selectedMember4,String selectedMember5){
-        
-        if((selectedMember2.equals(selectedMember3)&& !(selectedMember3.equals("No-one"))) || (selectedMember2.equals(selectedMember4) && !(selectedMember4.equals("No-one"))) || (selectedMember2.equals(selectedMember5))&& !(selectedMember5.equals("No-one"))){
-            
-            return false;
-            
-        }
-        else if((selectedMember3.equals(selectedMember4)&& !(selectedMember4.equals("No-one"))) || (selectedMember3.equals(selectedMember5))&& !(selectedMember4.equals("No-one"))){
-            
-            return false;
+    public static boolean areMembersDifferent(String selectedMember1,String selectedMember2,String selectedMember3,String selectedMember4,String selectedMember5){
+        if(!(selectedMember1.equals("No-one"))){
+            if((selectedMember1.equals(selectedMember2) && !(selectedMember2.equals("No-one"))) || (selectedMember1.equals(selectedMember3) && !(selectedMember3.equals("No-one"))) || ((selectedMember1.equals(selectedMember4) && !(selectedMember4.equals("No-one")))) || (selectedMember1.equals(selectedMember5) && !(selectedMember5.equals("No-one")))){
+                return false;
+            }
             
         }
-        else if((selectedMember4.equals(selectedMember5))&& !(selectedMember4.equals("No-one"))){
+        if(!(selectedMember2.equals("No-one"))){
+            if(selectedMember2.equals(selectedMember3) && !(selectedMember3.equals("No-one")) || selectedMember2.equals(selectedMember4) && !(selectedMember4.equals("No-one")) || selectedMember2.equals(selectedMember5) && !(selectedMember5.equals("No-one"))){
+                return false;
+            }
             
-            return false;
-            
+        }
+        if(!(selectedMember3.equals("No-one"))){
+            if(selectedMember3.equals(selectedMember4) && !(selectedMember4.equals("No-one")) || selectedMember3.equals(selectedMember5) && !(selectedMember5.equals("No-one"))){
+                return false;
+            }
+        }
+        if(!(selectedMember4.equals("No-one"))){
+            if(selectedMember4.equals(selectedMember5) && !(selectedMember5.equals("No-one"))){
+                return false;
+            }
         }
         
         return true;
     }
+    public static DefaultListModel getGroupMember(String groupName,String username) throws SQLException{
+        
+        String table = username + "_gm";
+        
+        DefaultListModel DefaultListModel = new DefaultListModel();
+        
+        ResultSet result = DB.query("Select GroupMemember1 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        String member = result.getString(1);
+        
+        if(!(member.equals("null"))){
+            
+            DefaultListModel.addElement(result.getString(1));
+            
+        }
+        
+        
+        
+        result = DB.query("Select GroupMemember2 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        member = result.getString(1);
+        
+        if(!(member.equals("null"))){
+            
+            DefaultListModel.addElement(result.getString(1));
+            
+        }
+        
+        result = DB.query("Select GroupMemember3 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        member = result.getString(1);
+        
+        if(!(member.equals("null"))){
+            
+            DefaultListModel.addElement(result.getString(1));
+            
+        }
+        
+        result = DB.query("Select GroupMemember4 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        member = result.getString(1);
+        
+        if(!(member.equals("null"))){
+            
+            DefaultListModel.addElement(result.getString(1));
+            
+        }
+        
+        result = DB.query("Select GroupMemember5 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        member = result.getString(1);
+        
+        if(!(member.equals("null"))){
+            
+            DefaultListModel.addElement(result.getString(1));
+            
+        }
+        
+        return DefaultListModel;
+    }
+    
+    public static void blockGroup(String username,String groupName) throws SQLException{
+        
+        String table = username + "_gm";
+        
+        DB.update("Update abbankDB." + table + " Set GroupBlockOrNot = 1 Where GroupName = '" + groupName + "'");
+        
+    }
+    
+    public static void unblockGroup(String username,String groupName) throws SQLException{
+        
+        String table = username + "_gm";
+        
+        DB.update("Update abbankDB." + table + " Set GroupBlockOrNot = 0 Where GroupName = '" + groupName + "'");
+        
+    }
+    
+    public static boolean isGroupBlock(String username,String groupName) throws SQLException{
+        
+        String table = username + "_gm";
+        
+        ResultSet result = DB.query("Select GroupBlockOrNot from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        int block = result.getInt(1);
+        
+        return block == 1;
+    }
+    
+   
 }
     
 

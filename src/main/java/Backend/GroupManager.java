@@ -4,7 +4,6 @@
  */
 package Backend;
 
-import static java.lang.ProcessBuilder.Redirect.to;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
@@ -200,6 +199,41 @@ public class GroupManager {
         return block == 1;
     }
     
+    public static void deleteGroup(String username,String groupName) throws SQLException{
+        
+        String table = username + "_gm";
+        
+        ResultSet result = DB.query("select GroupMemember1,GroupMemember2,GroupMemember3,GroupMemember4,GroupMemember5 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        result.next();
+        
+        String member1 = result.getString(1);
+        String member2 = result.getString(2);
+        String member3 = result.getString(3);
+        String member4 = result.getString(4);
+        String member5 = result.getString(5);
+        
+        DB.update("Delete * from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        
+        if(member1.equals(username)){
+            
+            DB.update("Update ");
+            
+        }
+        if(member2.equals(username)){
+            
+        }
+        if(member3.equals(username)){
+            
+        }
+        if(member4.equals(username)){
+            
+        }
+        if(member5.equals(username)){
+            
+        }
+        
+    }
    
 }
     

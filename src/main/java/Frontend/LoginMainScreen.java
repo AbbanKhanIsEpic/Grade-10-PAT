@@ -40,7 +40,6 @@ public class LoginMainScreen extends javax.swing.JFrame {
     }
     //if int usage = 0; means that the user is logining to the home screen
     //if int usage = 1; means that the user is adding an account
-    //if int usage = 2; means that the user is removing an account
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -260,9 +259,6 @@ public class LoginMainScreen extends javax.swing.JFrame {
                  dispose();
             }
             else if(result && Usage == 1){
-                
-            }
-            else if(result && Usage == 2){
                 
             }
             else{

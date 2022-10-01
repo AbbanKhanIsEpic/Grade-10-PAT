@@ -160,4 +160,16 @@ public class FriendManager {
         
         return block == 1;
     }
+    
+    public static void removeFriend(String from, String to) throws SQLException{
+        
+        String table = from + "_fm";
+        
+        DB.update("Delete from abbankDB." + table + " Where Friends = '" + to + "'");
+        
+        table = to + "_fm";
+        
+        DB.update("Delete from abbankDB." + table + " Where Friends = '" + from + "'");
+        
+    }
 }

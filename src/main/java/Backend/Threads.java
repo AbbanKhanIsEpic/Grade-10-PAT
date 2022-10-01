@@ -7,7 +7,6 @@ package Backend;
 import Frontend.HomeScreen;
 import java.awt.Color;
 import java.net.UnknownHostException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -109,10 +108,9 @@ public class Threads implements Runnable{
         
     }
     
-    public Threads(JTextArea jTextArea, String from, String to, String Message1,String Message2,boolean friend){
+    public Threads(String from, String to, String Message1,String Message2,boolean friend){
         
         
-        textArea = jTextArea;
         MessageFrom = from;
         MessageTo1 = to;
         sendMessage = Message1; 
@@ -125,7 +123,7 @@ public class Threads implements Runnable{
         }
     }
     
-    public Threads(JTextArea jTextArea, String from, String to,JToggleButton jToggleButton,JList jList){
+    public Threads(JTextArea jTextArea,String from, String to,JToggleButton jToggleButton,JList jList){
         
         MessageFrom = from;
         MessageTo1 = to;
@@ -324,10 +322,19 @@ public class Threads implements Runnable{
                 for(int i = 0; i < listOfFriends.length; i++){
                     
                     DefaultListModel.addElement(listOfFriends[i]);
+                    
+                }
+                if(listOfFriends != null && listOfFriends.length > 0){
+                    
                     list.setModel(DefaultListModel);
                     
                 }
-                
+                else{
+                    
+                    DefaultListModel.clear();
+                    list.setModel(DefaultListModel);
+                    
+                }
                     
                 
             } catch (SQLException ex) {
@@ -391,9 +398,7 @@ public class Threads implements Runnable{
                 
                 try {
                     
-                    String result = MessageManager.sendFriendMessage(MessageFrom, MessageTo1, sendMessage);
-                    
-                    textArea.setText(result);
+                    MessageManager.sendFriendMessage(MessageFrom, MessageTo1, sendMessage);
                     
                 } catch (SQLException ex) {
                     Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
@@ -403,6 +408,7 @@ public class Threads implements Runnable{
         
         else if(purpose.equals("getFriendMessages")){
             
+            if(MessageTo1 != null){
             try {
                 
                 String result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
@@ -412,7 +418,6 @@ public class Threads implements Runnable{
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-
             while(new HomeScreen().isDisplayable() && list.getSelectedValue().toString().equals(MessageTo1) && toggleButton.getText().equals("Friends")){
                                     
                     String display = textArea.getText();
@@ -420,7 +425,7 @@ public class Threads implements Runnable{
                         
                         String result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
                         
-                         if(!(display.equals(result))){
+                        if(!(display.equals(result))){
                         
                         textArea.setText(result);
                         
@@ -437,6 +442,7 @@ public class Threads implements Runnable{
             
             
         }
+    }
         
         else if(purpose.equals("getGroupNames")){
             
@@ -617,6 +623,8 @@ public class Threads implements Runnable{
         }
         
         else if(purpose.equals("getGroupMessages")){
+            if(MessageTo1 != null){
+                
             try {
                 
                 String result = MessageManager.getGroupMessages(MessageFrom, MessageTo1);
@@ -627,7 +635,7 @@ public class Threads implements Runnable{
             }
             
 
-            while(new HomeScreen().isDisplayable() && list.getSelectedValue().toString().equals(MessageTo1) && toggleButton.getText().equals("Friends")){
+            while(new HomeScreen().isDisplayable() && list.getSelectedValue().toString().equals(MessageTo1) && toggleButton.getText().equals("Groups")){
                                     
                     String display = textArea.getText();
                     try {
@@ -651,13 +659,13 @@ public class Threads implements Runnable{
             
             
         }
+        }
         
         else if(purpose.equals("sendGroupMessage")){
             
             try {
                 
-                String text = MessageManager.sendGroupMessages(MessageFrom, MessageTo1, sendMessage );
-                textArea.setText(text);
+                MessageManager.sendGroupMessages(MessageFrom, MessageTo1, sendMessage );
                 
             } catch (SQLException ex) {
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);

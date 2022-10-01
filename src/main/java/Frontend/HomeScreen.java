@@ -4,6 +4,7 @@
  */
 package Frontend;
 
+import Backend.FriendManager;
 import Backend.MessageManager;
 import Backend.Threads;
 import java.sql.SQLException;
@@ -152,6 +153,11 @@ public class HomeScreen extends javax.swing.JFrame {
 
         RemoveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_icon.png"))); // NOI18N
         RemoveButton.setText("Remove");
+        RemoveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RemoveButtonActionPerformed(evt);
+            }
+        });
 
         AddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Add_icon.png"))); // NOI18N
         AddButton.setText("Add");
@@ -190,20 +196,22 @@ public class HomeScreen extends javax.swing.JFrame {
                             .addComponent(RemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(AddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(loginBackground1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(SettingButton))
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
-                        .addGap(238, 238, 238)
+                        .addGap(21, 21, 21)
+                        .addComponent(SettingButton)
+                        .addGap(144, 144, 144)
                         .addComponent(WelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(76, Short.MAX_VALUE))
         );
         loginBackground1Layout.setVerticalGroup(
             loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginBackground1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(SettingButton)
-                .addGap(10, 10, 10)
-                .addComponent(WelcomeLabel)
+                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(WelcomeLabel))
+                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(SettingButton)))
                 .addGap(18, 18, 18)
                 .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -301,16 +309,16 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void DeleteMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMessageButtonActionPerformed
         // TODO add your handling code here:
-        if(FriendsOrGroupToggleButton.equals("Friends")){
+        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
             try {
-                MessageManager.deleteFriendMessage(Username, FriendORGroupList.getSelectedValue());
+                MessageManager.deleteFriendMessage(Username, selectedFriendOrGroup);
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else{
             try {
-                MessageManager.deleteGroupMessage(Username, FriendORGroupList.getSelectedValue());
+                MessageManager.deleteGroupMessage(Username, selectedFriendOrGroup);
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -359,7 +367,7 @@ public class HomeScreen extends javax.swing.JFrame {
        String messageRecieved = ViewMessageTextArea.getText();
        boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
         
-        Runnable sendFriendMessage = new Threads(ViewMessageTextArea,Username,selectedFriendOrGroup,messageSend,messageRecieved,friend);
+        Runnable sendFriendMessage = new Threads(Username,selectedFriendOrGroup,messageSend,messageRecieved,friend);
         
         Thread thread = new Thread(sendFriendMessage);
         
@@ -430,6 +438,28 @@ public class HomeScreen extends javax.swing.JFrame {
         
         thread.start();
     }//GEN-LAST:event_SwapAccountComboBoxItemStateChanged
+
+    private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
+        // TODO add your handling code here:
+        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
+            try {
+                
+                FriendManager.removeFriend(Username, selectedFriendOrGroup);
+                
+                Runnable setNewList = new Threads(Username,"Friends",FriendORGroupList);
+        
+                Thread thread = new Thread(setNewList);
+        
+                thread.start();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            
+        }
+    }//GEN-LAST:event_RemoveButtonActionPerformed
 
     /**
      * @param args the command line arguments

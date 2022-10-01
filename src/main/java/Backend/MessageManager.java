@@ -29,16 +29,17 @@ public class MessageManager {
         
     }
     
-    public static String sendFriendMessage(String from, String to, String sendmessage) throws SQLException{
+    public static void sendFriendMessage(String from, String to, String sendmessage) throws SQLException{
 
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
         
         String time = formatTime.format(LocalTime.now());
         String date = LocalDate.now().toString();
         
-        
+        String sendMessage = "";
         
         String table = to + "_fm";
+        
         if(!(FriendManager.isFriendBlock(to, from))){
             
             ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + from + "'");
@@ -47,16 +48,19 @@ public class MessageManager {
             
             String message = result.getString(1);
             
-            String sendMessage =  message +  "< " + date + " | " + time + " > " + from + ": " + sendmessage + "\n";
+            sendMessage =  message +  "< " + date + " | " + time + " > " + from + ": " + sendmessage + "\n";
             
             DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendMessage + "' WHERE Friends = '" + from + "'");
             
         }
         
-        String sendMessage = "";
+        
         
         table = from + "_fm";
+        
         if(!(FriendManager.isFriendBlock(from, to))){
+            
+            sendMessage = "";
             
             ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + to + "'");
             
@@ -70,8 +74,6 @@ public class MessageManager {
             
         }
         
-        
-        return sendMessage;
         
     }
     
@@ -88,14 +90,14 @@ public class MessageManager {
         return message;
     }
     
-    public static String sendGroupMessages(String username, String groupName,String sendmessage) throws SQLException{
+    public static void sendGroupMessages(String username, String groupName,String sendmessage) throws SQLException{
         
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
         
         String time = formatTime.format(LocalTime.now());
         String date = LocalDate.now().toString();
         
-        String sendMessage =   "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n" ;
+        String sendMessage = "";
         
         String table = username + "_gm";
         
@@ -112,6 +114,14 @@ public class MessageManager {
         if(!(member1.equals("null")) && !(GroupManager.isGroupBlock(member1, groupName))){
             
             table = member1 + "_gm";
+            
+            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+            
+            result.next();
+            
+            String previousMessage = result.getString(1);
+            
+            sendMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
         
             DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendMessage + "' Where GroupName = '" + groupName + "'");
             
@@ -120,6 +130,16 @@ public class MessageManager {
         if(!(member2.equals("null"))){
             
             table = member2 + "_gm";
+            
+            sendMessage = "";
+            
+            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+            
+            result.next();
+            
+            String previousMessage = result.getString(1);
+            
+            sendMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
         
             DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendMessage + "' Where GroupName = '" + groupName + "'");
             
@@ -127,6 +147,16 @@ public class MessageManager {
         if(!(member3.equals("null"))){
             
             table = member3 + "_gm";
+            
+            sendMessage = "";
+            
+            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+            
+            result.next();
+            
+            String previousMessage = result.getString(1);
+            
+            sendMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
         
             DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendMessage + "' Where GroupName = '" + groupName + "'");
             
@@ -134,19 +164,38 @@ public class MessageManager {
         if(!(member5.equals("null"))){
             
             table = member5 + "_gm";
+            
+            sendMessage = "";
+            
+            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+            
+            result.next();
+            
+            String previousMessage = result.getString(1);
+            
+            sendMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
         
             DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendMessage + "' Where GroupName = '" + groupName + "'");
             
         }
+        
         if(!(member4.equals("null"))){
             
             table = member4 + "_gm";
             
+            sendMessage = "";
+            
+            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+            
+            result.next();
+            
+            String previousMessage = result.getString(1);
+            
+            sendMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
+            
             DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendMessage + "' Where GroupName = '" + groupName + "'");
         
         } 
-        
-        return sendMessage;
     }
     
     public static void deleteGroupMessage(String username, String groupName) throws SQLException{
@@ -161,9 +210,8 @@ public class MessageManager {
         
         String table = username + "_fm";
         
-        DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '' WHERE Friends = '" + to + "'");
-        
-        
+        DB.update("UPDATE abbankDB." + table + " Set FriendMessages = '' WHERE Friends = '" + to + "'");
+
     }
     
     

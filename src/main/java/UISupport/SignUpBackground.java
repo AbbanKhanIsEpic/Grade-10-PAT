@@ -23,7 +23,6 @@ public class SignUpBackground extends javax.swing.JPanel {
      */
     //From 30 to 40 is stolen
     //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
-    //This jPanel is meant to be only for login-related screen but changed my mind
     //The reason for the colour is because green represent birth(spring) like when the user sign up an account to the program, like giving birth to a new user(only for SignUpMainScreen)
     public SignUpBackground() {
         initComponents();

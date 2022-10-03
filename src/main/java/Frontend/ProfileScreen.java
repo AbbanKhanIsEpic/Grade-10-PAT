@@ -4,6 +4,12 @@
  */
 package Frontend;
 
+import Backend.VisualManager;
+import UISupport.ProfileBackground;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author abban
@@ -21,8 +27,20 @@ public class ProfileScreen extends javax.swing.JFrame {
     }
     
     public ProfileScreen(String username) {
-        initComponents();
-        Username = username;
+        try {
+            initComponents();
+            Username = username;
+            
+            String colour1 = VisualManager.getFirstColourProfileBackground(username);
+            
+            String colour2 = VisualManager.getLastColourProfileBackground(username);
+            
+            ProfileBackground.changeColour(colour1, colour2);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfileScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
     }
 
     /**

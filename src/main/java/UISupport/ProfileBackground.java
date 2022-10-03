@@ -21,14 +21,27 @@ public class ProfileBackground extends javax.swing.JPanel {
      */
     //From 29 to 39 is stolen
     //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
+    
+    private static String Colour1 = "#1CB5E0";
+    
+    private static String Colour2 = "#1CB5E0";
+    
     public ProfileBackground() {
         initComponents();
-    setOpaque(false);
+        setOpaque(false);
     }
+    
+    public static void changeColour(String colour1,String colour2){
+        
+        Colour1 = colour1;
+        Colour2 = colour2;
+        
+    }
+    
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        GradientPaint g = new GradientPaint(0, 0, Color.decode("#1CB5E0"), 0, getHeight(), Color.decode("#000046"));
+        GradientPaint g = new GradientPaint(0, 0, Color.decode(Colour1), 0, getHeight(), Color.decode(Colour2));
         g2.setPaint(g);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());

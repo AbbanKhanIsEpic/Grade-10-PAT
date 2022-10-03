@@ -5,11 +5,15 @@
 package Frontend;
 
 import Backend.FriendManager;
+import Backend.GroupManager;
 import Backend.MessageManager;
 import Backend.Threads;
+import Backend.UserManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
 /**
@@ -24,34 +28,56 @@ public class HomeScreen extends javax.swing.JFrame {
     
     private String Username;
     private String selectedFriendOrGroup;
+    private String DisplayName;
+    
     
     public HomeScreen() {
         initComponents();
     }
     
     public HomeScreen(String username) {
-        initComponents();
-        
-        new HomeScreen().setTitle("Welcome to ChatBun");
-        
-        Username = username;
-        
-        WelcomeLabel.setText("Welcome: " + username);
-        
-        setLocationRelativeTo(null);
-        
-        
-        Runnable getFriends = new Threads(username,"Friends",FriendORGroupList);
-        Runnable getConnectedAccount = new Threads(username,SwapAccountComboBox);
+        try {
+            initComponents();
             
-        Thread thread1 = new Thread(getFriends);
-        Thread thread2 = new Thread(getConnectedAccount);
-        
-        thread1.start();
-        thread2.start();
-        
-        
+            new HomeScreen().setTitle("Welcome to ChatBun");
+            
+            Username = username;
+            
+            DisplayName = UserManager.getDisplayName(username);
+            
+            WelcomeLabel.setText("Welcome: " + DisplayName);
+            
+            setLocationRelativeTo(null);
+            
+            String[] friendList = FriendManager.getFriends(Username);
+            
+            String[] connectedAccountList = UserManager.getConnectedAccount(Username);
+            
+            DefaultListModel DefaultListModel = new DefaultListModel();
+            
+            DefaultComboBoxModel DefaultComboBoxModel = new DefaultComboBoxModel();
+            
+            for(int i = 0; i < friendList.length;i++){
+                
+                DefaultListModel.addElement(friendList[i]);
+                
+            }
+            
+            FriendORGroupList.setModel(DefaultListModel);
+            
+            for(int i = 0; i < connectedAccountList.length;i++){
+                
+                DefaultComboBoxModel.addElement(connectedAccountList[i]);
+                
+            }
+            
+            SwapAccountComboBox.setModel(DefaultComboBoxModel);
 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**
@@ -63,37 +89,116 @@ public class HomeScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        SeparatorSplitPane = new javax.swing.JSplitPane();
-        loginBackground1 = new UISupport.LoginBackground();
-        FriendsOrGroupToggleButton = new javax.swing.JToggleButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        FriendORGroupList = new javax.swing.JList<>();
-        DeleteMessageButton = new javax.swing.JButton();
-        BlockButton = new javax.swing.JButton();
-        Separator3 = new javax.swing.JSeparator();
-        Separator2 = new javax.swing.JSeparator();
-        swapAccountLabel = new javax.swing.JLabel();
-        SwapAccountComboBox = new javax.swing.JComboBox<>();
-        Separator1 = new javax.swing.JSeparator();
-        WelcomeLabel = new javax.swing.JLabel();
-        SettingButton = new javax.swing.JButton();
-        RemoveButton = new javax.swing.JButton();
-        AddButton = new javax.swing.JButton();
-        signUpBackground1 = new UISupport.SignUpBackground();
+        textingBackground1 = new UISupport.TextingBackground();
         TalkToLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         ViewMessageTextArea = new javax.swing.JTextArea();
         SendMessageTextField = new javax.swing.JTextField();
         SendMessgeButton = new javax.swing.JButton();
+        SeparatorSplitPane = new javax.swing.JSplitPane();
+        sideMenuBackground1 = new UISupport.SideMenuBackground();
+        FriendsOrGroupToggleButton = new javax.swing.JToggleButton();
+        SettingButton = new javax.swing.JButton();
+        AddButton = new javax.swing.JButton();
+        SwapAccountComboBox = new javax.swing.JComboBox<>();
+        BlockButton = new javax.swing.JButton();
+        Separator3 = new javax.swing.JSeparator();
+        DeleteMessageButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        FriendORGroupList = new javax.swing.JList<>();
+        WelcomeLabel = new javax.swing.JLabel();
+        RemoveButton = new javax.swing.JButton();
+        Separator2 = new javax.swing.JSeparator();
+        swapAccountLabel = new javax.swing.JLabel();
+        Separator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 204));
 
+        ViewMessageTextArea.setEditable(false);
+        ViewMessageTextArea.setColumns(20);
+        ViewMessageTextArea.setRows(5);
+        jScrollPane2.setViewportView(ViewMessageTextArea);
+
+        SendMessgeButton.setText("Send");
+        SendMessgeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendMessgeButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout textingBackground1Layout = new javax.swing.GroupLayout(textingBackground1);
+        textingBackground1.setLayout(textingBackground1Layout);
+        textingBackground1Layout.setHorizontalGroup(
+            textingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(textingBackground1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(textingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(textingBackground1Layout.createSequentialGroup()
+                        .addComponent(SendMessageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addComponent(SendMessgeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2)
+                    .addComponent(TalkToLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+        textingBackground1Layout.setVerticalGroup(
+            textingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(textingBackground1Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(TalkToLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(textingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SendMessgeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SendMessageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
         FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png"))); // NOI18N
         FriendsOrGroupToggleButton.setText("Friends");
-        FriendsOrGroupToggleButton.addActionListener(new java.awt.event.ActionListener() {
+        FriendsOrGroupToggleButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                FriendsOrGroupToggleButtonItemStateChanged(evt);
+            }
+        });
+
+        SettingButton.setText("Settings");
+        SettingButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FriendsOrGroupToggleButtonActionPerformed(evt);
+                SettingButtonActionPerformed(evt);
+            }
+        });
+
+        AddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Add_icon.png"))); // NOI18N
+        AddButton.setText("Add");
+        AddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButtonActionPerformed(evt);
+            }
+        });
+
+        SwapAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        SwapAccountComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                SwapAccountComboBoxItemStateChanged(evt);
+            }
+        });
+
+        BlockButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/block_icon.png"))); // NOI18N
+        BlockButton.setText("Block");
+        BlockButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BlockButtonActionPerformed(evt);
+            }
+        });
+
+        DeleteMessageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_message_icon.png"))); // NOI18N
+        DeleteMessageButton.setText("Delete message");
+        DeleteMessageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteMessageButtonActionPerformed(evt);
             }
         });
 
@@ -114,42 +219,9 @@ public class HomeScreen extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(FriendORGroupList);
 
-        DeleteMessageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_message_icon.png"))); // NOI18N
-        DeleteMessageButton.setText("Delete message");
-        DeleteMessageButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteMessageButtonActionPerformed(evt);
-            }
-        });
-
-        BlockButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/block_icon.png"))); // NOI18N
-        BlockButton.setText("Block");
-        BlockButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BlockButtonActionPerformed(evt);
-            }
-        });
-
-        swapAccountLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/change_account_icon.png"))); // NOI18N
-        swapAccountLabel.setText("Swap account:");
-
-        SwapAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        SwapAccountComboBox.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                SwapAccountComboBoxItemStateChanged(evt);
-            }
-        });
-
         WelcomeLabel.setForeground(new java.awt.Color(51, 51, 55));
         WelcomeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
         WelcomeLabel.setText("Welcome back ");
-
-        SettingButton.setText("Settings");
-        SettingButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SettingButtonActionPerformed(evt);
-            }
-        });
 
         RemoveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_icon.png"))); // NOI18N
         RemoveButton.setText("Remove");
@@ -159,131 +231,82 @@ public class HomeScreen extends javax.swing.JFrame {
             }
         });
 
-        AddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Add_icon.png"))); // NOI18N
-        AddButton.setText("Add");
-        AddButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddButtonActionPerformed(evt);
-            }
-        });
+        swapAccountLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/change_account_icon.png"))); // NOI18N
+        swapAccountLabel.setText("Swap account:");
 
-        javax.swing.GroupLayout loginBackground1Layout = new javax.swing.GroupLayout(loginBackground1);
-        loginBackground1.setLayout(loginBackground1Layout);
-        loginBackground1Layout.setHorizontalGroup(
-            loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginBackground1Layout.createSequentialGroup()
-                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
+        javax.swing.GroupLayout sideMenuBackground1Layout = new javax.swing.GroupLayout(sideMenuBackground1);
+        sideMenuBackground1.setLayout(sideMenuBackground1Layout);
+        sideMenuBackground1Layout.setHorizontalGroup(
+            sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sideMenuBackground1Layout.createSequentialGroup()
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(151, 151, 151)
-                        .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(loginBackground1Layout.createSequentialGroup()
-                                    .addGap(58, 58, 58)
-                                    .addComponent(swapAccountLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(Separator3)
-                                .addComponent(jScrollPane1)
-                                .addComponent(Separator2)
-                                .addGroup(loginBackground1Layout.createSequentialGroup()
-                                    .addComponent(BlockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-                                    .addComponent(DeleteMessageButton))
-                                .addComponent(FriendsOrGroupToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(RemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(AddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                        .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(SettingButton)
                         .addGap(144, 144, 144)
-                        .addComponent(WelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(WelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideMenuBackground1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(sideMenuBackground1Layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(swapAccountLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Separator3)
+                            .addComponent(jScrollPane1)
+                            .addComponent(Separator2)
+                            .addGroup(sideMenuBackground1Layout.createSequentialGroup()
+                                .addComponent(BlockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                                .addComponent(DeleteMessageButton))
+                            .addComponent(FriendsOrGroupToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(18, 18, 18)
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(RemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(AddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(76, Short.MAX_VALUE))
         );
-        loginBackground1Layout.setVerticalGroup(
-            loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginBackground1Layout.createSequentialGroup()
-                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
+        sideMenuBackground1Layout.setVerticalGroup(
+            sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sideMenuBackground1Layout.createSequentialGroup()
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addComponent(WelcomeLabel))
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(SettingButton)))
                 .addGap(18, 18, 18)
                 .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(19, 19, 19)
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(swapAccountLabel))
                 .addGap(18, 18, 18)
                 .addComponent(Separator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(FriendsOrGroupToggleButton)
                             .addComponent(AddButton))
                         .addGap(31, 31, 31)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18))
-                    .addGroup(loginBackground1Layout.createSequentialGroup()
+                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addComponent(RemoveButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(Separator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addGroup(loginBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DeleteMessageButton)
                     .addComponent(BlockButton))
                 .addGap(58, 58, 58))
-        );
-
-        ViewMessageTextArea.setEditable(false);
-        ViewMessageTextArea.setColumns(20);
-        ViewMessageTextArea.setRows(5);
-        jScrollPane2.setViewportView(ViewMessageTextArea);
-
-        SendMessgeButton.setText("Send");
-        SendMessgeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SendMessgeButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout signUpBackground1Layout = new javax.swing.GroupLayout(signUpBackground1);
-        signUpBackground1.setLayout(signUpBackground1Layout);
-        signUpBackground1Layout.setHorizontalGroup(
-            signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
-                .addContainerGap(110, Short.MAX_VALUE)
-                .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(signUpBackground1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
-                        .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signUpBackground1Layout.createSequentialGroup()
-                                .addComponent(SendMessageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(73, 73, 73)
-                                .addComponent(SendMessgeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(TalkToLabel))
-                        .addGap(65, 65, 65))))
-        );
-        signUpBackground1Layout.setVerticalGroup(
-            signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(signUpBackground1Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(TalkToLabel)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addGroup(signUpBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SendMessageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SendMessgeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -291,17 +314,17 @@ public class HomeScreen extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(loginBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
+                .addComponent(sideMenuBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(signUpBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textingBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(loginBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(signUpBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(sideMenuBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(textingBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -331,11 +354,50 @@ public class HomeScreen extends javax.swing.JFrame {
         boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
         boolean block = BlockButton.getText().equals("Block");
         
-        Runnable blockFriend = new Threads(Username,selectedFriendOrGroup,friend,block,BlockButton);
-        
-        Thread thread = new Thread(blockFriend);
-        
-        thread.start();
+        if(friend){
+            
+            if(block){
+                
+                try {
+                    FriendManager.blockFriend(Username, selectedFriendOrGroup);
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+            }
+            else{
+                
+                try {
+                    FriendManager.unblockFriend(Username, selectedFriendOrGroup);
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+        }
+        else{
+            
+            if(block){
+                
+                try {
+                    GroupManager.blockGroup(Username, selectedFriendOrGroup);
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            else{
+                
+                try {
+                    GroupManager.unblockGroup(Username, selectedFriendOrGroup);
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+        }
         
     }//GEN-LAST:event_BlockButtonActionPerformed
 
@@ -345,33 +407,17 @@ public class HomeScreen extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_SettingButtonActionPerformed
 
-    private void FriendsOrGroupToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonActionPerformed
-        // TODO add your handling code here:
-        String text = FriendsOrGroupToggleButton.getText();
-        
-        Runnable toggleFriendAndGroup = new Threads(FriendsOrGroupToggleButton,text,FriendORGroupList,Username);
-        
-        Thread thread = new Thread(toggleFriendAndGroup);
-        
-        thread.start();
-        
-        ViewMessageTextArea.setText("");
-        
-        TalkToLabel.setText("");
-        
-    }//GEN-LAST:event_FriendsOrGroupToggleButtonActionPerformed
-
     private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
 
        String messageSend = SendMessageTextField.getText();
-       String messageRecieved = ViewMessageTextArea.getText();
-       boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
-        
-        Runnable sendFriendMessage = new Threads(Username,selectedFriendOrGroup,messageSend,messageRecieved,friend);
-        
-        Thread thread = new Thread(sendFriendMessage);
-        
-        thread.start();
+       
+        try {
+            
+            MessageManager.sendFriendMessage(Username, selectedFriendOrGroup, messageSend);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_SendMessgeButtonActionPerformed
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
@@ -393,23 +439,35 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void FriendORGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_FriendORGroupListValueChanged
         // TODO add your handling code here:
+        ViewMessageTextArea.setText("");
+        
         selectedFriendOrGroup = FriendORGroupList.getSelectedValue();
         
-        boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
+        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
+            
+            try {
+                
+                boolean result = FriendManager.isBlocked(Username, selectedFriendOrGroup);
+                
+                if(result){
+                    
+                    BlockButton.setText("Block");
+                    
+                }
+                else{
+                    
+                    BlockButton.setText("Unblock");
+                    
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+
         
-        Runnable getFriendOrGroupMessage = new Threads(ViewMessageTextArea,Username,selectedFriendOrGroup,FriendsOrGroupToggleButton,FriendORGroupList);
-        
-        Runnable setBlockButton = new Threads(Username,selectedFriendOrGroup,BlockButton,friend);
-        
-        Thread thread = new Thread(getFriendOrGroupMessage);
-        
-        Thread thread2 = new Thread(setBlockButton);
-        
-        thread.start();
-        
-        thread2.start();
-        
-        TalkToLabel.setText("You are currently talking to: " + selectedFriendOrGroup);
+        TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
     }//GEN-LAST:event_FriendORGroupListValueChanged
 
     private void FriendORGroupListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FriendORGroupListMouseClicked
@@ -432,11 +490,27 @@ public class HomeScreen extends javax.swing.JFrame {
         
         WelcomeLabel.setText("Welcome: " + Username);
         
-        Runnable setNewList = new Threads(Username,toggleButtonText,FriendORGroupList);
+        FriendsOrGroupToggleButton.setText("Friends");
+        FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
+        FriendsOrGroupToggleButton.setSelected(false);
         
-        Thread thread = new Thread(setNewList);
-        
-        thread.start();
+        try {
+                
+                String[] friendList = FriendManager.getFriends(Username);
+                
+                DefaultListModel DefaultListModel = new DefaultListModel();
+                
+                for(int i = 0; i < friendList.length;i++){
+                
+                DefaultListModel.addElement(friendList[i]);
+                
+                }
+            
+                FriendORGroupList.setModel(DefaultListModel);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_SwapAccountComboBoxItemStateChanged
 
     private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
@@ -446,11 +520,17 @@ public class HomeScreen extends javax.swing.JFrame {
                 
                 FriendManager.removeFriend(Username, selectedFriendOrGroup);
                 
-                Runnable setNewList = new Threads(Username,"Friends",FriendORGroupList);
-        
-                Thread thread = new Thread(setNewList);
-        
-                thread.start();
+                String[] friendList = FriendManager.getFriends(Username);
+                
+                DefaultListModel DefaultListModel = new DefaultListModel();
+                
+                for(int i = 0; i < friendList.length;i++){
+                
+                DefaultListModel.addElement(friendList[i]);
+                
+                }
+            
+                FriendORGroupList.setModel(DefaultListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -458,8 +538,87 @@ public class HomeScreen extends javax.swing.JFrame {
         }
         else{
             
+            try {
+                
+                GroupManager.removeGroup(Username, selectedFriendOrGroup);
+                
+                String[] groupList = GroupManager.getGroups(Username);
+                
+                DefaultListModel DefaultListModel = new DefaultListModel();
+                
+                for(int i = 0; i < groupList.length;i++){
+                
+                    DefaultListModel.addElement(groupList[i]);
+                
+                }
+            
+                FriendORGroupList.setModel(DefaultListModel);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
         }
+        
     }//GEN-LAST:event_RemoveButtonActionPerformed
+
+    private void FriendsOrGroupToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == 1){
+            
+            FriendsOrGroupToggleButton.setText("Groups");
+            FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/group_icon.png")));
+            
+            try {
+                
+                String[] groupList = GroupManager.getGroups(Username);
+                
+                DefaultListModel DefaultListModel = new DefaultListModel();
+                
+                for(int i = 0; i < groupList.length;i++){
+                
+                    DefaultListModel.addElement(groupList[i]);
+                
+                }
+            
+                FriendORGroupList.setModel(DefaultListModel);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        else{
+            
+            FriendsOrGroupToggleButton.setText("Friends");
+            FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
+            
+            try {
+                
+                String[] friendList = FriendManager.getFriends(Username);
+                
+                DefaultListModel DefaultListModel = new DefaultListModel();
+                
+                for(int i = 0; i < friendList.length;i++){
+                
+                DefaultListModel.addElement(friendList[i]);
+                
+                }
+            
+                FriendORGroupList.setModel(DefaultListModel);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        ViewMessageTextArea.setText("");
+        
+        TalkToLabel.setText("");
+        
+    }//GEN-LAST:event_FriendsOrGroupToggleButtonItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -516,8 +675,8 @@ public class HomeScreen extends javax.swing.JFrame {
     private javax.swing.JLabel WelcomeLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private UISupport.LoginBackground loginBackground1;
-    private UISupport.SignUpBackground signUpBackground1;
+    private UISupport.SideMenuBackground sideMenuBackground1;
     private javax.swing.JLabel swapAccountLabel;
+    private UISupport.TextingBackground textingBackground1;
     // End of variables declaration//GEN-END:variables
 }

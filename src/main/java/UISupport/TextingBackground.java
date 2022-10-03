@@ -14,29 +14,37 @@ import java.awt.RenderingHints;
  *
  * @author abban
  */
-public class LoginBackground extends javax.swing.JPanel {
+public class TextingBackground extends javax.swing.JPanel {
 
     /**
-     * Creates new form LoginBackground
+     * Creates new form TextingBackground
      */
+    private static String Colour1 = "#90EE90";
     
-    //From 29 to 39 is stolen
-    //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
-    //The reason for the colour is because blue represent a feeling of welcoming. The login screen is welcoming the user back to the program(for the LoginMainScreen)
-    public LoginBackground() {
+    private static String Colour2 = "#18A558";
+    
+    public TextingBackground() {
         initComponents();
-        setOpaque(false);
+            setOpaque(false);
     }
-    @Override
+    
+    public static void changeColour(String colour1,String colour2){
+        
+        Colour1 = colour1;
+        Colour2 = colour2;
+        
+    }
+    
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        GradientPaint g = new GradientPaint(0, 0, Color.decode("#1CB5E0"), 0, getHeight(), Color.decode("#000046"));
+        GradientPaint g = new GradientPaint(0, 0, Color.decode(Colour1), 0, getHeight(), Color.decode(Colour2));
         g2.setPaint(g);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());
         super.paintChildren(grphcs);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,6 +53,17 @@ public class LoginBackground extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
 

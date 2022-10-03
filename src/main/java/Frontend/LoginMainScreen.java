@@ -6,6 +6,10 @@ package Frontend;
 
 import Backend.Threads;
 import Backend.UserManager;
+import Backend.VisualManager;
+import UISupport.SideMenuBackground;
+import UISupport.TextingBackground;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,23 +24,19 @@ public class LoginMainScreen extends javax.swing.JFrame {
      * Creates new form LoginMainScreeb
      */
     private int Usage = 0;
+    private String Username = "";
     
     public LoginMainScreen() {
+        
         initComponents();
-        
-        Runnable isAutoLoginOn = new Threads();
-        
-        Thread thread = new Thread(isAutoLoginOn);
-        
-        thread.start();
-
-        
+            
     }
     
-    public LoginMainScreen(int usage) {
+    public LoginMainScreen(int usage,String username) {
         initComponents();
         
         Usage = usage;
+        Username = username;
     }
     //if int usage = 0; means that the user is logining to the home screen
     //if int usage = 1; means that the user is adding an account
@@ -255,10 +255,36 @@ public class LoginMainScreen extends javax.swing.JFrame {
         try {
             boolean result =  UserManager.isLoginValid(username, password);
             if(result && Usage == 0){
+                            
+            String colour1 = VisualManager.getFirstColourSideMenuBackground(username);
+            
+            String colour2 = VisualManager.getLastColourSideMenuBackground(username);
+            
+            SideMenuBackground.changeColour(colour1,colour2);
+            
+            colour1 = VisualManager.getFirstColourTextingBackground(username);
+            
+            colour2 = VisualManager.getLastColourTextingBackground(username);
+            
+            TextingBackground.changeColour(colour1, colour2);
+            
                  new HomeScreen(username).setVisible(true);
                  dispose();
             }
-            else if(result && Usage == 1){
+            else if(result && Usage == 1 && !(UserManager.isAccountConnected(Username, username))){
+                    
+                    UserManager.addConnectedAccount(Username, password);
+                
+                   new SettingScreen(Username,"Account added successful").setVisible(true);
+                
+                   dispose();
+                
+            }
+            else if(Usage == 1){
+                
+                new SettingScreen(Username,"Account added failed").setVisible(true);
+                
+                dispose();
                 
             }
             else{

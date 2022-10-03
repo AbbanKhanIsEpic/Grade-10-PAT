@@ -4,7 +4,9 @@
  */
 package Backend;
 
+import Frontend.AddFriendScreen;
 import Frontend.HomeScreen;
+import Frontend.LoginMainScreen;
 import java.awt.Color;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
@@ -65,17 +67,24 @@ public class Threads implements Runnable{
         label = jLabel;
     }
     
-    public Threads(){
-        purpose = "isAutoLoginOn";
-    }
     
-    public Threads(String username,String whatList,JList jList){
+    public Threads(String username,String whatList,JList jList,boolean onlyDisplayName){
         Username = username;
         list = jList;
         
+        
         if(whatList.equals("Friends")){
             
-            purpose = "getFriends";
+            if(onlyDisplayName){
+                
+                purpose = "getFriendsOnlyDisplay";
+                
+            }
+            else{
+                
+                purpose = "getFriendsWithDisplay";
+                
+            }
             
         }
         
@@ -109,7 +118,6 @@ public class Threads implements Runnable{
     }
     
     public Threads(String from, String to, String Message1,String Message2,boolean friend){
-        
         
         MessageFrom = from;
         MessageTo1 = to;
@@ -259,6 +267,33 @@ public class Threads implements Runnable{
         }
         
     }
+    public Threads(JLabel jLabel,String displayName){
+        
+        label = jLabel;
+        userInput = displayName;
+        purpose = "isDisplayNameValid";
+                
+        
+    }
+    
+    public Threads(String username, String addAccount){
+        
+        purpose = "AddConnectedAccount";
+        Username = username;
+        userInput = addAccount;
+        
+    }
+    
+    public Threads(String username, String groupName,boolean friend){
+        //friend is there to keep it from error
+        
+        Username = username;
+        userInput = groupName;
+                    
+        purpose = "deleteGroup";
+        
+    }
+    
  
     
     
@@ -276,6 +311,7 @@ public class Threads implements Runnable{
             }
             label.setText(result);
         }
+        
         else if(purpose.equals("isPasswordSafe")){
             
             String result = UserManager.isPasswordSafe(Password, Username);
@@ -290,28 +326,7 @@ public class Threads implements Runnable{
             
         }
         
-        else if(purpose.equals("isAutoLoginOn")){
-
-            try {
-                
-                String result = UserManager.isAutoLoginOn();
-                
-                if(result.isEmpty()){
-                    
-                }
-                else{
-                    new HomeScreen(result).setVisible(true);
-                }
-                
-            } catch (SQLException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-        
-        else if(purpose.equals("getFriends")){
+        else if(purpose.equals("getFriendsOnlyDisplay")){
             
             try {
                 
@@ -321,7 +336,48 @@ public class Threads implements Runnable{
                 
                 for(int i = 0; i < listOfFriends.length; i++){
                     
-                    DefaultListModel.addElement(listOfFriends[i]);
+                    String displayName = UserManager.getDisplayName(listOfFriends[i]);
+                    DefaultListModel.addElement(displayName);
+                    
+                }
+                if(listOfFriends != null && listOfFriends.length > 0){
+                    
+                    list.setModel(DefaultListModel);
+                    
+                }
+                else{
+                    
+                    DefaultListModel.clear();
+                    list.setModel(DefaultListModel);
+                    
+                }
+                    
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+        
+        
+        else if(purpose.equals("getFriendsWithDisplay")){
+            
+            try {
+                
+                DefaultListModel DefaultListModel = new DefaultListModel();
+                        
+                String[] listOfFriends = FriendManager.getFriends(Username);
+                
+                for(int i = 0; i < listOfFriends.length; i++){
+                    
+                    String username = listOfFriends[i];
+                    
+                    String displayName = UserManager.getDisplayName(username);
+                    
+                    username = username + "(" + displayName + ")";
+                    
+                    DefaultListModel.addElement(username);
                     
                 }
                 if(listOfFriends != null && listOfFriends.length > 0){
@@ -369,7 +425,7 @@ public class Threads implements Runnable{
             try {
                 
                 
-                DefaultListModel DefaultListModel = FriendManager.findingToSendFriendRequest(userInput, Username);
+                DefaultListModel DefaultListModel = FriendManager.findPeople(userInput, Username);
      
                 this.list.setModel(DefaultListModel);
                 
@@ -380,9 +436,10 @@ public class Threads implements Runnable{
         
         else if(purpose.equals("getReceivingFriendRequest")){
             
+                
             try {
                 
-                DefaultListModel DefaultListModel = FriendManager.getReceivingFriendRequest(Username);
+                DefaultListModel DefaultListModel = FriendManager.getFriendRequestList(Username);
                 this.list.setModel(DefaultListModel);
                 
             } catch (SQLException ex) {
@@ -391,7 +448,8 @@ public class Threads implements Runnable{
                 
             }
             
-            }
+            
+        }
         
         else if(purpose.equals("sendFriendMessage")){
             
@@ -409,6 +467,7 @@ public class Threads implements Runnable{
         else if(purpose.equals("getFriendMessages")){
             
             if(MessageTo1 != null){
+                
             try {
                 
                 String result = MessageManager.getFriendMessages(MessageFrom, MessageTo1);
@@ -418,7 +477,7 @@ public class Threads implements Runnable{
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            while(new HomeScreen().isDisplayable() && list.getSelectedValue().toString().equals(MessageTo1) && toggleButton.getText().equals("Friends")){
+            while(new HomeScreen().isDisplayable()&& toggleButton.getText().equals("Friends")){
                                     
                     String display = textArea.getText();
                     try {
@@ -464,7 +523,7 @@ public class Threads implements Runnable{
             toggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/group_icon.png")));
             toggleButton.setSelected(false);
             
-           Runnable getGroupName = new Threads(Username,"Groups",list);
+           Runnable getGroupName = new Threads(Username,"Groups",list,false);
             
             Thread thread = new Thread(getGroupName);
         
@@ -478,7 +537,7 @@ public class Threads implements Runnable{
             toggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
             toggleButton.setSelected(false);
             
-            Runnable getFriendName = new Threads(Username,"Friends",list);
+            Runnable getFriendName = new Threads(Username,"Friends",list,true);
             
             Thread thread = new Thread(getFriendName);
         
@@ -665,7 +724,7 @@ public class Threads implements Runnable{
             
             try {
                 
-                MessageManager.sendGroupMessages(MessageFrom, MessageTo1, sendMessage );
+                MessageManager.sendGroupMessage(MessageFrom, MessageTo1, sendMessage );
                 
             } catch (SQLException ex) {
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
@@ -709,7 +768,7 @@ public class Threads implements Runnable{
             
             try {
                 
-                if(FriendManager.isFriendBlock(Username, userInput)){
+                if(FriendManager.isBlocked(Username, userInput)){
                     
                     button.setText("Unblock");
                     
@@ -727,7 +786,7 @@ public class Threads implements Runnable{
         
         else if(purpose.equals("IsGroupBlock")){
             try {
-                if(GroupManager.isGroupBlock(Username, userInput)){
+                if(GroupManager.isBlocked(Username, userInput)){
                     
                     button.setText("Unblock");
                     
@@ -767,5 +826,46 @@ public class Threads implements Runnable{
             }
             
         }
+        
+        else if(purpose.equals("isDisplayNameValid")){
+            
+            String result = UserManager.isDisplayNameValid(userInput);
+            
+            if(result.equals("Everything is alright")){
+                
+                label.setForeground(Color.green);
+                label.setText(result);
+                
+            }
+            else{
+                
+                label.setForeground(Color.red);
+                label.setText(result);
+                
+            }
+            
+        }
+        
+        else if(purpose.equals("AddConnectedAccount")){
+            
+            try {
+                UserManager.addConnectedAccount(Username, userInput);
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        else if(purpose.equals("deleteGroup")){
+           
+            try {
+                GroupManager.removeGroup(Username, userInput);
+            } catch (SQLException ex) {
+                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        
     }
 }

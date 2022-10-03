@@ -4,12 +4,12 @@
  */
 package Backend;
 
+import java.net.UnknownHostException;
+import java.sql.SQLException;
+
 /**
  *
  * @author abban
  */
 public class NewClass {
-    public static void main(String[] args) {
-
-    }
 }

@@ -4,8 +4,6 @@
  */
 package Frontend;
 
-
-import Backend.Threads;
 import Backend.UserManager;
 import java.awt.Color;
 import java.sql.SQLException;
@@ -329,20 +327,28 @@ public class SignUpMainScreen extends javax.swing.JFrame {
 
     private void passwordPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordPasswordFieldKeyReleased
         // TODO add your handling code here:
-        Runnable isPasswordSafe = new Threads(passwordPasswordField.getText(),UsernameTextField.getText(),PasswordErrorCheckerLabel);
+        String result = UserManager.isPasswordSafe(passwordPasswordField.getText(), UsernameTextField.getText());
         
-        Thread thread = new Thread(isPasswordSafe);
-        
-        thread.start();
+        if(result.equals("Everything looks alright")){
+                PasswordErrorCheckerLabel.setForeground(Color.darkGray);
+            } 
+            else{
+                PasswordErrorCheckerLabel.setForeground(Color.red);
+            }
+            PasswordErrorCheckerLabel.setText(result);
     }//GEN-LAST:event_passwordPasswordFieldKeyReleased
 
     private void UsernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsernameTextFieldKeyReleased
         // TODO add your handling code here:
-        Runnable isUsernameValid = new Threads(UsernameTextField.getText(),UsernameErrorCheckerLabel);
+        String result = UserManager.isUsernameValid(UsernameTextField.getText());
         
-        Thread thread = new Thread(isUsernameValid);
-        
-        thread.start();
+         if(result.equals("Everything looks alright")){
+                UsernameErrorCheckerLabel.setForeground(Color.darkGray);
+            } 
+            else{
+                UsernameErrorCheckerLabel.setForeground(Color.red);
+            }
+            UsernameErrorCheckerLabel.setText(result);
     }//GEN-LAST:event_UsernameTextFieldKeyReleased
 
     /**

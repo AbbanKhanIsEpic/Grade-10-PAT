@@ -66,7 +66,7 @@ public class AddFriendScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        settingBackground1 = new UISupport.SettingBackground();
+        settingBackground1 = new Backgrounds.SettingBackground();
         jSplitPane1 = new javax.swing.JSplitPane();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -270,12 +270,6 @@ public class AddFriendScreen extends javax.swing.JFrame {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Runnable getReceivingFriendRequest = new Threads(RecievedFriendRequestList, Username);
-        
-        Thread thread = new Thread(getReceivingFriendRequest);
-        
-        thread.start();
-        
         
     }//GEN-LAST:event_SendFriendRequestButtonActionPerformed
 
@@ -372,6 +366,6 @@ public class AddFriendScreen extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private UISupport.SettingBackground settingBackground1;
+    private Backgrounds.SettingBackground settingBackground1;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,7 @@
  */
 package Backend;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,63 +19,39 @@ public class MessageManager {
     
     public static String getFriendMessages(String username,String friend) throws SQLException{
         
-        String table = username + "_fm";
-        ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + friend + "'");
+        int userID = UserManager.getUserID(username);
         
-        result.next();
+        int friendID = UserManager.getUserID(friend);
         
-        String returnString = result.getString(1);
+        String completedMessage = "";
         
-        return returnString;
+        ResultSet result = DB.query("Select Time,Message From abbankDB.FriendMessages Where UserID = " + userID + " And FriendID = " + friendID + "");
         
+        while(result.next()){
+            
+            Date date = result.getDate(1);
+            String dateString = date.toString();
+            
+            String message = result.getString(2);
+            
+            String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+            completedMessage = completedMessage + completeLineMessage;
+            
+        }
+        
+        return completedMessage;
     }
     
     public static void sendFriendMessage(String username, String friend, String sendmessage) throws SQLException{
-
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+          
+        int userID = UserManager.getUserID(username);
         
-        String time = formatTime.format(LocalTime.now());
-        String date = LocalDate.now().toString();
-        
-        String sendFullMessage = "";
-        
-        String displayName = UserManager.getDisplayName(username);
-        
-        String table = friend + "_fm";
-        
-        if(!(FriendManager.isBlocked(friend, username))){
+        int friendID = UserManager.getUserID(friend);
             
-            ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + username + "'");
+        String message = username + ": " + sendmessage;
             
-            result.next();
-            
-            String message = result.getString(1);
-            
-            sendFullMessage =  message +  "< " + date + " | " + time + " > " + displayName + ": " + sendmessage + "\n";
-            
-            DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendFullMessage + "' WHERE Friends = '" + username + "'");
-            
-        }
-        
-        
-        
-        table = username + "_fm";
-        
-        if(!(FriendManager.isBlocked(username, friend))){
-            
-            sendFullMessage = "";
-            
-            ResultSet result = DB.query("Select FriendMessages from abbankDB." + table + " Where Friends = '" + friend + "'");
-            
-            result.next();
-            
-            String message = result.getString(1);
-            
-            sendFullMessage =  message  + "< " + date + " | " + time + " > " + displayName + ": " + sendmessage + "\n";
-            
-            DB.update("UPDATE abbankDB." + table + " SET FriendMessages = '" + sendFullMessage + "' WHERE Friends = '" + friend + "'");
-            
-        }
+        DB.update("Insert into abbankDB.FriendMessages(UserID,FriendID,Time,Message) Values(" + userID + " , " + friendID + " , now() , '" + message + "'");
         
         
     }
@@ -199,7 +176,9 @@ public class MessageManager {
         
         } 
     }
+
     
+    //from here
     public static void deleteGroupMessage(String username, String groupName) throws SQLException{
         
         String table = username + "_gm";
@@ -230,7 +209,7 @@ public class MessageManager {
     
         public static String getTextFont(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select MesaageTextFont From abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select MessageTextFont From abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -242,7 +221,7 @@ public class MessageManager {
     
     public static int getTextSize(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select MessageTextSize From abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select MessageTextSize From abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         

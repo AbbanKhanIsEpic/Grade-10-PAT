@@ -6,7 +6,8 @@ package Frontend;
 
 import Backend.ProfileManager;
 import Backend.UserManager;
-import Backend.VisualManager;
+import Backend.BackgroundManager;
+import Backend.MessageManager;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.sql.SQLException;
@@ -25,6 +26,12 @@ public class SettingScreen extends javax.swing.JFrame {
      * Creates new form SettingScreen
      */
     private String Username = "";
+    
+    private String textFontBio = "Dialog";
+    private String textFontMessage = "Dialog";
+    
+    private int textSizeBio = 11;
+    private int textSizeMessage = 11;
     
     DefaultListModel AccountDefaultList = new DefaultListModel();
     String[] connectedAccount;
@@ -68,17 +75,17 @@ public class SettingScreen extends javax.swing.JFrame {
                 this.fontMessageComboBox.setModel(FontProfileDefaultList2);
             }
             
-            FirstColourSideMenuTextField.setText(VisualManager.getFirstColourSideMenuBackground(username));
+            FirstColourSideMenuTextField.setText(BackgroundManager.getFirstColourSideMenuBackground(username));
             
-            LastColourSideMenuTextField.setText(VisualManager.getLastColourSideMenuBackground(username));
+            LastColourSideMenuTextField.setText(BackgroundManager.getLastColourSideMenuBackground(username));
             
-            FirstColourTextingScreenTextField.setText(VisualManager.getFirstColourTextingBackground(username));
+            FirstColourTextingScreenTextField.setText(BackgroundManager.getFirstColourTextingBackground(username));
             
-            LastColourTextingScreenTextField.setText(VisualManager.getLastColourTextingBackground(username));
+            LastColourTextingScreenTextField.setText(BackgroundManager.getLastColourTextingBackground(username));
             
-            FirstcColourProfileScreenTextField.setText(VisualManager.getFirstColourProfileBackground(username));
+            FirstcColourProfileScreenTextField.setText(BackgroundManager.getFirstColourProfileBackground(username));
             
-            LastColourProfileScreenTextField.setText(VisualManager.getLastColourProfileBackground(username));
+            LastColourProfileScreenTextField.setText(BackgroundManager.getLastColourProfileBackground(username));
             
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,12 +128,12 @@ public class SettingScreen extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            FirstColourSideMenuTextField.setText(VisualManager.getFirstColourSideMenuBackground(username));
-            LastColourSideMenuTextField.setText(VisualManager.getLastColourSideMenuBackground(username));
-            FirstColourTextingScreenTextField.setText(VisualManager.getFirstColourTextingBackground(username));
-            LastColourTextingScreenTextField.setText(VisualManager.getLastColourTextingBackground(username));
-            FirstcColourProfileScreenTextField.setText(VisualManager.getFirstColourProfileBackground(username));
-            LastColourProfileScreenTextField.setText(VisualManager.getLastColourProfileBackground(username));
+            FirstColourSideMenuTextField.setText(BackgroundManager.getFirstColourSideMenuBackground(username));
+            LastColourSideMenuTextField.setText(BackgroundManager.getLastColourSideMenuBackground(username));
+            FirstColourTextingScreenTextField.setText(BackgroundManager.getFirstColourTextingBackground(username));
+            LastColourTextingScreenTextField.setText(BackgroundManager.getLastColourTextingBackground(username));
+            FirstcColourProfileScreenTextField.setText(BackgroundManager.getFirstColourProfileBackground(username));
+            LastColourProfileScreenTextField.setText(BackgroundManager.getLastColourProfileBackground(username));
             ErrorAccountLabel.setText(result);
             
         } catch (SQLException ex) {
@@ -143,7 +150,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        settingPanel1 = new UISupport.SettingBackground();
+        settingPanel1 = new Backgrounds.SettingBackground();
         SettingLabel = new javax.swing.JLabel();
         ReturnButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -165,7 +172,7 @@ public class SettingScreen extends javax.swing.JFrame {
         FirstcColourProfileScreenTextField = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         LastColourProfileScreenTextField = new javax.swing.JTextField();
-        profileBackground1 = new UISupport.ProfileBackground();
+        profileBackground1 = new Backgrounds.ProfileBackground();
         UpdateProfileScreen = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -185,8 +192,8 @@ public class SettingScreen extends javax.swing.JFrame {
         TextingAreaErrorLabel = new javax.swing.JLabel();
         ProfileBackgroundErrorLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        sideMenuBackground1 = new UISupport.SideMenuBackground();
-        textingBackground1 = new UISupport.TextingBackground();
+        sideMenuBackground1 = new Backgrounds.SideMenuBackground();
+        textingBackground1 = new Backgrounds.TextingBackground();
         jLabel6 = new javax.swing.JLabel();
         ProfileLayeredPane = new javax.swing.JLayeredPane();
         DisplayNameLabel = new javax.swing.JLabel();
@@ -324,6 +331,11 @@ public class SettingScreen extends javax.swing.JFrame {
         jLabel21.setText("Change text size of messages:");
 
         fontBioComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fontBioComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fontBioComboBoxItemStateChanged(evt);
+            }
+        });
 
         jLabel5.setText("This is how it looks like:");
 
@@ -331,6 +343,11 @@ public class SettingScreen extends javax.swing.JFrame {
         jLabel24.setText("words");
 
         fontMessageComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fontMessageComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fontMessageComboBoxItemStateChanged(evt);
+            }
+        });
 
         jLabel25.setText("This is how it looks like: ");
 
@@ -339,8 +356,30 @@ public class SettingScreen extends javax.swing.JFrame {
         SideMenuColourError.setText(" ");
 
         UpdateMessageButton.setText("Update");
+        UpdateMessageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateMessageButtonActionPerformed(evt);
+            }
+        });
+
+        sizeBioSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sizeBioSpinnerStateChanged(evt);
+            }
+        });
+
+        sizeMessageSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sizeMessageSpinnerStateChanged(evt);
+            }
+        });
 
         UpdateBioDisplayButton.setText("Update");
+        UpdateBioDisplayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateBioDisplayButtonActionPerformed(evt);
+            }
+        });
 
         TextingAreaErrorLabel.setText(" ");
 
@@ -844,7 +883,9 @@ public class SettingScreen extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 2352, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 2279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -1126,7 +1167,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateSideMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateSideMenuButtonActionPerformed
         try {
             // TODO add your handling code here:
-            VisualManager.updateSideMenuBackground(Username, FirstColourSideMenuTextField.getText(), LastColourSideMenuTextField.getText());
+            BackgroundManager.updateSideMenuBackground(Username, FirstColourSideMenuTextField.getText(), LastColourSideMenuTextField.getText());
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1135,7 +1176,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateTextingScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateTextingScreenButtonActionPerformed
         try {
             // TODO add your handling code here:
-            VisualManager.updateTextingBackground(Username, FirstColourTextingScreenTextField.getText(), LastColourTextingScreenTextField.getText());
+            BackgroundManager.updateTextingBackground(Username, FirstColourTextingScreenTextField.getText(), LastColourTextingScreenTextField.getText());
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1144,11 +1185,61 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateProfileScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateProfileScreenActionPerformed
         try {
             // TODO add your handling code here:
-            VisualManager.updateProfileBackground(Username, FirstcColourProfileScreenTextField.getText(), LastColourProfileScreenTextField.getText());
+            BackgroundManager.updateProfileBackground(Username, FirstcColourProfileScreenTextField.getText(), LastColourProfileScreenTextField.getText());
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_UpdateProfileScreenActionPerformed
+
+    private void fontBioComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontBioComboBoxItemStateChanged
+        // TODO add your handling code here:
+        textFontBio = (String) fontBioComboBox.getSelectedItem();
+        
+        jLabel24.setFont(new java.awt.Font(textFontBio, 0, textSizeBio));
+        
+    }//GEN-LAST:event_fontBioComboBoxItemStateChanged
+
+    private void sizeBioSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sizeBioSpinnerStateChanged
+        // TODO add your handling code here:
+        textSizeBio = (int) sizeBioSpinner.getValue();
+        
+        jLabel24.setFont(new java.awt.Font(textFontBio, 0, textSizeBio));
+    }//GEN-LAST:event_sizeBioSpinnerStateChanged
+
+    private void fontMessageComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontMessageComboBoxItemStateChanged
+        // TODO add your handling code here:
+        
+        textFontMessage = (String) fontMessageComboBox.getSelectedItem();
+        
+        jLabel26.setFont(new java.awt.Font(textFontMessage, 0, textSizeMessage));
+    }//GEN-LAST:event_fontMessageComboBoxItemStateChanged
+
+    private void sizeMessageSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sizeMessageSpinnerStateChanged
+        // TODO add your handling code here:
+        textSizeMessage = (int) sizeMessageSpinner.getValue();
+        
+        jLabel24.setFont(new java.awt.Font(textFontMessage, 0, textSizeMessage));
+    }//GEN-LAST:event_sizeMessageSpinnerStateChanged
+
+    private void UpdateBioDisplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBioDisplayButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            ProfileManager.updateTextFont(Username, textFontBio);
+            ProfileManager.updateTextSize(Username, textSizeBio);
+        } catch (SQLException ex) {
+            Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_UpdateBioDisplayButtonActionPerformed
+
+    private void UpdateMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateMessageButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            MessageManager.updateTextFont(Username, textFontMessage);
+            MessageManager.updateTextSize(Username, textSizeMessage);
+        } catch (SQLException ex) {
+            Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_UpdateMessageButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1250,11 +1341,11 @@ public class SettingScreen extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private UISupport.ProfileBackground profileBackground1;
-    private UISupport.SettingBackground settingPanel1;
-    private UISupport.SideMenuBackground sideMenuBackground1;
+    private Backgrounds.ProfileBackground profileBackground1;
+    private Backgrounds.SettingBackground settingPanel1;
+    private Backgrounds.SideMenuBackground sideMenuBackground1;
     private javax.swing.JSpinner sizeBioSpinner;
     private javax.swing.JSpinner sizeMessageSpinner;
-    private UISupport.TextingBackground textingBackground1;
+    private Backgrounds.TextingBackground textingBackground1;
     // End of variables declaration//GEN-END:variables
 }

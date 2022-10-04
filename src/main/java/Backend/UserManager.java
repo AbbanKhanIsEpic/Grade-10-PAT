@@ -20,7 +20,7 @@ public class UserManager {
     
         public static boolean isLoginValid(String username, String password) throws SQLException{
             
-            ResultSet user = DB.query("SELECT COUNT(*) FROM TableOfUsers WHERE Username = '" + username +"' AND Password = '" + password +"';");
+            ResultSet user = DB.query("SELECT COUNT(*) FROM abbankDB.Users WHERE Username = '" + username +"' AND Password = '" + password +"';");
             user.next();
             int count = user.getInt(1);
             return count==1;
@@ -36,8 +36,7 @@ public class UserManager {
                 
             }
             //This check if the Username is too long
-            //In MySQL, table max length is 64 and need some space for creating the type of table for user
-            else if(username.length() >= 45){
+            else if(username.length() >= 100){
                 result = "Username is too long";
             }
             
@@ -47,7 +46,7 @@ public class UserManager {
             
             //This check if the username is unique
             try {
-                ResultSet unique = DB.query("SELECT count(*) FROM abbankDB.TableOfUsers WHERE Username = '"+username+"';");
+                ResultSet unique = DB.query("SELECT count(*) FROM abbankDB.Users WHERE Username = '"+username+"';");
                 unique.next();
                 int uniqueInt = unique.getInt(1);
                 
@@ -79,8 +78,8 @@ public class UserManager {
                 result = "Password too short (More than 8 character)";
                 return result;
             }
-            else if(password.length() >= 100){
-                result = "Password too long (Less than 100 character)";
+            else if(password.length() >= 200){
+                result = "Password too long (200 limit)";
                 return result;
             }
             boolean check = false;
@@ -130,40 +129,16 @@ public class UserManager {
         }
     
     public static void createAccount(String username, String password) throws SQLException{
-       DB.update("INSERT INTO abbankDB.TableOfUsers Values('"+username+"','"+password+"','"+username+"',current_date());");
-       
-       DB.update("INSERT INTO abbankDB.userSettings Values('"+ username + "',1,null,null,null,null,'#1CB5E0','#000046','#90EE90','FA8C05','#1CB5E0','#000046','Dialog',11,'Dialog',11);");
-       //msg is short for friend messages
-       String table = username + "_fm";
-       
-       DB.update(" CREATE TABLE `" + table + "` ( \n" + 
-                    "`Friends` varchar(60) NOT NULL,\n " + 
-                    "`FriendsBlockOrNot` int(1) DEFAULT NULL,\n" + 
-                    "`FriendMessages` longtext NOT NULL,\n" + 
-                    " PRIMARY KEY (`Friends`)\n" +
-                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
-       //msg is short for group messages
-       
-       table = username + "_gm";
-  
-       DB.update(" CREATE TABLE `" + table + "` ( \n" +
-                    "`GroupName` varchar(200) NOT NULL,\n" + 
-                    "`GroupMemember1` varchar(60) NOT NULL,\n" + 
-                    "`GroupMemember2` varchar(60) NOT NULL,\n" + 
-                    "`GroupMemember3` varchar(60) NOT NULL,\n" + 
-                    "`GroupMemember4` varchar(200) NOT NULL,\n" +
-                    "`GroupMemember5` varchar(200) NOT NULL,\n" + 
-                    "`GroupBlockOrNot` int(1) DEFAULT NULL,\n" + 
-                    "`GroupMessages` longtext NOT NULL,\n" +
-                    " PRIMARY KEY (`GroupName`)\n" +
-                    " ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
+        
+        DB.update("Insert Into abbankDB.Users(Username,DisplayName,Password,DateCreated,ProfileIcon,FirstColourSideMenuBackground,LastColourSideMenuBackground,FirstColourTextingScreenBackground,LastColourTextingScreenBackground,FirstColourProfileScreenBackground,LastColourProfileScreenBackground,BioTextFont,BioTextSize,MessageTextFont,MessageTextSize) Values('" + username + "' , '" + username + "' , '" + password + "' , now(), 1 , '#1CB5E0' , '#1CB5E0' , '#90EE90' , '#90EE90' , '#1CB5E0', '#1CB5E0' , 'Dialog' , 11 , 'Dialog' , 11)");
           
     }
 
+    //remove
     public static String[] getConnectedAccount(String username) throws SQLException {
         String[] account;
         
-        ResultSet result = DB.query("Select Account1,Account2,Account3 from abbankDB.userSettings where Username = '" + username + "';");
+        ResultSet result = DB.query("Select ConnectAccount1,ConnectAccount2,ConnectAccount3 from abbankDB.Users where Username = '" + username + "';");
         
         int length = 1;
         
@@ -223,13 +198,13 @@ public class UserManager {
     
     public static void updateDisplayName(String username, String displayName) throws SQLException{
         
-        DB.update("Update abbankDB.TableOfUsers Set DisplayName = '" + displayName + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set DisplayName = '" + displayName + "' Where Username = '" + username + "'");
         
     }
     
     public static String getDisplayName(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select DisplayName from abbankDB.TableOfUsers Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select DisplayName from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -239,10 +214,10 @@ public class UserManager {
         
     }
     
-    
+    //remove
     public static void addConnectedAccount(String username,String addAccount) throws SQLException{
         
-        ResultSet result = DB.query("Select Account1 from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select ConnectAccount1 from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -250,14 +225,14 @@ public class UserManager {
         
         if(account1 == null){
             
-            DB.update("Update abbankDB.userSettings set Account1 = '" + username + "' where Username = '"+ addAccount + "'");
+            DB.update("Update abbankDB.Users set ConnectAccount1 = '" + username + "' where Username = '"+ addAccount + "'");
             
-            DB.update("Update abbankDB.userSettings set Account1 = '" + addAccount + "' where Username = '"+ username + "'");
+            DB.update("Update abbankDB.Users set ConnectAccount1 = '" + addAccount + "' where Username = '"+ username + "'");
             
         }
         else{
             
-            result = DB.query("Select Account2 from abbankDB.userSettings Where Username = '" + username + "'");
+            result = DB.query("Select ConnectAccount2 from abbankDB.Users Where Username = '" + username + "'");
         
             result.next();
         
@@ -265,46 +240,16 @@ public class UserManager {
             
             if(account2 == null){
                 
-                DB.update("Update abbankDB.userSettings set Account2 = '" + username + "' where Username = '"+ addAccount + "'");
+                DB.update("Update abbankDB.Users set ConnectAccount2 = '" + username + "' where Username = '"+ addAccount + "'");
             
-                DB.update("Update abbankDB.userSettings set Account2 = '" + addAccount + "' where Username = '"+ username + "'");
-                
-                result = DB.query("select Account1 from abbankDB.userSettings Where Username = '" + username + "'");
-                
-                result.next();
-                
-                String member = result.getString(1);
-                
-                DB.update("Update abbankDB.userSettings set Account1 = '" + member + "' where Username = '"+ addAccount + "'");
-                
-                DB.update("Update abbankDB.userSettings set Account2 = '" + addAccount + "' where Username = '"+ member + "'");
+                DB.update("Update abbankDB.Users set ConnectAccount2 = '" + addAccount + "' where Username = '"+ username + "'");
                 
             }
             else{
                 
-                DB.update("Update abbankDB.userSettings set Account3 = '" + username + "' where Username = '"+ addAccount + "'");
+                DB.update("Update abbankDB.Users set ConnectAccount3 = '" + username + "' where Username = '"+ addAccount + "'");
             
-                DB.update("Update abbankDB.userSettings set Account3 = '" + addAccount + "' where Username = '"+ username + "'");
-                
-                result = DB.query("select Account1 from abbankDB.userSettings Where Username = '" + username + "'");
-                
-                result.next();
-                
-                String member = result.getString(1);
-                
-                DB.update("Update abbankDB.userSettings set Account1 = '" + member + "' where Username = '"+ addAccount + "'");
-                
-                DB.update("Update abbankDB.userSettings set Account3 = '" + addAccount + "' where Username = '"+ member + "'");
-                
-                result = DB.query("select Account2 from abbankDB.userSettings Where Username = '" + username + "'");
-                
-                result.next();
-                
-                member = result.getString(1);
-                
-                DB.update("Update abbankDB.userSettings set Account2 = '" + member + "' where Username = '"+ addAccount + "'");
-                
-                DB.update("Update abbankDB.userSettings set Account3 = '" + addAccount + "' where Username = '"+ member + "'");
+                DB.update("Update abbankDB.Users set ConnectAccount3 = '" + addAccount + "' where Username = '"+ username + "'");
                 
             }
             
@@ -312,41 +257,55 @@ public class UserManager {
         
     }
     
+    //remove
     public static void removeConnectedAccount(String username,String removeAccount,int accountnum) throws SQLException{
         
         if(accountnum == 1){
             
-            DB.update("Update abbankDB.userSettings Set Account1 = null Where Username = '" + username + "'");
+            DB.update("Update abbankDB.Users Set ConnectAccount1 = null Where Username = '" + username + "'");
             
-            DB.update("Update abbankDB.userSettings Set Account1 = null Where Username = '" + removeAccount + "'");
+            DB.update("Update abbankDB.Users Set ConnectAccount1 = null Where Username = '" + removeAccount + "'");
             
         }
         else if(accountnum == 2){
             
-            DB.update("Update abbankDB.userSettings Set Account2 = null Where Username = '" + username + "'");
+            DB.update("Update abbankDB.Users Set ConnectAccount2 = null Where Username = '" + username + "'");
             
-            DB.update("Update abbankDB.userSettings Set Account2 = null Where Username = '" + removeAccount + "'");
+            DB.update("Update abbankDB.Users Set ConnectAccount2 = null Where Username = '" + removeAccount + "'");
             
         }
         else{
             
-            DB.update("Update abbankDB.userSettings Set Account3 = null Where Username = '" + username + "'");
+            DB.update("Update abbankDB.Users Set ConnectAccount3 = null Where Username = '" + username + "'");
             
-            DB.update("Update abbankDB.userSettings Set Account3 = null Where Username = '" + removeAccount + "'");
+            DB.update("Update abbankDB.Users Set ConnectAccount3 = null Where Username = '" + removeAccount + "'");
             
         }
         
     }
     
+    //remove
     public static boolean isAccountConnected(String username,String addAccount) throws SQLException{
         
-        ResultSet result = DB.query("select count(*) from abbankDB.userSettings Where Username = '" + username + "' And Account1 = '" + addAccount + "' or Account2 = 'Testing3' or Account3 = 'Testing3'");
+        ResultSet result = DB.query("select count(*) from abbankDB.Users Where Username = '" + username + "' And (ConnectAccount1 = '" + addAccount + "' or ConnectAccount2 = '" + addAccount + "' or ConnectAccount3 = '" + addAccount + "')");
         
         result.next();
         
         int resultInt = result.getInt(1);
         
         return resultInt != 0;
+        
+    }
+    
+    public static int getUserID(String username) throws SQLException{
+        
+        ResultSet result = DB.query("Select UserID from abbankDB.Users Where Username = '" + username + "'");
+        
+        result.next();
+        
+        int userID = result.getInt(1);
+        
+        return userID;
         
     }
     

@@ -11,35 +11,35 @@ import java.sql.SQLException;
  *
  * @author abban
  */
-public class VisualManager {
+public class BackgroundManager {
     
     public static void updateSideMenuBackground(String username,String colour1, String colour2) throws SQLException{
         
-        DB.update("Update abbankDB.userSettings Set FistColourSideMenu = '" + colour1 + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set FirstColourSideMenuBackground = '" + colour1 + "' Where Username = '" + username + "'");
         
-        DB.update("Update abbankDB.userSettings Set LastColourSideMenu = '" + colour2 + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set LastColourSideMenuBackground = '" + colour2 + "' Where Username = '" + username + "'");
         
     }
     
     public static void updateTextingBackground(String username,String colour1, String colour2) throws SQLException{
         
-        DB.update("Update abbankDB.userSettings Set FistColourTextingArea = '" + colour1 + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set FirstColourTextingScreenBackground = '" + colour1 + "' Where Username = '" + username + "'");
         
-        DB.update("Update abbankDB.userSettings Set LastColourTextingArea = '" + colour2 + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set LastColourTextingScreenBackground = '" + colour2 + "' Where Username = '" + username + "'");
         
     }
     
     public static void updateProfileBackground(String username,String colour1, String colour2) throws SQLException{
         
-        DB.update("Update abbankDB.userSettings Set FistColourProfileMenu = '" + colour1 + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set FirstColourProfileScreenBackground = '" + colour1 + "' Where Username = '" + username + "'");
         
-        DB.update("Update abbankDB.userSettings Set LastColourProfileMenu = '" + colour2 + "' Where Username = '" + username + "'");
+        DB.update("Update abbankDB.Users Set LastColourProfileScreenBackground = '" + colour2 + "' Where Username = '" + username + "'");
         
     }
     
     public static String getFirstColourSideMenuBackground(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select FistColourSideMenu from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select FirstColourSideMenuBackground from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -51,7 +51,7 @@ public class VisualManager {
     
     public static String getLastColourSideMenuBackground(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select LastColourSideMenu from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select LastColourSideMenuBackground from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -63,7 +63,7 @@ public class VisualManager {
     
     public static String getFirstColourTextingBackground(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select FistColourTextingArea from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select FirstColourTextingScreenBackground from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -75,7 +75,7 @@ public class VisualManager {
     
     public static String getLastColourTextingBackground(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select LastColourTextingArea from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select LastColourTextingScreenBackground from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -87,7 +87,7 @@ public class VisualManager {
     
     public static String getFirstColourProfileBackground(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select FistColourProfileMenu from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select FirstColourProfileScreenBackground from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         
@@ -99,7 +99,7 @@ public class VisualManager {
     
     public static String getLastColourProfileBackground(String username) throws SQLException{
         
-        ResultSet result = DB.query("Select FistColourProfileMenu from abbankDB.userSettings Where Username = '" + username + "'");
+        ResultSet result = DB.query("Select LastColourProfileScreenBackground from abbankDB.Users Where Username = '" + username + "'");
         
         result.next();
         

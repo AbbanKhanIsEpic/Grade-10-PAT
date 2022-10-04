@@ -293,6 +293,10 @@ public class Threads implements Runnable{
         purpose = "deleteGroup";
         
     }
+
+    public Threads() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
  
     
@@ -859,7 +863,7 @@ public class Threads implements Runnable{
         else if(purpose.equals("deleteGroup")){
            
             try {
-                GroupManager.removeGroup(Username, userInput);
+                GroupManager.exitGroup(Username, userInput);
             } catch (SQLException ex) {
                 Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -28,7 +28,10 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane1" alignment="0" pref="2352" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="jScrollPane1" min="-2" pref="2279" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -37,7 +40,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Container class="UISupport.SettingBackground" name="settingPanel1">
+        <Container class="Backgrounds.SettingBackground" name="settingPanel1">
 
           <Layout>
             <DimensionLayout dim="0">
@@ -403,7 +406,7 @@
                     <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="LastColourProfileScreenTextFieldKeyReleased"/>
                   </Events>
                 </Component>
-                <Container class="UISupport.ProfileBackground" name="profileBackground1">
+                <Container class="Backgrounds.ProfileBackground" name="profileBackground1">
 
                   <Layout>
                     <DimensionLayout dim="0">
@@ -457,6 +460,9 @@
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="fontBioComboBoxItemStateChanged"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
@@ -485,6 +491,9 @@
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="fontMessageComboBoxItemStateChanged"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
@@ -508,15 +517,27 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Update"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="UpdateMessageButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="sizeBioSpinner">
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sizeBioSpinnerStateChanged"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="sizeMessageSpinner">
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sizeMessageSpinnerStateChanged"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="UpdateBioDisplayButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Update"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="UpdateBioDisplayButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="TextingAreaErrorLabel">
                   <Properties>
@@ -530,7 +551,7 @@
                     <Property name="text" type="java.lang.String" value="You may need to restart the program for the change to happen"/>
                   </Properties>
                 </Component>
-                <Container class="UISupport.SideMenuBackground" name="sideMenuBackground1">
+                <Container class="Backgrounds.SideMenuBackground" name="sideMenuBackground1">
 
                   <Layout>
                     <DimensionLayout dim="0">
@@ -545,7 +566,7 @@
                     </DimensionLayout>
                   </Layout>
                 </Container>
-                <Container class="UISupport.TextingBackground" name="textingBackground1">
+                <Container class="Backgrounds.TextingBackground" name="textingBackground1">
 
                   <Layout>
                     <DimensionLayout dim="0">

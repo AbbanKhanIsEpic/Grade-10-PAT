@@ -7,7 +7,6 @@ package Backend;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 
 /**
  *
@@ -15,17 +14,23 @@ import javax.swing.DefaultListModel;
  */
 public class GroupManager {
     
-    public static  String[] getGroups(String username) throws SQLException{
+    public static  String[] getGroupNames(String username) throws SQLException{
+        
+        int userID = UserManager.getUserID(username);
         
         ArrayList<String> groupArrayList = new ArrayList<>();
         
-        String table = username + "_gm";
+        ResultSet resultGroupID = DB.query("Select groupID from abbankDB.GroupMembers Where UserID = " + userID + "");
             
-        ResultSet result = DB.query("SELECT GroupName FROM abbankDB."+table+";");
-            
-        while(result.next()){
+        while(resultGroupID.next()){
                 
-            String individualGroupNames = result.getString(1);
+            int groupID = resultGroupID.getInt(1);
+            
+            ResultSet resultGroupName = DB.query("Select groupName from abbankDB.Groups Where groupID = " + groupID + "");
+            
+            resultGroupName.next();
+            
+            String individualGroupNames = resultGroupName.getString(1);
             
             groupArrayList.add(individualGroupNames);
                 
@@ -49,20 +54,16 @@ public class GroupManager {
     
     public static void createGroup(String groupName, String[] groupMembers) throws SQLException{
         
-        if(groupMembers[0].equals("No-one")){
-            groupMembers[0] = null;
-        }
-        if(groupMembers[1].equals("No-one")){
-            groupMembers[1] = null;
-        }
-        if(groupMembers[2].equals("No-one")){
-            groupMembers[2] = null;
-        }
-        if(groupMembers[3].equals("No-one")){
-            groupMembers[3] = null;
-        }
-        if(groupMembers[4].equals("No-one")){
-            groupMembers[4] = null;
+        DB.update("Insert into abbankDB.Groups(groupName) Values('" + groupName + "')");
+        
+        
+        
+        for (int i = 0; i < groupMembers.length; i++) {
+           if(!(groupMembers[i].equals("No-one"))){
+               
+               
+               
+           }
         }
         
         String table = groupMembers[0] + "_gm";
@@ -82,6 +83,9 @@ public class GroupManager {
         
     }
     
+    //addUsersToGroup (String [] users)
+    
+    //take out
     public static boolean areMembersDifferent(String[] selectedGroupMember){
         if(!(selectedGroupMember[0].equals("No-one"))){
             if((selectedGroupMember[0].equals(selectedGroupMember[1]) && !(selectedGroupMember[1].equals("No-one"))) || (selectedGroupMember[0].equals(selectedGroupMember[2]) && !(selectedGroupMember[2].equals("No-one"))) || ((selectedGroupMember[3].equals(selectedGroupMember[3]) && !(selectedGroupMember[3].equals("No-one")))) || (selectedGroupMember[0].equals(selectedGroupMember[4]) && !(selectedGroupMember[4].equals("No-one")))){
@@ -108,6 +112,8 @@ public class GroupManager {
         
         return true;
     }
+    
+    
     public static String[] getGroupMember(String groupName,String username) throws SQLException{
         
         String table = username + "_gm";
@@ -162,7 +168,7 @@ public class GroupManager {
         return block == 1;
     }
     
-    public static void removeGroup(String username,String groupName) throws SQLException{
+    public static void exitGroup(String username,String groupName) throws SQLException{
         
         String table = username + "_gm";
         

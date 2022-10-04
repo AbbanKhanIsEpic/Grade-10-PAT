@@ -7,6 +7,7 @@ package Frontend;
 import Backend.UserManager;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,8 @@ import java.util.logging.Logger;
  */
 public class SignUpMainScreen extends javax.swing.JFrame {
 
+    LocalDateTime lastUsernameKeyPressTime;
+    
     /**
      * Creates new form SignUpMainScreen
      */
@@ -32,7 +35,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        signUpBackground1 = new UISupport.SignUpBackground();
+        signUpBackground1 = new Backgrounds.SignUpBackground();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         UsernameTextField = new javax.swing.JTextField();
@@ -47,7 +50,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         FinalErrorCheckerLabel = new javax.swing.JLabel();
         passwordPasswordField = new javax.swing.JPasswordField();
         confirmPasswordPasswordField = new javax.swing.JPasswordField();
-        loginBackground1 = new UISupport.LoginBackground();
+        loginBackground1 = new Backgrounds.LoginBackground();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -404,8 +407,8 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
-    private UISupport.LoginBackground loginBackground1;
+    private Backgrounds.LoginBackground loginBackground1;
     private javax.swing.JPasswordField passwordPasswordField;
-    private UISupport.SignUpBackground signUpBackground1;
+    private Backgrounds.SignUpBackground signUpBackground1;
     // End of variables declaration//GEN-END:variables
 }

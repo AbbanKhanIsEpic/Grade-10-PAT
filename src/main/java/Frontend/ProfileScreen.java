@@ -4,8 +4,9 @@
  */
 package Frontend;
 
-import Backend.VisualManager;
-import UISupport.ProfileBackground;
+import Backend.BackgroundManager;
+import Backend.ProfileManager;
+import Backgrounds.ProfileBackground;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,16 +27,29 @@ public class ProfileScreen extends javax.swing.JFrame {
         
     }
     
-    public ProfileScreen(String username) {
+    public ProfileScreen(String friend,String username) {
         try {
             initComponents();
+            
             Username = username;
             
-            String colour1 = VisualManager.getFirstColourProfileBackground(username);
+            String colour1 = BackgroundManager.getFirstColourProfileBackground(friend);
             
-            String colour2 = VisualManager.getLastColourProfileBackground(username);
+            String colour2 = BackgroundManager.getLastColourProfileBackground(friend);
             
             ProfileBackground.changeColour(colour1, colour2);
+            
+            String bio = ProfileManager.getBio(friend);
+            
+            String textFont = ProfileManager.getTextFont(friend);
+            
+            int textSize = ProfileManager.getTextSize(friend);
+            
+            BioTextArea.setText(bio);
+            
+            BioTextArea.setFont(new java.awt.Font(textFont, 0, textSize));
+            
+            usernameLabel.setText("@" + friend);
             
         } catch (SQLException ex) {
             Logger.getLogger(ProfileScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -52,9 +66,9 @@ public class ProfileScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        profileBackground1 = new UISupport.ProfileBackground();
+        profileBackground1 = new Backgrounds.ProfileBackground();
         jComboBox1 = new javax.swing.JComboBox<>();
-        profileBackground2 = new UISupport.ProfileBackground();
+        profileBackground2 = new Backgrounds.ProfileBackground();
         ProfileIconLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         BioTextArea = new javax.swing.JTextArea();
@@ -223,8 +237,8 @@ public class ProfileScreen extends javax.swing.JFrame {
     private javax.swing.JLabel ProfileIconLabel;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JScrollPane jScrollPane1;
-    private UISupport.ProfileBackground profileBackground1;
-    private UISupport.ProfileBackground profileBackground2;
+    private Backgrounds.ProfileBackground profileBackground1;
+    private Backgrounds.ProfileBackground profileBackground2;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,8 +4,15 @@
  */
 package Frontend;
 
+import Backend.FriendManager;
+import Backend.GroupManager;
 import Backend.Threads;
-import javax.swing.JList;
+import java.awt.Color;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -28,12 +35,52 @@ public class AddGroupScreen extends javax.swing.JFrame {
         
         Username = username;
         
-        Runnable setScreen = new Threads(username,Member1CreateAccountComboBox,Member2CreateAccountComboBox,Member3CreateAccountComboBox,Member4CreateAccountComboBox,Member5CreateAccountComboBox,CurrentGroupList);
-
-        Thread thread = new Thread(setScreen);
-
-        thread.start();
-
+        try {
+            String[] groupList = GroupManager.getGroups(username);
+            
+            String[] friendList = FriendManager.getFriends(username);
+            
+            DefaultListModel DefaultListModel = new DefaultListModel();
+            
+            for(int i = 0; i < groupList.length;i++){
+                
+                DefaultListModel.addElement(groupList[i]);
+                
+            }
+            
+            CurrentGroupList.setModel(DefaultListModel);
+            
+            DefaultComboBoxModel comboBox1 = new DefaultComboBoxModel();
+            DefaultComboBoxModel comboBox2 = new DefaultComboBoxModel();
+            DefaultComboBoxModel comboBox3 = new DefaultComboBoxModel();
+            DefaultComboBoxModel comboBox4 = new DefaultComboBoxModel();
+            DefaultComboBoxModel comboBox5 = new DefaultComboBoxModel();
+            
+            comboBox1.addElement(Username);
+            
+            comboBox2.addElement("No-One");
+            comboBox3.addElement("No-One");
+            comboBox4.addElement("No-One");
+            comboBox5.addElement("No-One");
+            
+            for(int i = 0; i < friendList.length;i++){
+                
+                comboBox2.addElement(friendList[i]);
+                comboBox3.addElement(friendList[i]);
+                comboBox4.addElement(friendList[i]);
+                comboBox5.addElement(friendList[i]);
+                
+            }
+            
+            Member1CreateAccountComboBox.setModel(comboBox1);
+            Member2CreateAccountComboBox.setModel(comboBox2);
+            Member3CreateAccountComboBox.setModel(comboBox3);
+            Member4CreateAccountComboBox.setModel(comboBox4);
+            Member5CreateAccountComboBox.setModel(comboBox5);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
@@ -46,7 +93,7 @@ public class AddGroupScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        settingBackground1 = new UISupport.SettingBackground();
+        settingBackground1 = new Backgrounds.SettingBackground();
         jLabel1 = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jLabel2 = new javax.swing.JLabel();
@@ -282,12 +329,24 @@ public class AddGroupScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         String groupName = CurrentGroupList.getSelectedValue();
         
-        Runnable getSelectedGroupMember = new Threads(groupName,groupMemberList,Username);
+        try {
+            
+            String[] result = GroupManager.getGroupMember(groupName, Username);
+            
+            DefaultListModel DefaultListModel = new DefaultListModel();
+            
+            for(int i = 0; i < result.length;i++){
+                
+                DefaultListModel.addElement(result[i]);
+                
+            }
+            
+            groupMemberList.setModel(DefaultListModel);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        Thread thread = new Thread(getSelectedGroupMember);
-        
-        thread.start();
-
     }//GEN-LAST:event_CurrentGroupListValueChanged
 
     private void ReturnHomeScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnHomeScreenButtonActionPerformed
@@ -297,19 +356,48 @@ public class AddGroupScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_ReturnHomeScreenButtonActionPerformed
 
     private void CreateGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateGroupButtonActionPerformed
-        // TODO add your handling code here:
-        String groupName = newGroupNameTextField.getText();
-        String member1 = (String) Member1CreateAccountComboBox.getSelectedItem();
-        String member2 = (String) Member2CreateAccountComboBox.getSelectedItem();
-        String member3 = (String) Member3CreateAccountComboBox.getSelectedItem();
-        String member4 = (String) Member4CreateAccountComboBox.getSelectedItem();
-        String member5 = (String) Member5CreateAccountComboBox.getSelectedItem();
-
-        Runnable createGroup = new Threads(Username,groupName,member1,member2,member3,member4,member5,CreateGroupResultLabel);
-
-        Thread thread = new Thread(createGroup);
-
-        thread.start();
+        try {
+            // TODO add your handling code here:
+            String groupName = newGroupNameTextField.getText();
+            String member1 = (String) Member1CreateAccountComboBox.getSelectedItem();
+            String member2 = (String) Member2CreateAccountComboBox.getSelectedItem();
+            String member3 = (String) Member3CreateAccountComboBox.getSelectedItem();
+            String member4 = (String) Member4CreateAccountComboBox.getSelectedItem();
+            String member5 = (String) Member5CreateAccountComboBox.getSelectedItem();
+            
+            String[] members = {member1,member2,member3,member4,member5};
+            
+            boolean result = GroupManager.isGroupNameUnique(groupName, Username);
+            
+            if(!(result)){
+                
+                CreateGroupResultLabel.setForeground(Color.red);
+                CreateGroupResultLabel.setText("Group name has to be unique");
+                
+            }
+            else{
+                
+                result = GroupManager.areMembersDifferent(members);
+                
+                if(!(result)){
+                    
+                    CreateGroupResultLabel.setForeground(Color.red);
+                    CreateGroupResultLabel.setText("Group members have to be different");
+                    
+                }
+                else{
+                    
+                    CreateGroupResultLabel.setForeground(Color.green);
+                    CreateGroupResultLabel.setText("Group created");
+                    
+                    GroupManager.createGroup(groupName, members);
+                    
+                }
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_CreateGroupButtonActionPerformed
 
     /**
@@ -373,6 +461,6 @@ public class AddGroupScreen extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextField newGroupNameTextField;
     private javax.swing.JLabel saveGroupChangeLabel;
-    private UISupport.SettingBackground settingBackground1;
+    private Backgrounds.SettingBackground settingBackground1;
     // End of variables declaration//GEN-END:variables
 }

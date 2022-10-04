@@ -6,9 +6,9 @@ package Frontend;
 
 import Backend.Threads;
 import Backend.UserManager;
-import Backend.VisualManager;
-import UISupport.SideMenuBackground;
-import UISupport.TextingBackground;
+import Backend.BackgroundManager;
+import Backgrounds.SideMenuBackground;
+import Backgrounds.TextingBackground;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -50,7 +50,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        loginBackground1 = new UISupport.LoginBackground();
+        loginBackground1 = new Backgrounds.LoginBackground();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -60,7 +60,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         FinalErrorCheckerLabel = new javax.swing.JLabel();
         PasswordVisibleToggleButton = new javax.swing.JToggleButton();
         passwordPasswordField = new javax.swing.JPasswordField();
-        signUpScreen1 = new UISupport.SignUpBackground();
+        signUpScreen1 = new Backgrounds.SignUpBackground();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -256,15 +256,15 @@ public class LoginMainScreen extends javax.swing.JFrame {
             boolean result =  UserManager.isLoginValid(username, password);
             if(result && Usage == 0){
                             
-            String colour1 = VisualManager.getFirstColourSideMenuBackground(username);
+            String colour1 = BackgroundManager.getFirstColourSideMenuBackground(username);
             
-            String colour2 = VisualManager.getLastColourSideMenuBackground(username);
+            String colour2 = BackgroundManager.getLastColourSideMenuBackground(username);
             
             SideMenuBackground.changeColour(colour1,colour2);
             
-            colour1 = VisualManager.getFirstColourTextingBackground(username);
+            colour1 = BackgroundManager.getFirstColourTextingBackground(username);
             
-            colour2 = VisualManager.getLastColourTextingBackground(username);
+            colour2 = BackgroundManager.getLastColourTextingBackground(username);
             
             TextingBackground.changeColour(colour1, colour2);
             
@@ -346,8 +346,8 @@ public class LoginMainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private UISupport.LoginBackground loginBackground1;
+    private Backgrounds.LoginBackground loginBackground1;
     private javax.swing.JPasswordField passwordPasswordField;
-    private UISupport.SignUpBackground signUpScreen1;
+    private Backgrounds.SignUpBackground signUpScreen1;
     // End of variables declaration//GEN-END:variables
 }

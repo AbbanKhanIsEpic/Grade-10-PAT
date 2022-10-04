@@ -41,7 +41,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="UISupport.SignUpBackground" name="signUpBackground1">
+    <Container class="Backgrounds.SignUpBackground" name="signUpBackground1">
 
       <Layout>
         <DimensionLayout dim="0">
@@ -257,7 +257,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="UISupport.LoginBackground" name="loginBackground1">
+    <Container class="Backgrounds.LoginBackground" name="loginBackground1">
 
       <Layout>
         <DimensionLayout dim="0">

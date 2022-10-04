@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package UISupport;
+package Backgrounds;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -14,21 +14,31 @@ import java.awt.RenderingHints;
  *
  * @author abban
  */
-public class SettingBackground extends javax.swing.JPanel {
+public class TextingBackground extends javax.swing.JPanel {
 
     /**
-     * Creates new form SettingBackground
+     * Creates new form TextingBackground
      */
-    //From 27 to 37 is stolen
-    //The code is from: https://www.youtube.com/c/HelloWorld-Raven/feature
-    public SettingBackground() {
+    private static String Colour1 = "#90EE90";
+    
+    private static String Colour2 = "#18A558";
+    
+    public TextingBackground() {
         initComponents();
-        setOpaque(false);
+            setOpaque(false);
     }
+    
+    public static void changeColour(String colour1,String colour2){
+        
+        Colour1 = colour1;
+        Colour2 = colour2;
+        
+    }
+    
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        GradientPaint g = new GradientPaint(0, 0, Color.decode("#FBA337"), 0, getHeight(), Color.decode("#FA8C05"));
+        GradientPaint g = new GradientPaint(0, 0, Color.decode(Colour1), 0, getHeight(), Color.decode(Colour2));
         g2.setPaint(g);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());

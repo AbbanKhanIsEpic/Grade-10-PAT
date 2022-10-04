@@ -7,6 +7,7 @@ package Frontend;
 import Backend.FriendManager;
 import Backend.GroupManager;
 import Backend.MessageManager;
+import Backend.FriendMessageThread;
 import Backend.Threads;
 import Backend.UserManager;
 import java.sql.SQLException;
@@ -30,14 +31,19 @@ public class HomeScreen extends javax.swing.JFrame {
     private String selectedFriendOrGroup;
     private String DisplayName;
     
+    FriendMessageThread messageThread;
+    
     
     public HomeScreen() {
         initComponents();
+        
     }
     
     public HomeScreen(String username) {
         try {
             initComponents();
+            
+            messageThread = null;
             
             new HomeScreen().setTitle("Welcome to ChatBun");
             
@@ -48,6 +54,12 @@ public class HomeScreen extends javax.swing.JFrame {
             WelcomeLabel.setText("Welcome: " + DisplayName);
             
             setLocationRelativeTo(null);
+            
+            String textFont = MessageManager.getTextFont(Username);
+            
+            int textSize = MessageManager.getTextSize(Username);
+            
+            ViewMessageTextArea.setFont(new java.awt.Font(textFont, 0, textSize));
             
             String[] friendList = FriendManager.getFriends(Username);
             
@@ -89,14 +101,14 @@ public class HomeScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        textingBackground1 = new UISupport.TextingBackground();
+        textingBackground1 = new Backgrounds.TextingBackground();
         TalkToLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         ViewMessageTextArea = new javax.swing.JTextArea();
         SendMessageTextField = new javax.swing.JTextField();
         SendMessgeButton = new javax.swing.JButton();
         SeparatorSplitPane = new javax.swing.JSplitPane();
-        sideMenuBackground1 = new UISupport.SideMenuBackground();
+        sideMenuBackground1 = new Backgrounds.SideMenuBackground();
         FriendsOrGroupToggleButton = new javax.swing.JToggleButton();
         SettingButton = new javax.swing.JButton();
         AddButton = new javax.swing.JButton();
@@ -117,6 +129,7 @@ public class HomeScreen extends javax.swing.JFrame {
 
         ViewMessageTextArea.setEditable(false);
         ViewMessageTextArea.setColumns(20);
+        ViewMessageTextArea.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         ViewMessageTextArea.setRows(5);
         jScrollPane2.setViewportView(ViewMessageTextArea);
 
@@ -360,6 +373,7 @@ public class HomeScreen extends javax.swing.JFrame {
                 
                 try {
                     FriendManager.blockFriend(Username, selectedFriendOrGroup);
+                    BlockButton.setText("Unblock");
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -369,6 +383,7 @@ public class HomeScreen extends javax.swing.JFrame {
                 
                 try {
                     FriendManager.unblockFriend(Username, selectedFriendOrGroup);
+                    BlockButton.setText("Block");
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -382,6 +397,7 @@ public class HomeScreen extends javax.swing.JFrame {
                 
                 try {
                     GroupManager.blockGroup(Username, selectedFriendOrGroup);
+                    BlockButton.setText("Unblock");
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -391,6 +407,7 @@ public class HomeScreen extends javax.swing.JFrame {
                 
                 try {
                     GroupManager.unblockGroup(Username, selectedFriendOrGroup);
+                    BlockButton.setText("Block");
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -464,6 +481,10 @@ public class HomeScreen extends javax.swing.JFrame {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            if(messageThread != null){
+                messageThread.stopRunning();
+            }
+            messageThread = new FriendMessageThread(Username, selectedFriendOrGroup, ViewMessageTextArea);
         }
 
         
@@ -475,7 +496,7 @@ public class HomeScreen extends javax.swing.JFrame {
         JList list = (JList)evt.getSource();
         if (evt.getClickCount() == 2) {
             
-            new ProfileScreen(Username).setVisible(true);
+            new ProfileScreen(FriendORGroupList.getSelectedValue(),Username).setVisible(true);
             dispose();
             
          }
@@ -540,7 +561,7 @@ public class HomeScreen extends javax.swing.JFrame {
             
             try {
                 
-                GroupManager.removeGroup(Username, selectedFriendOrGroup);
+                GroupManager.exitGroup(Username, selectedFriendOrGroup);
                 
                 String[] groupList = GroupManager.getGroups(Username);
                 
@@ -675,8 +696,8 @@ public class HomeScreen extends javax.swing.JFrame {
     private javax.swing.JLabel WelcomeLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private UISupport.SideMenuBackground sideMenuBackground1;
+    private Backgrounds.SideMenuBackground sideMenuBackground1;
     private javax.swing.JLabel swapAccountLabel;
-    private UISupport.TextingBackground textingBackground1;
+    private Backgrounds.TextingBackground textingBackground1;
     // End of variables declaration//GEN-END:variables
 }

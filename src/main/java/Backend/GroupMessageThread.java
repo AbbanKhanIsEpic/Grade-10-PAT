@@ -13,10 +13,9 @@ import javax.swing.JTextArea;
  *
  * @author abban
  */
-public class FriendMessageThread implements Runnable {
-    
+public class GroupMessageThread implements Runnable {
     private String username;
-    private String friend;
+    private int groupIndex;
     private JTextArea messageTextArea;
     
     Thread t;
@@ -24,9 +23,9 @@ public class FriendMessageThread implements Runnable {
     private boolean running = true;
     //Messages
     
-    public FriendMessageThread(String username, String friend, JTextArea messageTextArea) {
+    public GroupMessageThread(String username, int groupIndex, JTextArea messageTextArea) {
         this.username = username;
-        this.friend = friend;
+        this.groupIndex = groupIndex;
         this.messageTextArea = messageTextArea;
         
         t = new Thread(this);
@@ -45,13 +44,13 @@ public class FriendMessageThread implements Runnable {
             try {
                 Thread.sleep(50);
                 
-                String messages = MessageManager.getFriendMessages(username, friend);
+                String messages = MessageManager.getGroupMessages(username, groupIndex);
                 
                 messageTextArea.setText(messages);
+                
             } catch (InterruptedException | SQLException ex) {
                 Logger.getLogger(FriendMessageThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
 }

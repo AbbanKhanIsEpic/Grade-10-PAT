@@ -4,7 +4,6 @@
  */
 package Backgrounds;
 
-import Frontend.HomeScreen;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -38,11 +37,9 @@ public class SideMenuBackground extends javax.swing.JPanel {
         
         setOpaque(false);
 
-        Colour1 = colour1;
-        
     }
     
-    public static void changeColour(String colour1,String colour2){
+    public static void setSideMenuBackground(String colour1,String colour2){
         
         Colour1 = colour1;
         Colour2 = colour2;

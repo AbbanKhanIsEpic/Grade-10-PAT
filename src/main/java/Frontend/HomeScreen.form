@@ -37,9 +37,14 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="sideMenuBackground1" alignment="0" min="-2" max="-2" attributes="0"/>
-          <Component id="textingBackground1" alignment="0" min="-2" max="-2" attributes="0"/>
-          <Component id="SeparatorSplitPane" alignment="0" min="-2" pref="671" max="-2" attributes="0"/>
+          <Component id="sideMenuBackground1" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="textingBackground1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="SeparatorSplitPane" alignment="0" min="-2" pref="671" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -126,40 +131,43 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="SettingButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="423" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+                                      <Component id="swapAccountLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="SwapAccountComboBox" min="-2" pref="96" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="Separator3" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="Separator2" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="BlockButton" min="-2" pref="147" max="-2" attributes="0"/>
+                                      <EmptySpace pref="72" max="32767" attributes="0"/>
+                                      <Component id="DeleteMessageButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="FriendsOrGroupToggleButton" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="151" max="-2" attributes="0"/>
-                          <Component id="Separator1" min="-2" pref="366" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                          <Component id="SettingButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
-                          <Component id="WelcomeLabel" min="-2" pref="185" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                                  <Component id="swapAccountLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="SwapAccountComboBox" min="-2" pref="96" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="Separator3" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="Separator2" alignment="0" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="BlockButton" min="-2" pref="147" max="-2" attributes="0"/>
-                                  <EmptySpace pref="72" max="32767" attributes="0"/>
-                                  <Component id="DeleteMessageButton" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="FriendsOrGroupToggleButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="WelcomeLabel" max="32767" attributes="0"/>
+                              <Component id="Separator1" pref="366" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="RemoveButton" max="32767" attributes="0"/>
+                      <Component id="RemoveOrExitButton" max="32767" attributes="0"/>
                       <Component id="AddButton" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="76" max="32767" attributes="0"/>
@@ -201,7 +209,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
-                          <Component id="RemoveButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="RemoveOrExitButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -323,7 +331,7 @@
             <Property name="text" type="java.lang.String" value="Welcome back "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="RemoveButton">
+        <Component class="javax.swing.JButton" name="RemoveOrExitButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Images/delete_icon.png"/>
@@ -331,7 +339,7 @@
             <Property name="text" type="java.lang.String" value="Remove"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RemoveButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RemoveOrExitButtonActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="Separator2">

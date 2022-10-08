@@ -28,6 +28,7 @@ public class LoginBackground extends javax.swing.JPanel {
         setOpaque(false);
     }
     @Override
+    
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

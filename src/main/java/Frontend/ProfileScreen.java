@@ -6,7 +6,9 @@ package Frontend;
 
 import Backend.BackgroundManager;
 import Backend.ProfileManager;
+import Backend.UserManager;
 import Backgrounds.ProfileBackground;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +22,7 @@ public class ProfileScreen extends javax.swing.JFrame {
     /**
      * Creates new form ProfileScreen
      */
-    private String Username = "";
+    private String username = "";
     
     public ProfileScreen() {
         initComponents();
@@ -29,27 +31,60 @@ public class ProfileScreen extends javax.swing.JFrame {
     
     public ProfileScreen(String friend,String username) {
         try {
+            
             initComponents();
             
-            Username = username;
+            this.username = username;
             
             String colour1 = BackgroundManager.getFirstColourProfileBackground(friend);
             
             String colour2 = BackgroundManager.getLastColourProfileBackground(friend);
             
-            ProfileBackground.changeColour(colour1, colour2);
+            ProfileBackground.setProfileBackground(colour1, colour2);
             
             String bio = ProfileManager.getBio(friend);
             
-            String textFont = ProfileManager.getTextFont(friend);
+            String profileTextFont = ProfileManager.getTextFont(friend);
             
-            int textSize = ProfileManager.getTextSize(friend);
+            int profileTextSize = ProfileManager.getTextSize(friend);
             
             BioTextArea.setText(bio);
             
-            BioTextArea.setFont(new java.awt.Font(textFont, 0, textSize));
+            BioTextArea.setFont(new java.awt.Font(profileTextFont, 0, profileTextSize));
+            
+            String displayName = UserManager.getDisplayName(friend);
+            
+            DisplayNameLabel.setText(displayName);
             
             usernameLabel.setText("@" + friend);
+            
+            Date whenFriendJoined = ProfileManager.getAccountCreated(friend);
+            
+            JoinedLabel.setText("Joined: " + whenFriendJoined);
+            
+            int profileIcon = ProfileManager.getProfileIcon(friend);
+            
+            switch (profileIcon) {
+                
+                case 1 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_icon.png")));
+                
+                case 2 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fancy_croc_profile_icon.png")));
+                
+                case 3 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/charli_sqaud_profile_icon.png")));
+                
+                case 4 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/real_charli_squad_profile_icon.png")));
+                
+                case 5 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/los_pollos_hermandoes_profile_icon.png")));
+                
+                case 6 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/old_man_with_stick_profile_icon.png")));
+                
+                case 7 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/capybara_profile_icon.png")));
+                
+                case 8 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/doofenshmirtz_evil_incorporated_profile_icon.png")));
+                
+                default -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/true_fat_man_profile_icon.png")));
+                
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(ProfileScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,12 +138,12 @@ public class ProfileScreen extends javax.swing.JFrame {
         BioLabel.setText("Bio:");
 
         DisplayNameLabel.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        DisplayNameLabel.setText("KingKhanTheGreat");
+        DisplayNameLabel.setText(" ");
 
         usernameLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        usernameLabel.setText("@AmongusFart");
+        usernameLabel.setText(" ");
 
-        JoinedLabel.setText("Joined:");
+        JoinedLabel.setText(" ");
 
         GoBackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/left_arrow_icon.png"))); // NOI18N
         GoBackButton.addActionListener(new java.awt.event.ActionListener() {
@@ -128,25 +163,16 @@ public class ProfileScreen extends javax.swing.JFrame {
                     .addComponent(BioLabel))
                 .addGap(121, 121, 121))
             .addGroup(profileBackground2Layout.createSequentialGroup()
-                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(profileBackground2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(198, 198, 198)
-                        .addComponent(ProfileIconLabel))
-                    .addGroup(profileBackground2Layout.createSequentialGroup()
-                        .addGap(244, 244, 244)
-                        .addComponent(DisplayNameLabel)))
+                .addContainerGap()
+                .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(198, 198, 198)
+                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(JoinedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(usernameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(DisplayNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ProfileIconLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(profileBackground2Layout.createSequentialGroup()
-                .addGroup(profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(profileBackground2Layout.createSequentialGroup()
-                        .addGap(295, 295, 295)
-                        .addComponent(usernameLabel))
-                    .addGroup(profileBackground2Layout.createSequentialGroup()
-                        .addGap(328, 328, 328)
-                        .addComponent(JoinedLabel)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         profileBackground2Layout.setVerticalGroup(
             profileBackground2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +213,7 @@ public class ProfileScreen extends javax.swing.JFrame {
 
     private void GoBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GoBackButtonActionPerformed
         // TODO add your handling code here:
-        new HomeScreen(Username).setVisible(true);
+        new HomeScreen(username).setVisible(true);
         dispose();
     }//GEN-LAST:event_GoBackButtonActionPerformed
 
@@ -221,10 +247,8 @@ public class ProfileScreen extends javax.swing.JFrame {
         //</editor-fold>
         
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ProfileScreen().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ProfileScreen().setVisible(true);
         });
     }
 

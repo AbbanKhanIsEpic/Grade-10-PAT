@@ -4,12 +4,9 @@
  */
 package Backend;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 
 /**
  *
@@ -19,24 +16,127 @@ public class MessageManager {
     
     public static String getFriendMessages(String username,String friend) throws SQLException{
         
+        boolean friendBlock = FriendManager.isBlocked(username, friend);
+        
+        boolean friendMessageDelete = FriendManager.isMessageDelete(username, friend);
+        
         int userID = UserManager.getUserID(username);
         
         int friendID = UserManager.getUserID(friend);
         
         String completedMessage = "";
         
-        ResultSet result = DB.query("Select Time,Message From abbankDB.FriendMessages Where UserID = " + userID + " And FriendID = " + friendID + "");
+        ResultSet result = DB.query("SELECT UserID,Time,Message FROM abbankDB.FriendMessages Where (UserID = " + userID + " And FriendID = " + friendID + ") OR (UserID = " + friendID + " And FriendID = " + userID + ") ORDER BY Time asc;");
         
-        while(result.next()){
+        if(friendBlock && friendMessageDelete){
             
-            Date date = result.getDate(1);
-            String dateString = date.toString();
+            while(result.next()){
             
-            String message = result.getString(2);
+                int userWhoSendMessage = result.getInt(1);
+                
+                Timestamp blockedDate = FriendManager.getWhenBlocked(userID, friendID);
             
-            String completeLineMessage = "< " + dateString + " > " + message + "\n";
+                Timestamp deletedate = FriendManager.getWhenMessageDelete(userID, friendID);
             
-            completedMessage = completedMessage + completeLineMessage;
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+                
+                if(deletedate.before(date) && blockedDate.after(date)){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+                
+                else if(deletedate.before(date) && blockedDate.before(date) && userWhoSendMessage == userID){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+            }
+            
+        }
+        
+        if(friendBlock){
+            
+            while(result.next()){
+                
+                Timestamp blockedDate = FriendManager.getWhenBlocked(userID, friendID);
+                        
+                int userWhoSendMessage = result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+                
+                if(blockedDate.after(date)){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+                
+                else if(blockedDate.before(date) && userWhoSendMessage == userID){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+            }
+            
+        }
+        
+        else if(friendMessageDelete){
+            
+            while(result.next()){
+            
+                Timestamp deletedate = FriendManager.getWhenMessageDelete(userID, friendID);
+            
+                result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+            
+                if(deletedate.before(date)){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+            }
+        }
+        
+        else{
+            
+            while(result.next()){
+            
+                result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+            
+                String completeLineMessage = "< " + dateString + " > " + message + "\n";
+                
+                completedMessage = completedMessage + completeLineMessage;
+            
+            }
             
         }
         
@@ -51,188 +151,150 @@ public class MessageManager {
             
         String message = username + ": " + sendmessage;
             
-        DB.update("Insert into abbankDB.FriendMessages(UserID,FriendID,Time,Message) Values(" + userID + " , " + friendID + " , now() , '" + message + "'");
+        DB.update("Insert into abbankDB.FriendMessages(UserID,FriendID,Time,Message) Values(" + userID + " , " + friendID + " , now() , '" + message + "')");
         
         
     }
     
-    public static String getGroupMessages(String username, String groupName) throws SQLException{
+    public static String getGroupMessages(String username, int index) throws SQLException{
         
-        String table = username + "_gm";
+        boolean groupBlock = GroupManager.isBlocked(username, index);
         
-        ResultSet result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        boolean groupMessageDelete = GroupManager.isMessageDelete(username, index);
         
-        result.next();
+        int groupID = GroupManager.getGroupID(username, index);
         
-        String message = result.getString(1);
+        int userID = UserManager.getUserID(username);
         
-        return message;
+        String completedMessage = "";
+        
+        ResultSet result = DB.query("Select userID,time,message from abbankDB.GroupMessages Where groupID = " + groupID + "");
+        
+        if(groupBlock && groupMessageDelete){
+            
+            while(result.next()){
+                
+                Timestamp whenBlocked = GroupManager.getWhenBlocked(username, index);
+            
+                Timestamp whenMessageDelete = GroupManager.getWhenMessageDelete(username, index);
+                
+                int userWhoSendMessage = result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+                
+                if(whenMessageDelete.before(date) && whenBlocked.after(date)){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+                
+                else if(whenMessageDelete.before(date) && whenBlocked.before(date) && userWhoSendMessage == userID){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+            }
+        }
+            
+        else if(groupMessageDelete){
+            
+            while(result.next()){
+            
+                Timestamp whenMessageDelete = GroupManager.getWhenMessageDelete(username, index);
+                
+                result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+            
+                if(whenMessageDelete.before(date)){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+            }
+            
+        }
+        else if(groupBlock){
+            
+            while(result.next()){
+                
+                Timestamp whenBlocked = GroupManager.getWhenBlocked(username, index);
+                
+                int userWhoSendMessage = result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+                
+                if(whenBlocked.after(date)){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+                
+                else if(whenBlocked.before(date) && userWhoSendMessage == userID){
+                    
+                    String completeLineMessage = "< " + dateString + " > " + message + "\n";
+            
+                    completedMessage = completedMessage + completeLineMessage;
+                    
+                }
+            }
+            
+        }
+        else{
+            
+            while(result.next()){
+            
+                result.getInt(1);
+            
+                Timestamp date = result.getTimestamp(2);
+            
+                String dateString = date.toString();
+            
+                String message = result.getString(3);
+            
+                String completeLineMessage = "< " + dateString + " > " + message + "\n";
+                
+                completedMessage = completedMessage + completeLineMessage;
+            
+            }
+            
+        }
+
+        
+        return completedMessage;
     }
     
-    public static void sendGroupMessage(String username, String groupName,String sendmessage) throws SQLException{
+    public static void sendGroupMessage(String username, int index,String sendmessage) throws SQLException{
         
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+        int groupID = GroupManager.getGroupID(username, index);
         
-        String time = formatTime.format(LocalTime.now());
-        String date = LocalDate.now().toString();
+        int userID = UserManager.getUserID(username);
         
-        String sendFullMessage = "";
+        String message = username + ": " + sendmessage;
         
-        String table = username + "_gm";
+        DB.update("Insert into abbankDB.GroupMessages(UserID,groupID,time,message) Values(" + userID + " , " + groupID + " , now() , '" + message + "')");
         
-        ResultSet result = DB.query("Select GroupMemember1 , GroupMemember2 , GroupMemember3 , GroupMemember4 , GroupMemember5 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-        
-        result.next();
-        
-        String member1 = result.getString(1);
-        String member2 = result.getString(2);
-        String member3 = result.getString(3);
-        String member4 = result.getString(4);
-        String member5 = result.getString(5);
-        
-        if(!(member1.equals("null")) && !(GroupManager.isBlocked(member1, groupName))){
-            
-            table = member1 + "_gm";
-            
-            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-            
-            result.next();
-            
-            String previousMessage = result.getString(1);
-            
-            sendFullMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
-        
-            DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendFullMessage + "' Where GroupName = '" + groupName + "'");
-            
-        }
-        
-        if(!(member2.equals("null"))){
-            
-            table = member2 + "_gm";
-            
-            sendFullMessage = "";
-            
-            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-            
-            result.next();
-            
-            String previousMessage = result.getString(1);
-            
-            sendFullMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
-        
-            DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendFullMessage + "' Where GroupName = '" + groupName + "'");
-            
-        }
-        if(!(member3.equals("null"))){
-            
-            table = member3 + "_gm";
-            
-            sendFullMessage = "";
-            
-            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-            
-            result.next();
-            
-            String previousMessage = result.getString(1);
-            
-            sendFullMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
-        
-            DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendFullMessage + "' Where GroupName = '" + groupName + "'");
-            
-        }
-        if(!(member5.equals("null"))){
-            
-            table = member5 + "_gm";
-            
-            sendFullMessage = "";
-            
-            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-            
-            result.next();
-            
-            String previousMessage = result.getString(1);
-            
-            sendFullMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
-        
-            DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendFullMessage + "' Where GroupName = '" + groupName + "'");
-            
-        }
-        
-        if(!(member4.equals("null"))){
-            
-            table = member4 + "_gm";
-            
-            sendFullMessage = "";
-            
-            result = DB.query("Select GroupMessages from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-            
-            result.next();
-            
-            String previousMessage = result.getString(1);
-            
-            sendFullMessage =  previousMessage +  "< " + date + " | " + time + " > " + username + ": " + sendmessage + "\n";
-            
-            DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '" + sendFullMessage + "' Where GroupName = '" + groupName + "'");
-        
-        } 
     }
 
-    
-    //from here
-    public static void deleteGroupMessage(String username, String groupName) throws SQLException{
-        
-        String table = username + "_gm";
-            
-        DB.update("UPDATE abbankDB." + table + " Set GroupMessages = '' Where GroupName = '" + groupName + "'");
-        
-    }
-    
-    public static void deleteFriendMessage(String username, String to) throws SQLException{
-        
-        String table = username + "_fm";
-        
-        DB.update("UPDATE abbankDB." + table + " Set FriendMessages = '' WHERE Friends = '" + to + "'");
 
-    }
-    
-    public static void updateTextFont(String username, String textFont) throws SQLException{
-        
-        DB.update("Update abbankDB.userSettings Set MesaageTextFont = '" + textFont + "' Where Username = '" + username + "'");
-        
-    }
-    
-    public static void updateTextSize(String username, int textSize) throws SQLException{
-        
-        DB.update("Update abbankDB.userSettings Set MessageTextSize = " + textSize + " Where Username = '" + username + "'");
-        
-    }
-    
-        public static String getTextFont(String username) throws SQLException{
-        
-        ResultSet result = DB.query("Select MessageTextFont From abbankDB.Users Where Username = '" + username + "'");
-        
-        result.next();
-        
-        String textFont = result.getString(1);
-        
-        return textFont;
-        
-    }
-    
-    public static int getTextSize(String username) throws SQLException{
-        
-        ResultSet result = DB.query("Select MessageTextSize From abbankDB.Users Where Username = '" + username + "'");
-        
-        result.next();
-        
-        int textSize = result.getInt(1);
-        
-        return textSize;
-        
-    }
-    
-    
-    
-    
-    
 }

@@ -24,11 +24,13 @@ public class TextingBackground extends javax.swing.JPanel {
     private static String Colour2 = "#18A558";
     
     public TextingBackground() {
+        
         initComponents();
-            setOpaque(false);
+        setOpaque(false);
+        
     }
     
-    public static void changeColour(String colour1,String colour2){
+    public static void setTextingScreenBackground(String colour1,String colour2){
         
         Colour1 = colour1;
         Colour2 = colour2;

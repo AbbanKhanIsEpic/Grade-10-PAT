@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
@@ -21,22 +20,33 @@ public class DB {
     private static final String user = "abbank";
     private static final String pass = "Reddam2021";
 
-	//INSERT, UPDATE or DELETE
-	public static void update(String update) throws SQLException {
-		Connection conn = DriverManager.getConnection(url, user, pass);
+    //This code from 23 to the last line of code is repurposed from MrB's github 
+    
+    //This method purpose is to insert, update or delete values in mySQL Table
+    
+    public static void update(String update) throws SQLException {
+        
+        Connection conn = DriverManager.getConnection(url, user, pass);
 
-		PreparedStatement statement = conn.prepareStatement(update);
-		statement.executeUpdate();
-		statement.close();
-	}
-
-	//SELECT
-	public static ResultSet query(String stmt) throws SQLException {
-		Connection conn = DriverManager.getConnection(url, user, pass);
-
-		PreparedStatement statement = conn.prepareStatement(stmt);
-		ResultSet resultSet = statement.executeQuery();
+        PreparedStatement statement = conn.prepareStatement(update);
+        
+	statement.executeUpdate();
+        
+	statement.close();
                 
-                return resultSet;
+    }
+
+        
+        //Purpose of this method is to select something from mySQL Table
+	public static ResultSet query(String stmt) throws SQLException {
+            
+	    Connection conn = DriverManager.getConnection(url, user, pass);
+
+	    PreparedStatement statement = conn.prepareStatement(stmt);
+                
+	    ResultSet resultSet = statement.executeQuery();
+                
+            return resultSet;
+            
 	}
 }

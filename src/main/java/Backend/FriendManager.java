@@ -4,9 +4,9 @@
  */
 package Backend;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * @author abban
  */
 public class FriendManager {
+    
 
     public static String[] getFriends(String username) throws SQLException{
             
@@ -36,6 +37,7 @@ public class FriendManager {
 
     }
     
+
     public static String[] findPeople(String friendString,String username) throws SQLException{
         
         ArrayList<String> peopleArrayList = new ArrayList<>();
@@ -66,7 +68,9 @@ public class FriendManager {
         
         ArrayList<String> friendRequestArrayList = new ArrayList<>();
         
-        ResultSet result = DB.query("Select Username from abbankDB.Users,FriendRequests Where (abbankDB.FriendRequests.UserID = abbankDB.Users.UserID) AND abbankDB.FriendRequests.FriendID = 1");
+        int userID = UserManager.getUserID(username);
+        
+        ResultSet result = DB.query("Select Username from abbankDB.Users,FriendRequests Where (abbankDB.FriendRequests.UserID = abbankDB.Users.UserID) AND abbankDB.FriendRequests.FriendID = " + userID + "");
         
         while(result.next()){
             
@@ -87,13 +91,13 @@ public class FriendManager {
         
         int friendID = UserManager.getUserID(friend);
         
-        ResultSet result = DB.query("select count(*) from abbankDB.FriendRequests Where FriendID = " + friendID + "");
+        ResultSet result = DB.query("Select count(*) from abbankDB.FriendRequests Where UserID = " + userID + " And FriendID = " + friendID + "");
         
         result.next();
         
         int friendRequestCount = result.getInt(1);
         
-        result = DB.query("select count(*) from abbankDB.Friends Where FriendID = " + friendID + "");
+        result = DB.query("Select count(*) from abbankDB.Friends Where UserID = " + userID + " And FriendID = " + friendID + "");
         
         result.next();
         
@@ -112,7 +116,6 @@ public class FriendManager {
         
     }
     
-    //take out jlist
     public static void acceptFriendRequest(String userName, String friendName) throws SQLException{
       
         int userID = UserManager.getUserID(userName);
@@ -123,9 +126,9 @@ public class FriendManager {
         
         DB.update("Delete from abbankDB.FriendRequests Where UserID = " + friendID + " And FriendID = " + userID + "");
         
-        DB.update("Update abbankDB.Friends Set UserID = " + userID + " , FriendID = " + friendID);
+        DB.update("Insert into abbankDB.Friends Values(" + userID + " , " + friendID + ")");
         
-        DB.update("Update abbankDB.Friends Set UserID = " + friendID + " , FriendID = " + userID);
+        DB.update("Insert into abbankDB.Friends Values(" + friendID + " , " + userID + ")");
         
     }
     
@@ -145,11 +148,15 @@ public class FriendManager {
         
         int friendID = UserManager.getUserID(friend);
         
-        DB.update("Delete from abbankDB.BlockedFriends Where UserID = " + userID + " And Where FriendID " + friendID + "");
+        DB.update("Delete from abbankDB.BlockedFriends Where UserID = " + userID + " And FriendID = " + friendID + "");
 
     }
     
-    public static boolean isBlocked(int userID, int friendID) throws SQLException{
+    public static boolean isBlocked(String username, String friend) throws SQLException{
+        
+        int userID = UserManager.getUserID(username);
+        
+        int friendID = UserManager.getUserID(friend);
         
         ResultSet result = DB.query("Select count(*) from abbankDB.BlockedFriends Where UserID = " + userID + " And FriendID = " + friendID + "");
         
@@ -161,44 +168,83 @@ public class FriendManager {
         
     }
     
-    public static Date getBlockedDate(int userID,int friendID) throws SQLException{
+    public static Timestamp getWhenBlocked(int userID,int friendID) throws SQLException{
         
         ResultSet result = DB.query("Select time from abbankDB.BlockedFriends Where UserID = " + userID + " And FriendID = " + friendID + "");
         
         result.next();
         
-        Date time = result.getDate(1);
+        Timestamp time = result.getTimestamp(1);
         
         return time;
     }
     
-    public static void removeFriend(String username, String friend) throws SQLException{
+    public static boolean isMessageDelete(String username,String friend) throws SQLException{
         
-        String table = username + "_fm";
+        int userID = UserManager.getUserID(username);
         
-        DB.update("Delete from abbankDB." + table + " Where Friends = '" + friend + "'");
+        int friendID = UserManager.getUserID(friend);
         
-        table = friend + "_fm";
+        ResultSet result = DB.query("Select count(*) from abbankDB.deleteFriendMessage Where UserID = " + userID + " And FriendID = " + friendID + "");
         
-        DB.update("Delete from abbankDB." + table + " Where Friends = '" + username + "'");
+        result.next();
+        
+        int count = result.getInt(1);
+        
+        return count == 1;
         
     }
     
-        public static String getUsernameFromFriend(String username,int index) throws SQLException{
+    public static Timestamp getWhenMessageDelete(int userID, int friendID) throws SQLException{
+
+        ResultSet result = DB.query("Select time from abbankDB.deleteFriendMessage Where UserID = " + userID + " And FriendID = " + friendID + "");
         
-        String table = username + "_fm";
+        result.next();
         
-        ResultSet result = DB.query("Select Friends from abbankDB." + table + "");
+        Timestamp date = result.getTimestamp(1);
         
-        for(int i = 0; i < index  + 1;i++){
+        return date;
+        
+    }
+    
+    public static void deleteMessage(String username,String friend) throws SQLException{
+
+        if(isMessageDelete(username,friend)){
             
-            result.next();
+            DB.update("Update abbankDB.deleteFriendMessage Set time = now()");
+            
+        }
+        else{
+            
+            int userID = UserManager.getUserID(username);
+                    
+            int friendID = UserManager.getUserID(friend);
+            
+            DB.update("Insert Into abbankDB.deleteFriendMessage Values(" + userID + " , " + friendID + " , now() )");
             
         }
         
-        String friendUsername = result.getString(1);
+    }
+    
+    public static void removeFriend(String username, String friend) throws SQLException{
         
-        return friendUsername;
+        int userID = UserManager.getUserID(username);
+        
+        int friendID = UserManager.getUserID(friend);
+        
+        DB.update("Delete from abbankDB.Friends Where UserID = " + userID + " And FriendID = " + friendID + "");
+        
+        DB.update("Delete from abbankDB.Friends Where UserID = " + friendID + " And FriendID = " + userID + "");
+        
+    }
+    
+    public static String getFriendUsername(String username,int index) throws SQLException{
+        
+        String[] friendList = FriendManager.getFriends(username);
+        
+        String friend = friendList[index];
+        
+        return friend;
         
     }
 }

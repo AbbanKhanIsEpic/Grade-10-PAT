@@ -259,6 +259,7 @@ public class SignUpMainScreen extends javax.swing.JFrame {
 
     private void SignUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpButtonActionPerformed
         // TODO add your handling code here:
+        
         String usernameLabelColour = UsernameErrorCheckerLabel.getForeground().toString();
         String passwordLabelColour = PasswordErrorCheckerLabel.getForeground().toString();
         String confirmedPasswordLabelColour = ConfirmedPasswordErrorCheckerLabel.getForeground().toString();
@@ -267,16 +268,22 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         String password = passwordPasswordField.getText();
         
         if(usernameLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")&&passwordLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")&&confirmedPasswordLabelColour.equals("java.awt.Color[r=64,g=64,b=64]")){
+            
             try {
+                
                 UserManager.createAccount(username, password);
+                
             } catch (SQLException ex) {
                 Logger.getLogger(SignUpMainScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             new HomeScreen(username).setVisible(true);
             dispose();
         }
         else{
+            
             FinalErrorCheckerLabel.setText("There is an error");
+            
         }
         
     }//GEN-LAST:event_SignUpButtonActionPerformed
@@ -290,12 +297,16 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     private void PasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PasswordVisibleToggleButtonItemStateChanged
         // TODO add your handling code here:
         if(evt.getStateChange() == 1){
+            
             PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
             passwordPasswordField.setEchoChar((char)0);
+            
         }
         else{
+            
             PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
             passwordPasswordField.setEchoChar('*');
+            
         }
         
         
@@ -304,24 +315,29 @@ public class SignUpMainScreen extends javax.swing.JFrame {
     private void ConfirmPasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ConfirmPasswordVisibleToggleButtonItemStateChanged
         // TODO add your handling code here:
         if(evt.getStateChange() == 1){
+            
             ConfirmPasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
             confirmPasswordPasswordField.setEchoChar((char)0);
+            
         }
         else{
+            
             ConfirmPasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
             confirmPasswordPasswordField.setEchoChar('*');
-            
-            
+
         }
     }//GEN-LAST:event_ConfirmPasswordVisibleToggleButtonItemStateChanged
 
     private void confirmPasswordPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_confirmPasswordPasswordFieldKeyReleased
         // TODO add your handling code here:
         if(confirmPasswordPasswordField.getText().equals(passwordPasswordField.getText())){
+            
             ConfirmedPasswordErrorCheckerLabel.setForeground(Color.darkGray);
             ConfirmedPasswordErrorCheckerLabel.setText("Everything looks alright");
+            
         }
         else{
+            
             ConfirmedPasswordErrorCheckerLabel.setForeground(Color.red);
             ConfirmedPasswordErrorCheckerLabel.setText("Passwords must be the same");
 
@@ -333,12 +349,19 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         String result = UserManager.isPasswordSafe(passwordPasswordField.getText(), UsernameTextField.getText());
         
         if(result.equals("Everything looks alright")){
-                PasswordErrorCheckerLabel.setForeground(Color.darkGray);
-            } 
-            else{
-                PasswordErrorCheckerLabel.setForeground(Color.red);
-            }
-            PasswordErrorCheckerLabel.setText(result);
+            
+            PasswordErrorCheckerLabel.setForeground(Color.darkGray);
+            
+        } 
+        
+        else{
+            
+            PasswordErrorCheckerLabel.setForeground(Color.red);
+            
+        }
+        
+        PasswordErrorCheckerLabel.setText(result);
+        
     }//GEN-LAST:event_passwordPasswordFieldKeyReleased
 
     private void UsernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsernameTextFieldKeyReleased
@@ -346,12 +369,18 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         String result = UserManager.isUsernameValid(UsernameTextField.getText());
         
          if(result.equals("Everything looks alright")){
-                UsernameErrorCheckerLabel.setForeground(Color.darkGray);
-            } 
-            else{
-                UsernameErrorCheckerLabel.setForeground(Color.red);
-            }
+             
+            UsernameErrorCheckerLabel.setForeground(Color.darkGray);
+            
+        } 
+        
+        else{
+             
+            UsernameErrorCheckerLabel.setForeground(Color.red);
+                
+         }
             UsernameErrorCheckerLabel.setText(result);
+            
     }//GEN-LAST:event_UsernameTextFieldKeyReleased
 
     /**
@@ -382,10 +411,8 @@ public class SignUpMainScreen extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SignUpMainScreen().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new SignUpMainScreen().setVisible(true);
         });
     }
 

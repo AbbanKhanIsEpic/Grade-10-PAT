@@ -4,12 +4,10 @@
  */
 package Frontend;
 
-import Backend.Threads;
 import Backend.UserManager;
 import Backend.BackgroundManager;
 import Backgrounds.SideMenuBackground;
 import Backgrounds.TextingBackground;
-import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +21,9 @@ public class LoginMainScreen extends javax.swing.JFrame {
     /**
      * Creates new form LoginMainScreeb
      */
-    private int Usage = 0;
-    private String Username = "";
+    private int usage = 0;
+    
+    private String username = "";
     
     public LoginMainScreen() {
         
@@ -35,8 +34,8 @@ public class LoginMainScreen extends javax.swing.JFrame {
     public LoginMainScreen(int usage,String username) {
         initComponents();
         
-        Usage = usage;
-        Username = username;
+        this.usage = usage;
+        this.username = username;
     }
     //if int usage = 0; means that the user is logining to the home screen
     //if int usage = 1; means that the user is adding an account
@@ -236,12 +235,16 @@ public class LoginMainScreen extends javax.swing.JFrame {
     private void PasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PasswordVisibleToggleButtonItemStateChanged
         // This code change the visuial of the toggle button
         if(evt.getStateChange() == 1){
+            
             PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
             passwordPasswordField.setEchoChar((char)0);
+            
         }
         else{
+            
             PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
             passwordPasswordField.setEchoChar('*');
+            
         }
         
         
@@ -249,46 +252,55 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         // TODO add your handling code here:
-        String username = UsernameTextField.getText();
+        String inputUsername = UsernameTextField.getText();
         String password = passwordPasswordField.getText();
        
         try {
-            boolean result =  UserManager.isLoginValid(username, password);
-            if(result && Usage == 0){
+            
+            boolean result =  UserManager.isLoginValid(inputUsername, password);
+            
+            if(result && usage == 0){
                             
-            String colour1 = BackgroundManager.getFirstColourSideMenuBackground(username);
+                String colour1 = BackgroundManager.getFirstColourSideMenuBackground(inputUsername);
             
-            String colour2 = BackgroundManager.getLastColourSideMenuBackground(username);
+                String colour2 = BackgroundManager.getLastColourSideMenuBackground(inputUsername);
             
-            SideMenuBackground.changeColour(colour1,colour2);
+                SideMenuBackground.setSideMenuBackground(colour1,colour2);
             
-            colour1 = BackgroundManager.getFirstColourTextingBackground(username);
+                colour1 = BackgroundManager.getFirstColourTextingBackground(inputUsername);
             
-            colour2 = BackgroundManager.getLastColourTextingBackground(username);
+                colour2 = BackgroundManager.getLastColourTextingBackground(inputUsername);
             
-            TextingBackground.changeColour(colour1, colour2);
+                TextingBackground.setTextingScreenBackground(colour1, colour2);
             
-                 new HomeScreen(username).setVisible(true);
+                 new HomeScreen(inputUsername).setVisible(true);
+                 
                  dispose();
+                 
             }
-            else if(result && Usage == 1 && !(UserManager.isAccountConnected(Username, username))){
+            
+            else if(result && usage == 1 && !(UserManager.isAccountConnected(username, inputUsername))){
                     
-                    UserManager.addConnectedAccount(Username, password);
+                    UserManager.addConnectedAccount(username, inputUsername);
                 
-                   new SettingScreen(Username,"Account added successful").setVisible(true);
+                    new SettingScreen(username,"Account added successful").setVisible(true);
                 
-                   dispose();
+                    dispose();
                 
             }
-            else if(Usage == 1){
+            
+            else if(usage == 1){
                 
-                new SettingScreen(Username,"Account added failed").setVisible(true);
+                new SettingScreen(username,"Account added failed").setVisible(true);
                 
                 dispose();
                 
             }
+            
             else{
+                
                 FinalErrorCheckerLabel.setText("Username or password is incorrect");
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(LoginMainScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -325,10 +337,8 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
         
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginMainScreen().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginMainScreen().setVisible(true);
         });
     }
 

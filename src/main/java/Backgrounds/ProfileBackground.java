@@ -31,7 +31,7 @@ public class ProfileBackground extends javax.swing.JPanel {
         setOpaque(false);
     }
     
-    public static void changeColour(String colour1,String colour2){
+    public static void setProfileBackground(String colour1,String colour2){
         
         Colour1 = colour1;
         Colour2 = colour2;

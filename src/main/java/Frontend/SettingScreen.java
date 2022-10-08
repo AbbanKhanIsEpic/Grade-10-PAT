@@ -7,7 +7,7 @@ package Frontend;
 import Backend.ProfileManager;
 import Backend.UserManager;
 import Backend.BackgroundManager;
-import Backend.MessageManager;
+import Backend.MessageVisualManager;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class SettingScreen extends javax.swing.JFrame {
     /**
      * Creates new form SettingScreen
      */
-    private String Username = "";
+    private String username = "";
     
     private String textFontBio = "Dialog";
     private String textFontMessage = "Dialog";
@@ -33,14 +33,16 @@ public class SettingScreen extends javax.swing.JFrame {
     private int textSizeBio = 11;
     private int textSizeMessage = 11;
     
-    DefaultListModel AccountDefaultList = new DefaultListModel();
+    DefaultListModel defaultAccountListModel = new DefaultListModel();
+    
     String[] connectedAccount;
     
     //Code to get currently available font is from https://alvinalexander.com/blog/post/jfc-swing/swing-faq-list-fonts-current-platform/ 
     String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
     
-    DefaultComboBoxModel FontProfileDefaultList1 = new DefaultComboBoxModel();
-    DefaultComboBoxModel FontProfileDefaultList2 = new DefaultComboBoxModel();
+    DefaultComboBoxModel defaultProfileTextFontComboBoxModel = new DefaultComboBoxModel();
+    
+    DefaultComboBoxModel defaultMessageTextFontComboBoxModel = new DefaultComboBoxModel();
     
     
     
@@ -52,27 +54,35 @@ public class SettingScreen extends javax.swing.JFrame {
         try {
             
             initComponents();
-            Username = username;
+            
+            this.username = username;
+            
             try {
                 
-                connectedAccount = UserManager.getConnectedAccount(Username);
+                connectedAccount = UserManager.getConnectedAccount(username);
                 
-                for(int i = 0; i < connectedAccount.length; i++ ){
+                for (String connectedAccount1 : connectedAccount) {
                     
-                    AccountDefaultList.addElement(connectedAccount[i]);
+                    defaultAccountListModel.addElement(connectedAccount1);
                     
                 }
                 
-                this.AccountList.setModel(AccountDefaultList);
+                this.AccountList.setModel(defaultAccountListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            for(int i = 0; i < fonts.length; i++){
-                FontProfileDefaultList1.addElement(fonts[i]);
-                FontProfileDefaultList2.addElement(fonts[i]);
-                this.fontBioComboBox.setModel(FontProfileDefaultList1);
-                this.fontMessageComboBox.setModel(FontProfileDefaultList2);
+            
+            for (String font : fonts) {
+                
+                defaultProfileTextFontComboBoxModel.addElement(font);
+                
+                defaultMessageTextFontComboBoxModel.addElement(font);
+                
+                this.fontBioComboBox.setModel(defaultProfileTextFontComboBoxModel);
+                
+                this.fontMessageComboBox.setModel(defaultMessageTextFontComboBoxModel);
+                
             }
             
             FirstColourSideMenuTextField.setText(BackgroundManager.getFirstColourSideMenuBackground(username));
@@ -96,18 +106,24 @@ public class SettingScreen extends javax.swing.JFrame {
         try {
             
             initComponents();
-            Username = username;
-            for(int i = 0; i < fonts.length; i++){
-                FontProfileDefaultList1.addElement(fonts[i]);
-                FontProfileDefaultList2.addElement(fonts[i]);
-                this.fontBioComboBox.setModel(FontProfileDefaultList1);
-                this.fontMessageComboBox.setModel(FontProfileDefaultList2);
+            
+            this.username = username;
+            
+            for (String font : fonts) {
+                
+                defaultProfileTextFontComboBoxModel.addElement(font);
+                defaultMessageTextFontComboBoxModel.addElement(font);
+                this.fontBioComboBox.setModel(defaultProfileTextFontComboBoxModel);
+                this.fontMessageComboBox.setModel(defaultMessageTextFontComboBoxModel);
+                
             }
+            
             if(result.equals("Account added successful")){
                 
                 ErrorAccountLabel.setForeground(Color.green);
                 
             }
+            
             else{
                 
                 ErrorAccountLabel.setForeground(Color.red);
@@ -115,25 +131,31 @@ public class SettingScreen extends javax.swing.JFrame {
             }
             try {
                 
-                connectedAccount = UserManager.getConnectedAccount(Username);
+                connectedAccount = UserManager.getConnectedAccount(username);
                 
-                for(int i = 0; i < connectedAccount.length; i++ ){
+                for (String connectedAccount1 : connectedAccount) {
                     
-                    AccountDefaultList.addElement(connectedAccount[i]);
-                    
+                    defaultAccountListModel.addElement(connectedAccount1);
                 }
                 
-                this.AccountList.setModel(AccountDefaultList);
+                this.AccountList.setModel(defaultAccountListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             FirstColourSideMenuTextField.setText(BackgroundManager.getFirstColourSideMenuBackground(username));
+            
             LastColourSideMenuTextField.setText(BackgroundManager.getLastColourSideMenuBackground(username));
+            
             FirstColourTextingScreenTextField.setText(BackgroundManager.getFirstColourTextingBackground(username));
+            
             LastColourTextingScreenTextField.setText(BackgroundManager.getLastColourTextingBackground(username));
+            
             FirstcColourProfileScreenTextField.setText(BackgroundManager.getFirstColourProfileBackground(username));
+            
             LastColourProfileScreenTextField.setText(BackgroundManager.getLastColourProfileBackground(username));
+            
             ErrorAccountLabel.setText(result);
             
         } catch (SQLException ex) {
@@ -180,10 +202,10 @@ public class SettingScreen extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         fontBioComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
+        showTextLabel = new javax.swing.JLabel();
         fontMessageComboBox = new javax.swing.JComboBox<>();
         jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
+        showTextMessageLabel = new javax.swing.JLabel();
         SideMenuColourError = new javax.swing.JLabel();
         UpdateMessageButton = new javax.swing.JButton();
         sizeBioSpinner = new javax.swing.JSpinner();
@@ -339,8 +361,8 @@ public class SettingScreen extends javax.swing.JFrame {
 
         jLabel5.setText("This is how it looks like:");
 
-        jLabel24.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 11)); // NOI18N
-        jLabel24.setText("words");
+        showTextLabel.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 11)); // NOI18N
+        showTextLabel.setText("words");
 
         fontMessageComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         fontMessageComboBox.addItemListener(new java.awt.event.ItemListener() {
@@ -351,7 +373,7 @@ public class SettingScreen extends javax.swing.JFrame {
 
         jLabel25.setText("This is how it looks like: ");
 
-        jLabel26.setText("words");
+        showTextMessageLabel.setText("words");
 
         SideMenuColourError.setText(" ");
 
@@ -432,10 +454,10 @@ public class SettingScreen extends javax.swing.JFrame {
         DisplayLayerPane.setLayer(jLabel21, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(fontBioComboBox, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jLabel24, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(showTextLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(fontMessageComboBox, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(jLabel25, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        DisplayLayerPane.setLayer(jLabel26, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        DisplayLayerPane.setLayer(showTextMessageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(SideMenuColourError, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(UpdateMessageButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DisplayLayerPane.setLayer(sizeBioSpinner, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -460,7 +482,7 @@ public class SettingScreen extends javax.swing.JFrame {
                             .addComponent(jLabel17)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel24)
+                        .addComponent(showTextLabel)
                         .addGap(224, 224, 224))
                     .addGroup(DisplayLayerPaneLayout.createSequentialGroup()
                         .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -468,7 +490,7 @@ public class SettingScreen extends javax.swing.JFrame {
                             .addComponent(jLabel21)
                             .addComponent(jLabel25))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                        .addComponent(jLabel26)
+                        .addComponent(showTextMessageLabel)
                         .addGap(220, 220, 220))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DisplayLayerPaneLayout.createSequentialGroup()
                         .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -586,7 +608,7 @@ public class SettingScreen extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel24))
+                    .addComponent(showTextLabel))
                 .addGap(18, 18, 18)
                 .addComponent(UpdateBioDisplayButton)
                 .addGap(18, 18, 18)
@@ -600,7 +622,7 @@ public class SettingScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(DisplayLayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
-                    .addComponent(jLabel26))
+                    .addComponent(showTextMessageLabel))
                 .addGap(18, 18, 18)
                 .addComponent(UpdateMessageButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -845,7 +867,7 @@ public class SettingScreen extends javax.swing.JFrame {
                     .addComponent(SettingLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingPanel1Layout.createSequentialGroup()
-                .addContainerGap(265, Short.MAX_VALUE)
+                .addContainerGap(305, Short.MAX_VALUE)
                 .addGroup(settingPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(ProfileLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -879,12 +901,12 @@ public class SettingScreen extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 2279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -893,7 +915,7 @@ public class SettingScreen extends javax.swing.JFrame {
 
     private void RemoveAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveAccountButtonActionPerformed
         // TODO add your handling code here:
-        if(AccountDefaultList.elementAt(AccountList.getSelectedIndex()).equals(Username)){
+        if(defaultAccountListModel.elementAt(AccountList.getSelectedIndex()).equals(username)){
             
             ErrorAccountLabel.setForeground(Color.red);
             ErrorAccountLabel.setText("Can't remove this account");
@@ -901,8 +923,8 @@ public class SettingScreen extends javax.swing.JFrame {
         }else{
             
             try {
-                UserManager.removeConnectedAccount(Username, AccountList.getSelectedValue(), AccountList.getSelectedIndex());
-                AccountDefaultList.removeElementAt(AccountList.getSelectedIndex());
+                UserManager.removeConnectedAccount(username, AccountList.getSelectedValue(), AccountList.getSelectedIndex());
+                defaultAccountListModel.removeElementAt(AccountList.getSelectedIndex());
                 ErrorAccountLabel.setForeground(Color.GREEN);
                 ErrorAccountLabel.setText("Remove account successful");
             } catch (SQLException ex) {
@@ -924,7 +946,7 @@ public class SettingScreen extends javax.swing.JFrame {
         }
         else{
             
-            new LoginMainScreen(1,Username).setVisible(true);
+            new LoginMainScreen(1,username).setVisible(true);
             dispose();
             
         }
@@ -950,7 +972,7 @@ public class SettingScreen extends javax.swing.JFrame {
 
     private void ReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnButtonActionPerformed
         // TODO add your handling code here:
-        new HomeScreen(Username).setVisible(true);
+        new HomeScreen(username).setVisible(true);
         dispose();
     }//GEN-LAST:event_ReturnButtonActionPerformed
 
@@ -1040,49 +1062,25 @@ public class SettingScreen extends javax.swing.JFrame {
 
     private void IconComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_IconComboBoxItemStateChanged
         // TODO add your handling code here:
-        if(IconComboBox.getSelectedItem().toString().equals("Default")){
+        switch (IconComboBox.getSelectedItem().toString()) {
             
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_icon.png")));
+            case "Default" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_icon.png")));
             
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Sir Croc")){
+            case "Sir Croc" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fancy_croc_profile_icon.png")));
             
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fancy_croc_profile_icon.png")));
+            case "Charli sqaud" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/charli_sqaud_profile_icon.png")));
             
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Charli sqaud")){
+            case "Real Charli sqaud" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/real_charli_squad_profile_icon.png")));
             
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/charli_sqaud_profile_icon.png")));
+            case "Los Pollos Hermanos" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/los_pollos_hermandoes_profile_icon.png")));
             
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Real Charli sqaud")){
+            case "Old wizard" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/old_man_with_stick_profile_icon.png")));
             
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/real_charli_squad_profile_icon.png")));
+            case "Capybara" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/capybara_profile_icon.png")));
             
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Los Pollos Hermanos")){
+            case "Doofenshmirtz evil incorporated" -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/doofenshmirtz_evil_incorporated_profile_icon.png")));
             
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/los_pollos_hermandoes_profile_icon.png")));
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Old wizard")){
-            
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/old_man_with_stick_profile_icon.png"))); 
-            
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Capybara")){
-            
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/capybara_profile_icon.png"))); 
-            
-        }
-        else if(IconComboBox.getSelectedItem().toString().equals("Doofenshmirtz evil incorporated")){
-            
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/doofenshmirtz_evil_incorporated_profile_icon.png")));
-            
-        }
-        else{
-            
-            ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/true_fat_man_profile_icon.png")));
-            
+            default -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/true_fat_man_profile_icon.png")));
         }
     }//GEN-LAST:event_IconComboBoxItemStateChanged
 
@@ -1106,7 +1104,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateDisplayNameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateDisplayNameButtonActionPerformed
         try {
             // TODO add your handling code here:
-            UserManager.updateDisplayName(Username, DisplayNameTextField.getText());
+            UserManager.updateDisplayName(username, DisplayNameTextField.getText());
             ErrrorDisplayNameLabel.setForeground(Color.green);
             ErrrorDisplayNameLabel.setText("Display name updated");
             
@@ -1121,7 +1119,7 @@ public class SettingScreen extends javax.swing.JFrame {
         
         try {
             
-            ProfileManager.updateProfileIcon(Username, profileIconNumber);
+            ProfileManager.updateProfileIcon(username, profileIconNumber);
             
             ConfirmUpdateIconLabel.setForeground(Color.green);
             
@@ -1153,7 +1151,7 @@ public class SettingScreen extends javax.swing.JFrame {
             // TODO add your handling code here:
             String bio = BioTextField.getText();
             
-            ProfileManager.updateBio(Username, bio);
+            ProfileManager.updateBio(username, bio);
             
             ErrorBioLabel.setForeground(Color.green);
             
@@ -1167,7 +1165,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateSideMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateSideMenuButtonActionPerformed
         try {
             // TODO add your handling code here:
-            BackgroundManager.updateSideMenuBackground(Username, FirstColourSideMenuTextField.getText(), LastColourSideMenuTextField.getText());
+            BackgroundManager.updateSideMenuBackground(username, FirstColourSideMenuTextField.getText(), LastColourSideMenuTextField.getText());
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1176,7 +1174,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateTextingScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateTextingScreenButtonActionPerformed
         try {
             // TODO add your handling code here:
-            BackgroundManager.updateTextingBackground(Username, FirstColourTextingScreenTextField.getText(), LastColourTextingScreenTextField.getText());
+            BackgroundManager.updateTextingBackground(username, FirstColourTextingScreenTextField.getText(), LastColourTextingScreenTextField.getText());
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1185,7 +1183,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateProfileScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateProfileScreenActionPerformed
         try {
             // TODO add your handling code here:
-            BackgroundManager.updateProfileBackground(Username, FirstcColourProfileScreenTextField.getText(), LastColourProfileScreenTextField.getText());
+            BackgroundManager.updateProfileBackground(username, FirstcColourProfileScreenTextField.getText(), LastColourProfileScreenTextField.getText());
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1195,7 +1193,7 @@ public class SettingScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         textFontBio = (String) fontBioComboBox.getSelectedItem();
         
-        jLabel24.setFont(new java.awt.Font(textFontBio, 0, textSizeBio));
+        showTextLabel.setFont(new java.awt.Font(textFontBio, 0, textSizeBio));
         
     }//GEN-LAST:event_fontBioComboBoxItemStateChanged
 
@@ -1203,7 +1201,7 @@ public class SettingScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         textSizeBio = (int) sizeBioSpinner.getValue();
         
-        jLabel24.setFont(new java.awt.Font(textFontBio, 0, textSizeBio));
+        showTextLabel.setFont(new java.awt.Font(textFontBio, 0, textSizeBio));
     }//GEN-LAST:event_sizeBioSpinnerStateChanged
 
     private void fontMessageComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontMessageComboBoxItemStateChanged
@@ -1211,21 +1209,21 @@ public class SettingScreen extends javax.swing.JFrame {
         
         textFontMessage = (String) fontMessageComboBox.getSelectedItem();
         
-        jLabel26.setFont(new java.awt.Font(textFontMessage, 0, textSizeMessage));
+        showTextMessageLabel.setFont(new java.awt.Font(textFontMessage, 0, textSizeMessage));
     }//GEN-LAST:event_fontMessageComboBoxItemStateChanged
 
     private void sizeMessageSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sizeMessageSpinnerStateChanged
         // TODO add your handling code here:
         textSizeMessage = (int) sizeMessageSpinner.getValue();
         
-        jLabel24.setFont(new java.awt.Font(textFontMessage, 0, textSizeMessage));
+        showTextLabel.setFont(new java.awt.Font(textFontMessage, 0, textSizeMessage));
     }//GEN-LAST:event_sizeMessageSpinnerStateChanged
 
     private void UpdateBioDisplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBioDisplayButtonActionPerformed
         try {
             // TODO add your handling code here:
-            ProfileManager.updateTextFont(Username, textFontBio);
-            ProfileManager.updateTextSize(Username, textSizeBio);
+            ProfileManager.updateTextFont(username, textFontBio);
+            ProfileManager.updateTextSize(username, textSizeBio);
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1234,8 +1232,8 @@ public class SettingScreen extends javax.swing.JFrame {
     private void UpdateMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateMessageButtonActionPerformed
         try {
             // TODO add your handling code here:
-            MessageManager.updateTextFont(Username, textFontMessage);
-            MessageManager.updateTextSize(Username, textSizeMessage);
+            MessageVisualManager.updateTextFont(username, textFontMessage);
+            MessageVisualManager.updateTextSize(username, textSizeMessage);
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1269,10 +1267,8 @@ public class SettingScreen extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SettingScreen().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new SettingScreen().setVisible(true);
         });
     }
 
@@ -1325,9 +1321,7 @@ public class SettingScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1343,6 +1337,8 @@ public class SettingScreen extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator4;
     private Backgrounds.ProfileBackground profileBackground1;
     private Backgrounds.SettingBackground settingPanel1;
+    private javax.swing.JLabel showTextLabel;
+    private javax.swing.JLabel showTextMessageLabel;
     private Backgrounds.SideMenuBackground sideMenuBackground1;
     private javax.swing.JSpinner sizeBioSpinner;
     private javax.swing.JSpinner sizeMessageSpinner;

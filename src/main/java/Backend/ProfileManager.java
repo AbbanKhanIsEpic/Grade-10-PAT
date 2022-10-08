@@ -4,6 +4,7 @@
  */
 package Backend;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -75,4 +76,27 @@ public class ProfileManager {
         
     }
     
+    public static int getProfileIcon(String username) throws SQLException{
+        
+        ResultSet mySQLresult = DB.query("Select ProfileIcon from abbankDB.Users where Username = '" + username + "'");
+        
+        mySQLresult.next();
+        
+        int profileIcon = mySQLresult.getInt(1);
+        
+        return profileIcon;
+        
+    }
+    
+    public static Date getAccountCreated(String username) throws SQLException{
+        
+        ResultSet mySQLresult = DB.query("Select DateCreated from abbankDB.Users where Username = '" + username + "'");
+        
+        mySQLresult.next();
+        
+        Date dateCreated = mySQLresult.getDate(1);
+        
+        return dateCreated;
+        
+    }
 }

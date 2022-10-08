@@ -8,7 +8,8 @@ import Backend.FriendManager;
 import Backend.GroupManager;
 import Backend.MessageManager;
 import Backend.FriendMessageThread;
-import Backend.Threads;
+import Backend.GroupMessageThread;
+import Backend.MessageVisualManager;
 import Backend.UserManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -27,12 +28,17 @@ public class HomeScreen extends javax.swing.JFrame {
      * Creates new form HomeScreen
      */
     
-    private String Username;
-    private String selectedFriendOrGroup;
-    private String DisplayName;
+    private String username;
+    private String selectedFriend;
+    private String displayName;
     
-    FriendMessageThread messageThread;
+    private int indexOfSelectedGroup;
     
+    FriendMessageThread friendMessageThread;
+    
+    GroupMessageThread groupMessageThread;
+    
+    private DefaultListModel defaultFriendOrGroupListModel = new DefaultListModel();
     
     public HomeScreen() {
         initComponents();
@@ -43,47 +49,51 @@ public class HomeScreen extends javax.swing.JFrame {
         try {
             initComponents();
             
-            messageThread = null;
+            friendMessageThread = null;
             
-            new HomeScreen().setTitle("Welcome to ChatBun");
+            groupMessageThread = null;
             
-            Username = username;
+            setTitle("Welcome to ChatBun");
             
-            DisplayName = UserManager.getDisplayName(username);
+            this.username = username;
             
-            WelcomeLabel.setText("Welcome: " + DisplayName);
+            displayName = UserManager.getDisplayName(username);
+            
+            WelcomeLabel.setText("Welcome: " + displayName);
             
             setLocationRelativeTo(null);
             
-            String textFont = MessageManager.getTextFont(Username);
+            String messageTextFont = MessageVisualManager.getTextFont(username);
             
-            int textSize = MessageManager.getTextSize(Username);
+            int messageTextSize = MessageVisualManager.getTextSize(username);
             
-            ViewMessageTextArea.setFont(new java.awt.Font(textFont, 0, textSize));
+            ViewMessageTextArea.setFont(new java.awt.Font(messageTextFont, 0, messageTextSize));
             
-            String[] friendList = FriendManager.getFriends(Username);
+            String[] friendList = FriendManager.getFriends(username);
             
-            String[] connectedAccountList = UserManager.getConnectedAccount(Username);
+            String[] connectedAccountList = UserManager.getConnectedAccount(username);
             
-            DefaultListModel DefaultListModel = new DefaultListModel();
+            defaultFriendOrGroupListModel.clear();
             
-            DefaultComboBoxModel DefaultComboBoxModel = new DefaultComboBoxModel();
+            DefaultComboBoxModel defaultConnectedAccountComboBoxModel = new DefaultComboBoxModel();
             
-            for(int i = 0; i < friendList.length;i++){
+            for (String friend : friendList) {
                 
-                DefaultListModel.addElement(friendList[i]);
+                String friendDisplayName = UserManager.getDisplayName(friend);
                 
-            }
-            
-            FriendORGroupList.setModel(DefaultListModel);
-            
-            for(int i = 0; i < connectedAccountList.length;i++){
-                
-                DefaultComboBoxModel.addElement(connectedAccountList[i]);
+                defaultFriendOrGroupListModel.addElement(friendDisplayName);
                 
             }
             
-            SwapAccountComboBox.setModel(DefaultComboBoxModel);
+            FriendORGroupList.setModel(defaultFriendOrGroupListModel);
+            
+            for (String connectedAccountList1 : connectedAccountList) {
+                
+                defaultConnectedAccountComboBoxModel.addElement(connectedAccountList1);
+                
+            }
+            
+            SwapAccountComboBox.setModel(defaultConnectedAccountComboBoxModel);
 
             
         } catch (SQLException ex) {
@@ -119,7 +129,7 @@ public class HomeScreen extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         FriendORGroupList = new javax.swing.JList<>();
         WelcomeLabel = new javax.swing.JLabel();
-        RemoveButton = new javax.swing.JButton();
+        RemoveOrExitButton = new javax.swing.JButton();
         Separator2 = new javax.swing.JSeparator();
         swapAccountLabel = new javax.swing.JLabel();
         Separator1 = new javax.swing.JSeparator();
@@ -236,11 +246,11 @@ public class HomeScreen extends javax.swing.JFrame {
         WelcomeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/hand_wave_icon.png"))); // NOI18N
         WelcomeLabel.setText("Welcome back ");
 
-        RemoveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_icon.png"))); // NOI18N
-        RemoveButton.setText("Remove");
-        RemoveButton.addActionListener(new java.awt.event.ActionListener() {
+        RemoveOrExitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_icon.png"))); // NOI18N
+        RemoveOrExitButton.setText("Remove");
+        RemoveOrExitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RemoveButtonActionPerformed(evt);
+                RemoveOrExitButtonActionPerformed(evt);
             }
         });
 
@@ -253,33 +263,34 @@ public class HomeScreen extends javax.swing.JFrame {
             sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                 .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideMenuBackground1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideMenuBackground1Layout.createSequentialGroup()
+                                .addComponent(SettingButton)
+                                .addGap(423, 423, 423))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(sideMenuBackground1Layout.createSequentialGroup()
+                                    .addGap(58, 58, 58)
+                                    .addComponent(swapAccountLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(Separator3)
+                                .addComponent(jScrollPane1)
+                                .addComponent(Separator2)
+                                .addGroup(sideMenuBackground1Layout.createSequentialGroup()
+                                    .addComponent(BlockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                                    .addComponent(DeleteMessageButton))
+                                .addComponent(FriendsOrGroupToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(151, 151, 151)
-                        .addComponent(Separator1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(SettingButton)
-                        .addGap(144, 144, 144)
-                        .addComponent(WelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideMenuBackground1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(sideMenuBackground1Layout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(swapAccountLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(SwapAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Separator3)
-                            .addComponent(jScrollPane1)
-                            .addComponent(Separator2)
-                            .addGroup(sideMenuBackground1Layout.createSequentialGroup()
-                                .addComponent(BlockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-                                .addComponent(DeleteMessageButton))
-                            .addComponent(FriendsOrGroupToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(WelcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Separator1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
                 .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(RemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RemoveOrExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(AddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(76, Short.MAX_VALUE))
         );
@@ -312,7 +323,7 @@ public class HomeScreen extends javax.swing.JFrame {
                         .addGap(18, 18, 18))
                     .addGroup(sideMenuBackground1Layout.createSequentialGroup()
                         .addGap(72, 72, 72)
-                        .addComponent(RemoveButton)
+                        .addComponent(RemoveOrExitButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(Separator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
@@ -335,9 +346,12 @@ public class HomeScreen extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sideMenuBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(textingBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(sideMenuBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textingBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SeparatorSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -347,14 +361,14 @@ public class HomeScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(FriendsOrGroupToggleButton.getText().equals("Friends")){
             try {
-                MessageManager.deleteFriendMessage(Username, selectedFriendOrGroup);
+                FriendManager.deleteMessage(username, selectedFriend);
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else{
             try {
-                MessageManager.deleteGroupMessage(Username, selectedFriendOrGroup);
+                GroupManager.deleteMessage(username, indexOfSelectedGroup);
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -364,16 +378,19 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void BlockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BlockButtonActionPerformed
         // TODO add your handling code here:
-        boolean friend = FriendsOrGroupToggleButton.getText().equals("Friends");
-        boolean block = BlockButton.getText().equals("Block");
+        boolean isTextEqualsFriends = FriendsOrGroupToggleButton.getText().equals("Friends");
+        boolean isTextEqualsBlock = BlockButton.getText().equals("Block");
         
-        if(friend){
+        if(isTextEqualsFriends){
             
-            if(block){
+            if(isTextEqualsBlock){
                 
                 try {
-                    FriendManager.blockFriend(Username, selectedFriendOrGroup);
+                    
+                    FriendManager.blockFriend(username, selectedFriend);
+                    
                     BlockButton.setText("Unblock");
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -382,8 +399,11 @@ public class HomeScreen extends javax.swing.JFrame {
             else{
                 
                 try {
-                    FriendManager.unblockFriend(Username, selectedFriendOrGroup);
+                    
+                    FriendManager.unblockFriend(username, selectedFriend);
+                    
                     BlockButton.setText("Block");
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -393,11 +413,14 @@ public class HomeScreen extends javax.swing.JFrame {
         }
         else{
             
-            if(block){
+            if(isTextEqualsBlock){
                 
                 try {
-                    GroupManager.blockGroup(Username, selectedFriendOrGroup);
+                    
+                    GroupManager.blockGroup(username, indexOfSelectedGroup);
+                    
                     BlockButton.setText("Unblock");
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -406,8 +429,11 @@ public class HomeScreen extends javax.swing.JFrame {
             else{
                 
                 try {
-                    GroupManager.unblockGroup(Username, selectedFriendOrGroup);
+                    
+                    GroupManager.unblockGroup(username, indexOfSelectedGroup);
+                    
                     BlockButton.setText("Block");
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -420,138 +446,228 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
         // TODO add your handling code here:
-        new SettingScreen(Username).setVisible(true);
+        if(friendMessageThread != null){
+            
+            friendMessageThread.stopRunning();
+                    
+        }
+        if(groupMessageThread != null){
+            
+            groupMessageThread.stopRunning();
+                    
+        }
+        
+        new SettingScreen(username).setVisible(true);
         dispose();
+        
     }//GEN-LAST:event_SettingButtonActionPerformed
 
     private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
 
-       String messageSend = SendMessageTextField.getText();
+       String messageToSend=  SendMessageTextField.getText();
        
-        try {
+        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
             
-            MessageManager.sendFriendMessage(Username, selectedFriendOrGroup, messageSend);
+           try {
             
-        } catch (SQLException ex) {
-            Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+                MessageManager.sendFriendMessage(username, selectedFriend, messageToSend);
+            
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
+        else{
+            
+           try {
+               
+               MessageManager.sendGroupMessage(username, indexOfSelectedGroup, messageToSend);
+               
+           } catch (SQLException ex) {
+               Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            
+        }
+        
     }//GEN-LAST:event_SendMessgeButtonActionPerformed
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
         // TODO add your handling code here:
-        String addWhat = FriendsOrGroupToggleButton.getText();
-        
-        if(addWhat.equals("Friends")){
+        if(friendMessageThread != null){
             
-            new AddFriendScreen(Username).setVisible(true);
+            friendMessageThread.stopRunning();
+                    
+        }
+        if(groupMessageThread != null){
+            
+            groupMessageThread.stopRunning();
+                    
+        }
+        
+        boolean isToggleButtonTextEqualsFriends = FriendsOrGroupToggleButton.getText().equals("Friends");
+        
+        if(isToggleButtonTextEqualsFriends){
+            
+            new AddFriendScreen(username).setVisible(true);
             dispose();
             
         }else{
             
-            new AddGroupScreen(Username).setVisible(true);
+            new AddGroupScreen(username).setVisible(true);
             dispose();
             
         }
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void FriendORGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_FriendORGroupListValueChanged
-        // TODO add your handling code here:
-        ViewMessageTextArea.setText("");
-        
-        selectedFriendOrGroup = FriendORGroupList.getSelectedValue();
-        
-        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
+        try {
+            // TODO add your handling code here:
             
-            try {
+            if(FriendsOrGroupToggleButton.getText().equals("Friends")){
                 
-                boolean result = FriendManager.isBlocked(Username, selectedFriendOrGroup);
+                selectedFriend = FriendManager.getFriendUsername(username, FriendORGroupList.getSelectedIndex());
                 
-                if(result){
+                try {
                     
-                    BlockButton.setText("Block");
+                    boolean result = FriendManager.isBlocked(username, selectedFriend);
                     
+                    if(friendMessageThread != null){
+                        friendMessageThread.stopRunning();
+                    }
+                    friendMessageThread = new FriendMessageThread(username, selectedFriend, ViewMessageTextArea);
+                    
+                    if(result){
+                        
+                        BlockButton.setText("Unblock");
+                        
+                    }
+                    else{
+                        
+                        BlockButton.setText("Block");
+                        
+                    }
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                else{
-                    
-                    BlockButton.setText("Unblock");
-                    
-                }
                 
-            } catch (SQLException ex) {
-                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            else{
+                try {
+                    
+                    indexOfSelectedGroup = FriendORGroupList.getSelectedIndex();
+                    
+                    boolean result = GroupManager.isBlocked(username,indexOfSelectedGroup);
+                    
+                    if(groupMessageThread != null){
+                        groupMessageThread.stopRunning();
+                    }
+                    groupMessageThread = new GroupMessageThread(username, indexOfSelectedGroup, ViewMessageTextArea);
+                    
+                    if(result){
+                        
+                        BlockButton.setText("Unblock");
+                        
+                    }
+                    else{
+                        
+                        BlockButton.setText("Block");
+                        
+                    }
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
-            if(messageThread != null){
-                messageThread.stopRunning();
-            }
-            messageThread = new FriendMessageThread(Username, selectedFriendOrGroup, ViewMessageTextArea);
+            TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        
-        TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
     }//GEN-LAST:event_FriendORGroupListValueChanged
 
     private void FriendORGroupListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FriendORGroupListMouseClicked
         // https://stackoverflow.com/questions/4344682/double-click-event-on-jlist-element
-        JList list = (JList)evt.getSource();
-        if (evt.getClickCount() == 2) {
+        if (evt.getClickCount() == 2 && FriendsOrGroupToggleButton.getText().equals("Friends")) {
             
-            new ProfileScreen(FriendORGroupList.getSelectedValue(),Username).setVisible(true);
+                    if(friendMessageThread != null){
+            
+                        friendMessageThread.stopRunning();
+                    
+                    }
+                    if(groupMessageThread != null){
+            
+                        groupMessageThread.stopRunning();
+                    
+                    }
+            
+            new ProfileScreen(selectedFriend,username).setVisible(true);
             dispose();
             
          }
     }//GEN-LAST:event_FriendORGroupListMouseClicked
 
     private void SwapAccountComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SwapAccountComboBoxItemStateChanged
-        // TODO add your handling code here:
-        String currentAccount =  (String) SwapAccountComboBox.getSelectedItem();
-        String toggleButtonText = FriendsOrGroupToggleButton.getText();
-        
-        Username = currentAccount;
-        
-        WelcomeLabel.setText("Welcome: " + Username);
-        
-        FriendsOrGroupToggleButton.setText("Friends");
-        FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
-        FriendsOrGroupToggleButton.setSelected(false);
-        
-        try {
+        try {                                                     
+            // TODO add your handling code here:
+            TalkToLabel.setText("");
+            
+            String selectedAccount =  (String) SwapAccountComboBox.getSelectedItem();
+            
+            username = selectedAccount;
+            
+            String newDisplayName = UserManager.getDisplayName(username);
+            
+            WelcomeLabel.setText("Welcome: " + newDisplayName);
+            
+            FriendsOrGroupToggleButton.setText("Friends");
+            FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
+            FriendsOrGroupToggleButton.setSelected(false);
+            
+            try {
                 
-                String[] friendList = FriendManager.getFriends(Username);
+                String[] friendList = FriendManager.getFriends(username);
                 
-                DefaultListModel DefaultListModel = new DefaultListModel();
+                defaultFriendOrGroupListModel.clear();
                 
-                for(int i = 0; i < friendList.length;i++){
-                
-                DefaultListModel.addElement(friendList[i]);
-                
+                for (String friend : friendList) {
+                    
+                    String friendDisplayName = UserManager.getDisplayName(friend);
+                    
+                    defaultFriendOrGroupListModel.addElement(friendDisplayName);
+                    
                 }
             
-                FriendORGroupList.setModel(DefaultListModel);
+                FriendORGroupList.setModel(defaultFriendOrGroupListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_SwapAccountComboBoxItemStateChanged
 
-    private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
+    private void RemoveOrExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveOrExitButtonActionPerformed
         // TODO add your handling code here:
         if(FriendsOrGroupToggleButton.getText().equals("Friends")){
             try {
                 
-                FriendManager.removeFriend(Username, selectedFriendOrGroup);
+                FriendManager.removeFriend(username, selectedFriend);
                 
-                String[] friendList = FriendManager.getFriends(Username);
+                String[] friendList = FriendManager.getFriends(username);
                 
-                DefaultListModel DefaultListModel = new DefaultListModel();
+                defaultFriendOrGroupListModel.clear();
                 
-                for(int i = 0; i < friendList.length;i++){
-                
-                DefaultListModel.addElement(friendList[i]);
-                
+                for (String friendList1 : friendList) {
+                    
+                    defaultFriendOrGroupListModel.addElement(friendList1);
+                    
                 }
             
-                FriendORGroupList.setModel(DefaultListModel);
+                FriendORGroupList.setModel(defaultFriendOrGroupListModel);
+                
+                FriendORGroupList.setSelectedIndex(0);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -561,19 +677,19 @@ public class HomeScreen extends javax.swing.JFrame {
             
             try {
                 
-                GroupManager.exitGroup(Username, selectedFriendOrGroup);
+                GroupManager.exitGroup(username, indexOfSelectedGroup);
                 
-                String[] groupList = GroupManager.getGroups(Username);
+                String[] groupList = GroupManager.getGroupNames(username);
                 
-                DefaultListModel DefaultListModel = new DefaultListModel();
+                defaultFriendOrGroupListModel.clear();
                 
-                for(int i = 0; i < groupList.length;i++){
-                
-                    DefaultListModel.addElement(groupList[i]);
-                
+                for (String groupList1 : groupList) {
+                    
+                    defaultFriendOrGroupListModel.addElement(groupList1);
+                    
                 }
             
-                FriendORGroupList.setModel(DefaultListModel);
+                FriendORGroupList.setModel(defaultFriendOrGroupListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -582,28 +698,40 @@ public class HomeScreen extends javax.swing.JFrame {
             
         }
         
-    }//GEN-LAST:event_RemoveButtonActionPerformed
+    }//GEN-LAST:event_RemoveOrExitButtonActionPerformed
 
     private void FriendsOrGroupToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonItemStateChanged
         // TODO add your handling code here:
+        if(friendMessageThread != null){
+            
+            friendMessageThread.stopRunning();
+                    
+        }
+        if(groupMessageThread != null){
+            
+            groupMessageThread.stopRunning();
+                    
+        }
+        
         if(evt.getStateChange() == 1){
             
             FriendsOrGroupToggleButton.setText("Groups");
             FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/group_icon.png")));
+            RemoveOrExitButton.setText("Exit");
             
             try {
                 
-                String[] groupList = GroupManager.getGroups(Username);
+                String[] groupList = GroupManager.getGroupNames(username);
                 
-                DefaultListModel DefaultListModel = new DefaultListModel();
+                defaultFriendOrGroupListModel.clear();
                 
-                for(int i = 0; i < groupList.length;i++){
-                
-                    DefaultListModel.addElement(groupList[i]);
-                
+                for (String groupList1 : groupList) {
+                    
+                    defaultFriendOrGroupListModel.addElement(groupList1);
+                    
                 }
             
-                FriendORGroupList.setModel(DefaultListModel);
+                FriendORGroupList.setModel(defaultFriendOrGroupListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -614,20 +742,23 @@ public class HomeScreen extends javax.swing.JFrame {
             
             FriendsOrGroupToggleButton.setText("Friends");
             FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
+            RemoveOrExitButton.setText("Remove");
             
             try {
                 
-                String[] friendList = FriendManager.getFriends(Username);
+                String[] friendList = FriendManager.getFriends(username);
                 
-                DefaultListModel DefaultListModel = new DefaultListModel();
+                defaultFriendOrGroupListModel.clear();
                 
-                for(int i = 0; i < friendList.length;i++){
+                for (String friend : friendList) {
+                    
+                    String friendDisplayName = UserManager.getDisplayName(friend);
                 
-                DefaultListModel.addElement(friendList[i]);
-                
+                    defaultFriendOrGroupListModel.addElement(friendDisplayName);
+                    
                 }
             
-                FriendORGroupList.setModel(DefaultListModel);
+                FriendORGroupList.setModel(defaultFriendOrGroupListModel);
                 
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -669,10 +800,8 @@ public class HomeScreen extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new HomeScreen().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new HomeScreen().setVisible(true);
         });
     }
 
@@ -682,7 +811,7 @@ public class HomeScreen extends javax.swing.JFrame {
     private javax.swing.JButton DeleteMessageButton;
     private javax.swing.JList<String> FriendORGroupList;
     private javax.swing.JToggleButton FriendsOrGroupToggleButton;
-    private javax.swing.JButton RemoveButton;
+    private javax.swing.JButton RemoveOrExitButton;
     private javax.swing.JTextField SendMessageTextField;
     private javax.swing.JButton SendMessgeButton;
     private javax.swing.JSeparator Separator1;

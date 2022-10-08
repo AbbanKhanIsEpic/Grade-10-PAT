@@ -6,6 +6,7 @@ package Backend;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -42,310 +43,184 @@ public class GroupManager {
         
     }
     
-    public static boolean isGroupNameUnique(String groupName,String username) throws SQLException{
-        
-        String table = username + "_gm";
-        
-        ResultSet result = DB.query("Select count(*) from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-        result.next();
-        
-        return result.getInt(1) == 0;
-    }
-    
     public static void createGroup(String groupName, String[] groupMembers) throws SQLException{
         
         DB.update("Insert into abbankDB.Groups(groupName) Values('" + groupName + "')");
         
+        ResultSet result = DB.query("Select groupID from abbankDB.Groups Where groupName = '" + groupName + "' Order by groupID desc");
         
+        result.next();
         
-        for (int i = 0; i < groupMembers.length; i++) {
-           if(!(groupMembers[i].equals("No-one"))){
-               
-               
-               
-           }
-        }
+        int groupID = result.getInt(1);
         
-        String table = groupMembers[0] + "_gm";
-        DB.update("Insert into abbankDB." + table + " Values('" + groupName + "' , '" + groupMembers[0] + "' , '" + groupMembers[1] + "' , '" + groupMembers[2] + "' , '" + groupMembers[3] + "' , '" + groupMembers[4] + "', 0 , '')"); 
-        
-        table = groupMembers[1] + "_gm";
-        DB.update("Insert into abbankDB." + table + " Values('" + groupName + "' , '" + groupMembers[0] + "' , '" + groupMembers[1] + "' , '" + groupMembers[2] + "' , '" + groupMembers[3] + "' , '" + groupMembers[4] + "', 0 , '')");
-        
-        table = groupMembers[2] + "_gm";
-        DB.update("Insert into abbankDB." + table + " Values('" + groupName + "' , '" + groupMembers[0] + "' , '" + groupMembers[1] + "' , '" + groupMembers[2] + "' , '" + groupMembers[3] + "' , '" + groupMembers[4] + "' , 0, '')");
-        
-        table = groupMembers[3] + "_gm";
-        DB.update("Insert into abbankDB." + table + " Values('" + groupName + "' , '" + groupMembers[0] + "' , '" + groupMembers[1] + "' , '" + groupMembers[2] + "' , '" + groupMembers[3] + "' , '" + groupMembers[4] + "' , 0 , '')");
-        
-        table = groupMembers[4] + "_gm";
-        DB.update("Insert into abbankDB." + table + " Values('" + groupName + "' , '" + groupMembers[0] + "' , '" + groupMembers[1] + "' , '" + groupMembers[2] + "' , '" + groupMembers[3] + "' , '" + groupMembers[4] + "' , 0 , '')");
+        addUsersToGroup(groupID,groupMembers);
         
     }
     
-    //addUsersToGroup (String [] users)
-    
-    //take out
-    public static boolean areMembersDifferent(String[] selectedGroupMember){
-        if(!(selectedGroupMember[0].equals("No-one"))){
-            if((selectedGroupMember[0].equals(selectedGroupMember[1]) && !(selectedGroupMember[1].equals("No-one"))) || (selectedGroupMember[0].equals(selectedGroupMember[2]) && !(selectedGroupMember[2].equals("No-one"))) || ((selectedGroupMember[3].equals(selectedGroupMember[3]) && !(selectedGroupMember[3].equals("No-one")))) || (selectedGroupMember[0].equals(selectedGroupMember[4]) && !(selectedGroupMember[4].equals("No-one")))){
-                return false;
-            }
+    public static void addUsersToGroup(int groupID,String[] users) throws SQLException{
+        
+        for (String user : users) {
             
-        }
-        if(!(selectedGroupMember[1].equals("No-one"))){
-            if(selectedGroupMember[1].equals(selectedGroupMember[2]) && !(selectedGroupMember[2].equals("No-one")) || selectedGroupMember[1].equals(selectedGroupMember[3]) && !(selectedGroupMember[3].equals("No-one")) || selectedGroupMember[1].equals(selectedGroupMember[4]) && !(selectedGroupMember[4].equals("No-one"))){
-                return false;
-            }
+            int userID = UserManager.getUserID(user);
             
-        }
-        if(!(selectedGroupMember[2].equals("No-one"))){
-            if(selectedGroupMember[2].equals(selectedGroupMember[3]) && !(selectedGroupMember[3].equals("No-one")) || selectedGroupMember[2].equals(selectedGroupMember[4]) && !(selectedGroupMember[4].equals("No-one"))){
-                return false;
-            }
-        }
-        if(!(selectedGroupMember[3].equals("No-one"))){
-            if(selectedGroupMember[3].equals(selectedGroupMember[4]) && !(selectedGroupMember[4].equals("No-one"))){
-                return false;
-            }
+            DB.update("Insert into abbankDB.GroupMembers Values(" + groupID + " , '" + userID + "')");
+            
         }
         
-        return true;
     }
     
-    
-    public static String[] getGroupMember(String groupName,String username) throws SQLException{
+    public static String[] getGroupMembers(String username,int index) throws SQLException{
+
+        ArrayList<String> groupMembersArrayList = new ArrayList<>();
         
-        String table = username + "_gm";
+        int groupID = GroupManager.getGroupID(username, index);
         
-        ArrayList<String> groupMemberArrayList = new ArrayList<>();
-        
-        ResultSet result = DB.query("Select GroupMemember1,GroupMemember2,GroupMemember3,GroupMemember4,GroupMemember5 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        ResultSet result = DB.query("Select distinct Username from abbankDB.Users,GroupMembers Where (abbankDB.Users.UserID = abbankDB.GroupMembers.userID) And abbankDB.GroupMembers.groupID = " + groupID + "");
         
         while(result.next()){
             
             String individualGroupMember = result.getString(1);
             
-            if(!(individualGroupMember.equals("null"))){
-                
-                groupMemberArrayList.add(individualGroupMember);
-                
-            }
+            groupMembersArrayList.add(individualGroupMember);
             
         }
         
-        String[] listOfGroupMember = groupMemberArrayList.toArray(String[]::new);
+        String[] groupMembers = groupMembersArrayList.toArray(String[]::new);
         
-        return listOfGroupMember;
+        return groupMembers;
     }
     
-    public static void blockGroup(String username,String groupName) throws SQLException{
+    public static void blockGroup(String username,int index) throws SQLException{
+
+        int groupID = GroupManager.getGroupID(username, index);
         
-        String table = username + "_gm";
+        int userID = UserManager.getUserID(username);
         
-        DB.update("Update abbankDB." + table + " Set GroupBlockOrNot = 1 Where GroupName = '" + groupName + "'");
+        DB.update("Insert into abbankDB.BlockedGroups Values(" + userID + " , " + groupID + " , now())");
         
-    }
-    
-    public static void unblockGroup(String username,String groupName) throws SQLException{
-        
-        String table = username + "_gm";
-        
-        DB.update("Update abbankDB." + table + " Set GroupBlockOrNot = 0 Where GroupName = '" + groupName + "'");
         
     }
     
-    public static boolean isBlocked(String username,String groupName) throws SQLException{
+    public static void unblockGroup(String username,int index) throws SQLException{
         
-        String table = username + "_gm";
+        int groupID = GroupManager.getGroupID(username, index);
         
-        ResultSet result = DB.query("Select GroupBlockOrNot from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        int userID = UserManager.getUserID(username);
+        
+        DB.update("Delete from abbankDB.BlockedGroups Where userID = " + userID + " And groupID = " + groupID + "");
+        
+    }
+    
+    public static boolean isBlocked(String username,int index) throws SQLException{
+        
+        int groupID = GroupManager.getGroupID(username, index);
+        
+        int userID = UserManager.getUserID(username);
+        
+        ResultSet result = DB.query("Select count(*) from abbankDB.BlockedGroups Where userID = " + userID + " And groupID = " + groupID + "");
         
         result.next();
         
-        int block = result.getInt(1);
+        int count = result.getInt(1);
         
-        return block == 1;
+        return count == 1;
+
     }
     
-    public static void exitGroup(String username,String groupName) throws SQLException{
+    public static Timestamp getWhenBlocked(String username,int index) throws SQLException{
         
-        String table = username + "_gm";
+        int groupID = GroupManager.getGroupID(username, index);
         
-        ResultSet result = DB.query("select GroupMemember1,GroupMemember2,GroupMemember3,GroupMemember4,GroupMemember5 from abbankDB." + table + " Where GroupName = '" + groupName + "'");
+        int userID = UserManager.getUserID(username);
+        
+        ResultSet result = DB.query("Select time from abbankDB.BlockedGroups Where userID = " + userID + " And groupID = " + groupID + "");
         
         result.next();
         
-        String member1 = result.getString(1);
-        String member2 = result.getString(2);
-        String member3 = result.getString(3);
-        String member4 = result.getString(4);
-        String member5 = result.getString(5);
+        Timestamp time = result.getTimestamp(1);
         
-        DB.update("Delete from abbankDB." + table + " Where GroupName = '" + groupName + "'");
-        
-        if(member1.equals(username)){
-            
-            if(!(member2.equals("null"))){
-                
-                table = member2 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember1 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member3.equals("null"))){
-                
-                table = member3 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember1 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member4.equals("null"))){
-                
-                table = member4 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember1 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member5.equals("null"))){
-                
-                table = member5 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember1 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            
-        }
-        else if(member2.equals(username)){
-            
-            if(!(member1.equals("null"))){
-                
-                table = member1 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember2 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member3.equals("null"))){
-                
-                table = member3 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember2 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member4.equals("null"))){
-                
-                table = member4 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember2 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member5.equals("null"))){
-                
-                table = member5 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember2 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            
-        }
-        else if(member3.equals(username)){
-            
-            if(!(member1.equals("null"))){
-                
-                table = member1 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember3 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member2.equals("null"))){
-                
-                table = member2 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember3 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member4.equals("null"))){
-                
-                table = member4 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember3 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member5.equals("null"))){
-                
-                table = member5 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember3 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            
-        }
-        else if(member4.equals(username)){
-            
-            if(!(member1.equals("null"))){
-                
-                table = member1 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember4 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member2.equals("null"))){
-                
-                table = member2 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember4 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member3.equals("null"))){
-                
-                table = member3 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember4 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member5.equals("null"))){
-                
-                table = member5 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember4 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            
-        }
-        else if(member5.equals(username)){
-            
-            if(!(member1.equals("null"))){
-                
-                table = member1 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember5 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member2.equals("null"))){
-                
-                table = member2 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember5 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member3.equals("null"))){
-                
-                table = member3 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember5 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            if(!(member4.equals("null"))){
-                
-                table = member4 + "_gm";
-                
-                DB.update("Update abbankDB." + table + " Set GroupMemember5 = 'null' Where GroupName = '" + groupName + "'");
-                
-            }
-            
-        }
+        return time;
         
     }
+    
+    public static void exitGroup(String username,int index) throws SQLException{
+        
+        int groupID = GroupManager.getGroupID(username, index);
+        
+        int userID = UserManager.getUserID(username);
+        
+        DB.update("Delete from abbankDB.GroupMembers Where groupID = " + groupID + " And userID = " + userID + "");
+        
+    }
+    
+    public static int getGroupID(String username,int index) throws SQLException{
+        
+        int userID = UserManager.getUserID(username);
+        
+        ResultSet result = DB.query("SELECT groupID FROM abbankDB.GroupMembers Where userID = " + userID + "");
+        
+        for(int i = 0; i <= index;i++){
+            
+            result.next();
+            
+        }
+        
+        int groupID = result.getInt(1);
+        
+        return groupID;
+    }
+    
+    public static boolean isMessageDelete(String username,int index) throws SQLException{
+        
+        int groupID = GroupManager.getGroupID(username, index);
+        
+        int userID = UserManager.getUserID(username);    
+        
+        ResultSet result = DB.query("Select count(*) from abbankDB.deleteGroupMessage Where groupID = " + groupID + " And UserID = " + userID + "");
+        
+        result.next();
+        
+        int count = result.getInt(1);
+        
+        return count == 1;
+        
+    }
+    
+    public static Timestamp getWhenMessageDelete(String username,int index) throws SQLException{
+        
+        int groupID = GroupManager.getGroupID(username, index);
+        
+        int userID = UserManager.getUserID(username);
+        
+        ResultSet result = DB.query("Select time from abbankDB.deleteGroupMessage Where groupID = " + groupID + " And UserID = " + userID + "");
+        
+        result.next();
+        
+        Timestamp time = result.getTimestamp(1);
+        
+        return time;
+        
+    }
+    
+    public static void deleteMessage(String username,int index) throws SQLException{
+        
+        int userID = UserManager.getUserID(username);
+        
+        int groupID = GroupManager.getGroupID(username, index);
+        
+        if(isMessageDelete(username,index)){
+            
+            DB.update("Update abbankDB.deleteGroupMessage set time = now() Where groupID = " + groupID + " And UserID = " + userID + "");
+            
+        }
+        else{
+
+            DB.update("Insert into abbankDB.deleteGroupMessage Values(" + groupID + " , " + userID + " , now() )");
+            
+        }
+    }
+    
+    
    
 }
     

@@ -6,12 +6,11 @@ package Frontend;
 
 import Backend.FriendManager;
 import Backend.GroupManager;
-import Backend.Threads;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
 /**
@@ -23,7 +22,14 @@ public class AddGroupScreen extends javax.swing.JFrame {
     /**
      * Creates new form AddGroupScreen
      */
-    private String Username;
+    private String username;
+    
+    private DefaultListModel defaultMemberForNewGroupListModel = new DefaultListModel();
+    private DefaultListModel defaultFriendListModel = new DefaultListModel(); 
+    
+    private  ArrayList<String> groupMemberArrayList = new ArrayList<>();
+    
+    private String[] groupMembers;
     
     public AddGroupScreen() {
         initComponents();
@@ -33,50 +39,37 @@ public class AddGroupScreen extends javax.swing.JFrame {
         
         initComponents();
         
-        Username = username;
+        this.username = username;
         
         try {
-            String[] groupList = GroupManager.getGroups(username);
+            String[] currentGroupsList = GroupManager.getGroupNames(username);
             
             String[] friendList = FriendManager.getFriends(username);
             
-            DefaultListModel DefaultListModel = new DefaultListModel();
+            DefaultListModel defaultCurrentGroupListModel = new DefaultListModel();        
             
-            for(int i = 0; i < groupList.length;i++){
+            for (String currentGroupsList1 : currentGroupsList) {
                 
-                DefaultListModel.addElement(groupList[i]);
-                
-            }
-            
-            CurrentGroupList.setModel(DefaultListModel);
-            
-            DefaultComboBoxModel comboBox1 = new DefaultComboBoxModel();
-            DefaultComboBoxModel comboBox2 = new DefaultComboBoxModel();
-            DefaultComboBoxModel comboBox3 = new DefaultComboBoxModel();
-            DefaultComboBoxModel comboBox4 = new DefaultComboBoxModel();
-            DefaultComboBoxModel comboBox5 = new DefaultComboBoxModel();
-            
-            comboBox1.addElement(Username);
-            
-            comboBox2.addElement("No-One");
-            comboBox3.addElement("No-One");
-            comboBox4.addElement("No-One");
-            comboBox5.addElement("No-One");
-            
-            for(int i = 0; i < friendList.length;i++){
-                
-                comboBox2.addElement(friendList[i]);
-                comboBox3.addElement(friendList[i]);
-                comboBox4.addElement(friendList[i]);
-                comboBox5.addElement(friendList[i]);
+                defaultCurrentGroupListModel.addElement(currentGroupsList1);
                 
             }
             
-            Member1CreateAccountComboBox.setModel(comboBox1);
-            Member2CreateAccountComboBox.setModel(comboBox2);
-            Member3CreateAccountComboBox.setModel(comboBox3);
-            Member4CreateAccountComboBox.setModel(comboBox4);
-            Member5CreateAccountComboBox.setModel(comboBox5);
+            for (String friendList1 : friendList) {
+                
+                defaultFriendListModel.addElement(friendList1);
+                
+            }
+            
+            defaultMemberForNewGroupListModel.addElement(username);
+            
+            CurrentGroupList.setModel(defaultCurrentGroupListModel);
+            
+            FriendList.setModel(defaultFriendListModel);
+            
+            MemberList.setModel(defaultMemberForNewGroupListModel);
+            
+            groupMemberArrayList.add(username);
+            
             
         } catch (SQLException ex) {
             Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,21 +97,17 @@ public class AddGroupScreen extends javax.swing.JFrame {
         ReturnHomeScreenButton = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         CurrentGroupList = new javax.swing.JList<>();
-        jLabel4 = new javax.swing.JLabel();
-        Member1CreateAccountComboBox = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
-        Member2CreateAccountComboBox = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        Member3CreateAccountComboBox = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        Member4CreateAccountComboBox = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
-        Member5CreateAccountComboBox = new javax.swing.JComboBox<>();
         CreateGroupResultLabel = new javax.swing.JLabel();
         saveGroupChangeLabel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         groupMemberList = new javax.swing.JList<>();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        FriendList = new javax.swing.JList<>();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        MemberList = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -159,26 +148,6 @@ public class AddGroupScreen extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(CurrentGroupList);
 
-        jLabel4.setText("Member 1:");
-
-        Member1CreateAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel5.setText("Member 2:");
-
-        Member2CreateAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel6.setText("Memeber 3:");
-
-        Member3CreateAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel7.setText("Member 4:");
-
-        Member4CreateAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel8.setText("Member 5:");
-
-        Member5CreateAccountComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel10.setText("Members:");
 
         groupMemberList.setModel(new javax.swing.AbstractListModel<String>() {
@@ -188,50 +157,65 @@ public class AddGroupScreen extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(groupMemberList);
 
+        jLabel11.setText("Friends:");
+
+        FriendList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        FriendList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FriendListMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(FriendList);
+
+        jLabel12.setText("Member:");
+
+        MemberList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MemberListMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(MemberList);
+
         javax.swing.GroupLayout settingBackground1Layout = new javax.swing.GroupLayout(settingBackground1);
         settingBackground1.setLayout(settingBackground1Layout);
         settingBackground1Layout.setHorizontalGroup(
             settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingBackground1Layout.createSequentialGroup()
                 .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingBackground1Layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(CreateGroupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(settingBackground1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(Member1CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(settingBackground1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(Member2CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingBackground1Layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(Member5CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingBackground1Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(Member4CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingBackground1Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(Member3CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(settingBackground1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(newGroupNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(CreateGroupResultLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27))
                     .addGroup(settingBackground1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ReturnHomeScreenButton)
-                        .addGap(267, 267, 267)))
+                        .addGap(128, 128, 128)
+                        .addComponent(CreateGroupResultLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(settingBackground1Layout.createSequentialGroup()
+                        .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(settingBackground1Layout.createSequentialGroup()
+                                .addGap(145, 286, Short.MAX_VALUE)
+                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(settingBackground1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(settingBackground1Layout.createSequentialGroup()
+                                        .addComponent(ReturnHomeScreenButton)
+                                        .addGap(125, 125, 125))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingBackground1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(newGroupNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1)))
+                            .addGroup(settingBackground1Layout.createSequentialGroup()
+                                .addGap(54, 54, 54)
+                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11)
+                                    .addComponent(CreateGroupButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(50, 50, 50)))
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,48 +248,34 @@ public class AddGroupScreen extends javax.swing.JFrame {
                             .addGroup(settingBackground1Layout.createSequentialGroup()
                                 .addGap(24, 24, 24)
                                 .addComponent(jLabel2)))
-                        .addGap(50, 50, 50)
-                        .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(settingBackground1Layout.createSequentialGroup()
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(newGroupNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3))
-                                .addGap(38, 38, 38)
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(Member1CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel5)
-                                    .addComponent(Member2CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(Member3CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                                .addGap(18, 18, 18)
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(Member4CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGap(18, 18, 18)
-                                .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(Member5CreateAccountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8))
-                                .addGap(18, 18, 18)
-                                .addComponent(CreateGroupButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(CreateGroupResultLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(settingBackground1Layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel9)
-                                .addGap(9, 9, 9)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(15, 15, 15)
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(104, 104, 104)
+                        .addGap(18, 18, 18)
+                        .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(newGroupNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(42, 42, 42)
+                        .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12))
+                        .addGap(18, 18, 18)
+                        .addGroup(settingBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane4))
+                        .addGap(41, 41, 41)
+                        .addComponent(CreateGroupButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(CreateGroupResultLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(settingBackground1Layout.createSequentialGroup()
+                        .addGap(111, 111, 111)
+                        .addComponent(jLabel9)
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(101, 101, 101)
                         .addComponent(saveGroupChangeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -318,7 +288,7 @@ public class AddGroupScreen extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(settingBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(settingBackground1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -327,21 +297,21 @@ public class AddGroupScreen extends javax.swing.JFrame {
 
     private void CurrentGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_CurrentGroupListValueChanged
         // TODO add your handling code here:
-        String groupName = CurrentGroupList.getSelectedValue();
+        int indexOfSelectedGroup = CurrentGroupList.getSelectedIndex();
         
         try {
             
-            String[] result = GroupManager.getGroupMember(groupName, Username);
+            String[] listOfSelectedGroupMembers = GroupManager.getGroupMembers(username, indexOfSelectedGroup);
             
-            DefaultListModel DefaultListModel = new DefaultListModel();
+            DefaultListModel defaultGroupMembersListModel = new DefaultListModel();
             
-            for(int i = 0; i < result.length;i++){
+            for (String listOfSelectedGroupMember : listOfSelectedGroupMembers) {
                 
-                DefaultListModel.addElement(result[i]);
+                defaultGroupMembersListModel.addElement(listOfSelectedGroupMember);
                 
             }
             
-            groupMemberList.setModel(DefaultListModel);
+            groupMemberList.setModel(defaultGroupMembersListModel);
             
         } catch (SQLException ex) {
             Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -351,54 +321,81 @@ public class AddGroupScreen extends javax.swing.JFrame {
 
     private void ReturnHomeScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnHomeScreenButtonActionPerformed
         // TODO add your handling code here:
-        new HomeScreen(Username).setVisible(true);
+        new HomeScreen(username).setVisible(true);
         dispose();
     }//GEN-LAST:event_ReturnHomeScreenButtonActionPerformed
 
     private void CreateGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateGroupButtonActionPerformed
         try {
             // TODO add your handling code here:
+            groupMembers = groupMemberArrayList.toArray(String[]::new);
             String groupName = newGroupNameTextField.getText();
-            String member1 = (String) Member1CreateAccountComboBox.getSelectedItem();
-            String member2 = (String) Member2CreateAccountComboBox.getSelectedItem();
-            String member3 = (String) Member3CreateAccountComboBox.getSelectedItem();
-            String member4 = (String) Member4CreateAccountComboBox.getSelectedItem();
-            String member5 = (String) Member5CreateAccountComboBox.getSelectedItem();
             
-            String[] members = {member1,member2,member3,member4,member5};
-            
-            boolean result = GroupManager.isGroupNameUnique(groupName, Username);
-            
-            if(!(result)){
+            if(groupName.isEmpty()){
                 
                 CreateGroupResultLabel.setForeground(Color.red);
-                CreateGroupResultLabel.setText("Group name has to be unique");
+                CreateGroupResultLabel.setText("Group name can't be empthy");
+                
+            }
+            else if(groupMembers.length < 3){
+                
+                CreateGroupResultLabel.setForeground(Color.red);
+                CreateGroupResultLabel.setText("Need more people");
                 
             }
             else{
                 
-                result = GroupManager.areMembersDifferent(members);
-                
-                if(!(result)){
-                    
-                    CreateGroupResultLabel.setForeground(Color.red);
-                    CreateGroupResultLabel.setText("Group members have to be different");
-                    
-                }
-                else{
-                    
-                    CreateGroupResultLabel.setForeground(Color.green);
-                    CreateGroupResultLabel.setText("Group created");
-                    
-                    GroupManager.createGroup(groupName, members);
-                    
-                }
+                CreateGroupResultLabel.setForeground(Color.green);
+                CreateGroupResultLabel.setText("Group created");
+                GroupManager.createGroup(groupName, groupMembers);
                 
             }
         } catch (SQLException ex) {
             Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_CreateGroupButtonActionPerformed
+
+    private void FriendListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FriendListMouseClicked
+        // TODO add your handling code here:
+        String selectedFriend = FriendList.getSelectedValue();
+
+        defaultMemberForNewGroupListModel.addElement(selectedFriend);
+
+        defaultFriendListModel.removeElement(selectedFriend);
+        
+        MemberList.setModel(defaultMemberForNewGroupListModel);
+        
+        FriendList.setModel(defaultFriendListModel);
+        
+        groupMemberArrayList.add(selectedFriend);
+        
+    }//GEN-LAST:event_FriendListMouseClicked
+
+    private void MemberListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MemberListMouseClicked
+        // TODO add your handling code here:
+        String selectedGroupMember = MemberList.getSelectedValue();
+
+        if(!(selectedGroupMember.equals(username))){
+            
+            defaultMemberForNewGroupListModel.removeElement(selectedGroupMember);
+
+            defaultFriendListModel.addElement(selectedGroupMember);
+        
+            MemberList.setModel(defaultMemberForNewGroupListModel);
+        
+            FriendList.setModel(defaultFriendListModel);
+            
+            groupMemberArrayList.remove(selectedGroupMember);
+            
+        }
+        else{
+            
+            CreateGroupResultLabel.setForeground(Color.red);
+            CreateGroupResultLabel.setText("Can't remove yourself");
+            
+        }
+    }//GEN-LAST:event_MemberListMouseClicked
 
     /**
      * @param args the command line arguments
@@ -428,10 +425,8 @@ public class AddGroupScreen extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddGroupScreen().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new AddGroupScreen().setVisible(true);
         });
     }
 
@@ -439,25 +434,21 @@ public class AddGroupScreen extends javax.swing.JFrame {
     private javax.swing.JButton CreateGroupButton;
     private javax.swing.JLabel CreateGroupResultLabel;
     private javax.swing.JList<String> CurrentGroupList;
-    private javax.swing.JComboBox<String> Member1CreateAccountComboBox;
-    private javax.swing.JComboBox<String> Member2CreateAccountComboBox;
-    private javax.swing.JComboBox<String> Member3CreateAccountComboBox;
-    private javax.swing.JComboBox<String> Member4CreateAccountComboBox;
-    private javax.swing.JComboBox<String> Member5CreateAccountComboBox;
+    private javax.swing.JList<String> FriendList;
+    private javax.swing.JList<String> MemberList;
     private javax.swing.JButton ReturnHomeScreenButton;
     private javax.swing.JList<String> groupMemberList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextField newGroupNameTextField;
     private javax.swing.JLabel saveGroupChangeLabel;

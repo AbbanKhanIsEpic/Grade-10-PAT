@@ -5,8 +5,6 @@
 package Backend;
 
 
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -214,7 +212,6 @@ public class UserManager {
         
     }
     
-    //remove
     public static void addConnectedAccount(String username,String addAccount) throws SQLException{
         
         ResultSet result = DB.query("Select ConnectAccount1 from abbankDB.Users Where Username = '" + username + "'");
@@ -260,31 +257,32 @@ public class UserManager {
     //remove
     public static void removeConnectedAccount(String username,String removeAccount,int accountnum) throws SQLException{
         
-        if(accountnum == 1){
-            
-            DB.update("Update abbankDB.Users Set ConnectAccount1 = null Where Username = '" + username + "'");
-            
-            DB.update("Update abbankDB.Users Set ConnectAccount1 = null Where Username = '" + removeAccount + "'");
-            
-        }
-        else if(accountnum == 2){
-            
-            DB.update("Update abbankDB.Users Set ConnectAccount2 = null Where Username = '" + username + "'");
-            
-            DB.update("Update abbankDB.Users Set ConnectAccount2 = null Where Username = '" + removeAccount + "'");
-            
-        }
-        else{
-            
-            DB.update("Update abbankDB.Users Set ConnectAccount3 = null Where Username = '" + username + "'");
-            
-            DB.update("Update abbankDB.Users Set ConnectAccount3 = null Where Username = '" + removeAccount + "'");
-            
-        }
+            switch (accountnum) {
+                
+                case 1 -> {
+                    
+                    DB.update("Update abbankDB.Users Set ConnectAccount1 = null Where Username = '" + username + "'");
+                    DB.update("Update abbankDB.Users Set ConnectAccount1 = null Where Username = '" + removeAccount + "'");
+                    
+                }
+                
+                case 2 -> {
+                    
+                    DB.update("Update abbankDB.Users Set ConnectAccount2 = null Where Username = '" + username + "'");
+                    DB.update("Update abbankDB.Users Set ConnectAccount2 = null Where Username = '" + removeAccount + "'");
+                    
+                }
+                
+                default -> {
+                        
+                        DB.update("Update abbankDB.Users Set ConnectAccount3 = null Where Username = '" + username + "'");
+                        DB.update("Update abbankDB.Users Set ConnectAccount3 = null Where Username = '" + removeAccount + "'");
+                        
+                }
+            }
         
     }
     
-    //remove
     public static boolean isAccountConnected(String username,String addAccount) throws SQLException{
         
         ResultSet result = DB.query("select count(*) from abbankDB.Users Where Username = '" + username + "' And (ConnectAccount1 = '" + addAccount + "' or ConnectAccount2 = '" + addAccount + "' or ConnectAccount3 = '" + addAccount + "')");

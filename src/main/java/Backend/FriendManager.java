@@ -13,11 +13,15 @@ import java.util.ArrayList;
  *
  * @author abban
  */
+//This class's purpose is to make,get,update and remove friends
 public class FriendManager {
     
-
+    //This method uses mySQL database to get a list of user's friends
+    //This method's input is username
+    //This method returns a string array
     public static String[] getFriends(String username) throws SQLException{
             
+            //Used ArrayList because you don't have to define the length of it
             ArrayList<String> friendsArrayList = new ArrayList<>();
             
             int userID = UserManager.getUserID(username);

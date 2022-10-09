@@ -4,6 +4,7 @@
  */
 package Frontend;
 
+import Backend.BackgroundManager;
 import Backend.FriendManager;
 import Backend.GroupManager;
 import Backend.MessageManager;
@@ -11,6 +12,8 @@ import Backend.FriendMessageThread;
 import Backend.GroupMessageThread;
 import Backend.MessageVisualManager;
 import Backend.UserManager;
+import Backgrounds.SideMenuBackground;
+import Backgrounds.TextingBackground;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

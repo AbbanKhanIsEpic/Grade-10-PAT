@@ -148,8 +148,10 @@ public class MessageManager {
         int userID = UserManager.getUserID(username);
         
         int friendID = UserManager.getUserID(friend);
+        
+        String displayName = UserManager.getDisplayName(username);
             
-        String message = username + ": " + sendmessage;
+        String message = displayName + ": " + sendmessage;
             
         DB.update("Insert into abbankDB.FriendMessages(UserID,FriendID,Time,Message) Values(" + userID + " , " + friendID + " , now() , '" + message + "')");
         

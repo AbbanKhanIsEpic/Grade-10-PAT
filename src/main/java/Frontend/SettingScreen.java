@@ -97,6 +97,10 @@ public class SettingScreen extends javax.swing.JFrame {
             
             LastColourProfileScreenTextField.setText(BackgroundManager.getLastColourProfileBackground(username));
             
+            String displayName = UserManager.getDisplayName(username);
+            
+            DisplayNameTextField.setText(displayName);
+            
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -157,6 +161,10 @@ public class SettingScreen extends javax.swing.JFrame {
             LastColourProfileScreenTextField.setText(BackgroundManager.getLastColourProfileBackground(username));
             
             ErrorAccountLabel.setText(result);
+            
+            String displayName = UserManager.getDisplayName(username);
+            
+            DisplayNameTextField.setText(displayName);
             
         } catch (SQLException ex) {
             Logger.getLogger(SettingScreen.class.getName()).log(Level.SEVERE, null, ex);

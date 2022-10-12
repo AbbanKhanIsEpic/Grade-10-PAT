@@ -30,79 +30,85 @@ public class HomeScreen extends javax.swing.JFrame {
     /**
      * Creates new form HomeScreen
      */
-    
     private String username;
     private String selectedFriend;
     private String displayName;
-    
+
     private int indexOfSelectedGroup;
-    
+
     FriendMessageThread friendMessageThread;
-    
+
     GroupMessageThread groupMessageThread;
-    
+
     private DefaultListModel defaultFriendOrGroupListModel = new DefaultListModel();
-    
+
     public HomeScreen() {
         initComponents();
-        
+
     }
-    
+
     public HomeScreen(String username) {
         try {
             initComponents();
-            
+
             friendMessageThread = null;
-            
+
             groupMessageThread = null;
-            
+
             setTitle("Welcome to ChatBun");
-            
+
             this.username = username;
-            
+
             displayName = UserManager.getDisplayName(username);
-            
+
             WelcomeLabel.setText("Welcome: " + displayName);
-            
+
             setLocationRelativeTo(null);
-            
+
             String messageTextFont = MessageVisualManager.getTextFont(username);
-            
+
             int messageTextSize = MessageVisualManager.getTextSize(username);
-            
+
             ViewMessageTextArea.setFont(new java.awt.Font(messageTextFont, 0, messageTextSize));
-            
+
             String[] friendList = FriendManager.getFriends(username);
-            
+
             String[] connectedAccountList = UserManager.getConnectedAccount(username);
-            
+
             defaultFriendOrGroupListModel.clear();
-            
+
             DefaultComboBoxModel defaultConnectedAccountComboBoxModel = new DefaultComboBoxModel();
-            
+
             for (String friend : friendList) {
-                
+
+                boolean isFriendBlocked = FriendManager.isBlocked(username, friend);
+
                 String friendDisplayName = UserManager.getDisplayName(friend);
-                
+
+                if (isFriendBlocked) {
+
+                    friendDisplayName = friendDisplayName + " (blocked)";
+
+                }
+
                 defaultFriendOrGroupListModel.addElement(friendDisplayName);
-                
+
             }
-            
+
             FriendORGroupList.setModel(defaultFriendOrGroupListModel);
-            
+
             for (String connectedAccountList1 : connectedAccountList) {
-                
+
                 defaultConnectedAccountComboBoxModel.addElement(connectedAccountList1);
-                
+
             }
-            
+
             SwapAccountComboBox.setModel(defaultConnectedAccountComboBoxModel);
 
-            
         } catch (SQLException ex) {
             Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     /**
@@ -362,227 +368,219 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void DeleteMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMessageButtonActionPerformed
         // TODO add your handling code here:
-        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
+        if (FriendsOrGroupToggleButton.getText().equals("Friends")) {
             try {
                 FriendManager.deleteMessage(username, selectedFriend);
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else{
+        } else {
             try {
                 GroupManager.deleteMessage(username, indexOfSelectedGroup);
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }//GEN-LAST:event_DeleteMessageButtonActionPerformed
 
     private void BlockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BlockButtonActionPerformed
         // TODO add your handling code here:
         boolean isTextEqualsFriends = FriendsOrGroupToggleButton.getText().equals("Friends");
         boolean isTextEqualsBlock = BlockButton.getText().equals("Block");
-        
-        if(isTextEqualsFriends){
-            
-            if(isTextEqualsBlock){
-                
+
+        if (isTextEqualsFriends) {
+
+            if (isTextEqualsBlock) {
+
                 try {
-                    
+
                     FriendManager.blockFriend(username, selectedFriend);
-                    
+
                     BlockButton.setText("Unblock");
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            
-            }
-            else{
-                
+
+            } else {
+
                 try {
-                    
+
                     FriendManager.unblockFriend(username, selectedFriend);
-                    
+
                     BlockButton.setText("Block");
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
-            
-        }
-        else{
-            
-            if(isTextEqualsBlock){
-                
+
+        } else {
+
+            if (isTextEqualsBlock) {
+
                 try {
-                    
+
                     GroupManager.blockGroup(username, indexOfSelectedGroup);
-                    
+
                     BlockButton.setText("Unblock");
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-            }
-            else{
-                
+
+            } else {
+
                 try {
-                    
+
                     GroupManager.unblockGroup(username, indexOfSelectedGroup);
-                    
+
                     BlockButton.setText("Block");
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
-            
+
         }
-        
+
     }//GEN-LAST:event_BlockButtonActionPerformed
 
     private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
         // TODO add your handling code here:
-        if(friendMessageThread != null){
-            
+        if (friendMessageThread != null) {
+
             friendMessageThread.stopRunning();
-                    
+
         }
-        if(groupMessageThread != null){
-            
+        if (groupMessageThread != null) {
+
             groupMessageThread.stopRunning();
-                    
+
         }
-        
+
         new SettingScreen(username).setVisible(true);
         dispose();
-        
+
     }//GEN-LAST:event_SettingButtonActionPerformed
 
     private void SendMessgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendMessgeButtonActionPerformed
 
-       String messageToSend=  SendMessageTextField.getText();
-       
-        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
-            
-           try {
-            
+        String messageToSend = SendMessageTextField.getText();
+
+        if (FriendsOrGroupToggleButton.getText().equals("Friends")) {
+
+            try {
+
                 MessageManager.sendFriendMessage(username, selectedFriend, messageToSend);
-            
+
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
+        } else {
+
+            try {
+
+                MessageManager.sendGroupMessage(username, indexOfSelectedGroup, messageToSend);
+
+            } catch (SQLException ex) {
+                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
-        else{
-            
-           try {
-               
-               MessageManager.sendGroupMessage(username, indexOfSelectedGroup, messageToSend);
-               
-           } catch (SQLException ex) {
-               Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
-           }
-            
-        }
-        
+
     }//GEN-LAST:event_SendMessgeButtonActionPerformed
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
         // TODO add your handling code here:
-        if(friendMessageThread != null){
-            
+        if (friendMessageThread != null) {
+
             friendMessageThread.stopRunning();
-                    
+
         }
-        if(groupMessageThread != null){
-            
+        if (groupMessageThread != null) {
+
             groupMessageThread.stopRunning();
-                    
+
         }
-        
+
         boolean isToggleButtonTextEqualsFriends = FriendsOrGroupToggleButton.getText().equals("Friends");
-        
-        if(isToggleButtonTextEqualsFriends){
-            
+
+        if (isToggleButtonTextEqualsFriends) {
+
             new AddFriendScreen(username).setVisible(true);
             dispose();
-            
-        }else{
-            
+
+        } else {
+
             new AddGroupScreen(username).setVisible(true);
             dispose();
-            
+
         }
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void FriendORGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_FriendORGroupListValueChanged
         try {
             // TODO add your handling code here:
-            
-            if(FriendsOrGroupToggleButton.getText().equals("Friends")){
-                
+
+            if (FriendsOrGroupToggleButton.getText().equals("Friends") && FriendORGroupList.getSelectedIndex() != -1) {
+
                 selectedFriend = FriendManager.getFriendUsername(username, FriendORGroupList.getSelectedIndex());
-                
+
                 try {
-                    
+
                     boolean result = FriendManager.isBlocked(username, selectedFriend);
-                    
-                    if(friendMessageThread != null){
+
+                    if (friendMessageThread != null) {
                         friendMessageThread.stopRunning();
                     }
                     friendMessageThread = new FriendMessageThread(username, selectedFriend, ViewMessageTextArea);
-                    
-                    if(result){
-                        
+
+                    if (result) {
+
                         BlockButton.setText("Unblock");
-                        
-                    }
-                    else{
-                        
+
+                    } else {
+
                         BlockButton.setText("Block");
-                        
+
                     }
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-            }
-            else{
+
+            } else if (FriendORGroupList.getSelectedIndex() != -1) {
                 try {
-                    
+
                     indexOfSelectedGroup = FriendORGroupList.getSelectedIndex();
-                    
-                    boolean result = GroupManager.isBlocked(username,indexOfSelectedGroup);
-                    
-                    if(groupMessageThread != null){
+
+                    boolean result = GroupManager.isBlocked(username, indexOfSelectedGroup);
+
+                    if (groupMessageThread != null) {
                         groupMessageThread.stopRunning();
                     }
                     groupMessageThread = new GroupMessageThread(username, indexOfSelectedGroup, ViewMessageTextArea);
-                    
-                    if(result){
-                        
+
+                    if (result) {
+
                         BlockButton.setText("Unblock");
-                        
-                    }
-                    else{
-                        
+
+                    } else {
+
                         BlockButton.setText("Block");
-                        
+
                     }
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
         } catch (SQLException ex) {
             Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -592,187 +590,193 @@ public class HomeScreen extends javax.swing.JFrame {
     private void FriendORGroupListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FriendORGroupListMouseClicked
         // https://stackoverflow.com/questions/4344682/double-click-event-on-jlist-element
         if (evt.getClickCount() == 2 && FriendsOrGroupToggleButton.getText().equals("Friends")) {
-            
-                    if(friendMessageThread != null){
-            
-                        friendMessageThread.stopRunning();
-                    
-                    }
-                    if(groupMessageThread != null){
-            
-                        groupMessageThread.stopRunning();
-                    
-                    }
-            
-            new ProfileScreen(selectedFriend,username).setVisible(true);
+
+            if (friendMessageThread != null) {
+
+                friendMessageThread.stopRunning();
+
+            }
+            if (groupMessageThread != null) {
+
+                groupMessageThread.stopRunning();
+
+            }
+
+            new ProfileScreen(selectedFriend, username).setVisible(true);
             dispose();
-            
-         }
+
+        }
     }//GEN-LAST:event_FriendORGroupListMouseClicked
 
     private void SwapAccountComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SwapAccountComboBoxItemStateChanged
-        try {                                                     
+        try {
             // TODO add your handling code here:
             TalkToLabel.setText("");
-            
-            String selectedAccount =  (String) SwapAccountComboBox.getSelectedItem();
-            
+
+            String selectedAccount = (String) SwapAccountComboBox.getSelectedItem();
+
             username = selectedAccount;
-            
+
             String newDisplayName = UserManager.getDisplayName(username);
-            
+
             WelcomeLabel.setText("Welcome: " + newDisplayName);
-            
+
             FriendsOrGroupToggleButton.setText("Friends");
             FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
             FriendsOrGroupToggleButton.setSelected(false);
-            
+
             try {
-                
+
                 String[] friendList = FriendManager.getFriends(username);
-                
+
                 defaultFriendOrGroupListModel.clear();
-                
+
                 for (String friend : friendList) {
-                    
+
+                    boolean isFriendBlocked = FriendManager.isBlocked(username, friend);
+
                     String friendDisplayName = UserManager.getDisplayName(friend);
-                    
+
+                    if (isFriendBlocked) {
+
+                        friendDisplayName = friendDisplayName + " (blocked)";
+
+                    }
+
                     defaultFriendOrGroupListModel.addElement(friendDisplayName);
-                    
+
                 }
-            
+
                 FriendORGroupList.setModel(defaultFriendOrGroupListModel);
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
-                Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_SwapAccountComboBoxItemStateChanged
 
     private void RemoveOrExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveOrExitButtonActionPerformed
         // TODO add your handling code here:
-        if(FriendsOrGroupToggleButton.getText().equals("Friends")){
+        if (FriendsOrGroupToggleButton.getText().equals("Friends")) {
             try {
-                
+
                 FriendManager.removeFriend(username, selectedFriend);
-                
+
                 String[] friendList = FriendManager.getFriends(username);
-                
+
                 defaultFriendOrGroupListModel.clear();
-                
+
                 for (String friendList1 : friendList) {
-                    
+
                     defaultFriendOrGroupListModel.addElement(friendList1);
-                    
+
                 }
-            
+
                 FriendORGroupList.setModel(defaultFriendOrGroupListModel);
-                
+
                 FriendORGroupList.setSelectedIndex(0);
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else{
-            
+
+        } else {
+
             try {
-                
+
                 GroupManager.exitGroup(username, indexOfSelectedGroup);
-                
+
                 String[] groupList = GroupManager.getGroupNames(username);
-                
+
                 defaultFriendOrGroupListModel.clear();
-                
+
                 for (String groupList1 : groupList) {
-                    
+
                     defaultFriendOrGroupListModel.addElement(groupList1);
-                    
+
                 }
-            
+
                 FriendORGroupList.setModel(defaultFriendOrGroupListModel);
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
+
         }
-        
+
     }//GEN-LAST:event_RemoveOrExitButtonActionPerformed
 
     private void FriendsOrGroupToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_FriendsOrGroupToggleButtonItemStateChanged
         // TODO add your handling code here:
-        if(friendMessageThread != null){
-            
+        if (friendMessageThread != null) {
+
             friendMessageThread.stopRunning();
-                    
+
         }
-        if(groupMessageThread != null){
-            
+        if (groupMessageThread != null) {
+
             groupMessageThread.stopRunning();
-                    
+
         }
-        
-        if(evt.getStateChange() == 1){
-            
+
+        if (evt.getStateChange() == 1) {
+
             FriendsOrGroupToggleButton.setText("Groups");
             FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/group_icon.png")));
             RemoveOrExitButton.setText("Exit");
-            
+
             try {
-                
+
                 String[] groupList = GroupManager.getGroupNames(username);
-                
+
                 defaultFriendOrGroupListModel.clear();
-                
+
                 for (String groupList1 : groupList) {
-                    
+
                     defaultFriendOrGroupListModel.addElement(groupList1);
-                    
+
                 }
-            
+
                 FriendORGroupList.setModel(defaultFriendOrGroupListModel);
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-        }
-        else{
-            
+
+        } else {
+
             FriendsOrGroupToggleButton.setText("Friends");
             FriendsOrGroupToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/friend_icon.png")));
             RemoveOrExitButton.setText("Remove");
-            
+
             try {
-                
+
                 String[] friendList = FriendManager.getFriends(username);
-                
+
                 defaultFriendOrGroupListModel.clear();
-                
+
                 for (String friend : friendList) {
-                    
+
                     String friendDisplayName = UserManager.getDisplayName(friend);
-                
+
                     defaultFriendOrGroupListModel.addElement(friendDisplayName);
-                    
+
                 }
-            
+
                 FriendORGroupList.setModel(defaultFriendOrGroupListModel);
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
-        
+
         ViewMessageTextArea.setText("");
-        
+
         TalkToLabel.setText("");
-        
+
     }//GEN-LAST:event_FriendsOrGroupToggleButtonItemStateChanged
 
     /**
@@ -782,7 +786,7 @@ public class HomeScreen extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

@@ -6,6 +6,7 @@ package Frontend;
 
 import Backend.UserManager;
 import Backend.BackgroundManager;
+import Backend.DB;
 import Backgrounds.SideMenuBackground;
 import Backgrounds.TextingBackground;
 import java.sql.SQLException;
@@ -22,20 +23,37 @@ public class LoginMainScreen extends javax.swing.JFrame {
      * Creates new form LoginMainScreeb
      */
     private int usage = 0;
-    
+
     private String username = "";
-    
+
     public LoginMainScreen() {
-        
+
         initComponents();
-            
+
+        try {
+
+            DB.createConnection();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginMainScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
-    
-    public LoginMainScreen(int usage,String username) {
+
+    public LoginMainScreen(int usage, String username) {
         initComponents();
-        
+
         this.usage = usage;
         this.username = username;
+
+        try {
+
+            DB.createConnection();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginMainScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     //if int usage = 0; means that the user is logining to the home screen
     //if int usage = 1; means that the user is adding an account
@@ -234,73 +252,65 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
     private void PasswordVisibleToggleButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PasswordVisibleToggleButtonItemStateChanged
         // This code change the visuial of the toggle button
-        if(evt.getStateChange() == 1){
-            
+        if (evt.getStateChange() == 1) {
+
             PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/open_eye.png")));
-            passwordPasswordField.setEchoChar((char)0);
-            
-        }
-        else{
-            
+            passwordPasswordField.setEchoChar((char) 0);
+
+        } else {
+
             PasswordVisibleToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/close_eye_icon.png")));
             passwordPasswordField.setEchoChar('*');
-            
+
         }
-        
-        
+
     }//GEN-LAST:event_PasswordVisibleToggleButtonItemStateChanged
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         // TODO add your handling code here:
         String inputUsername = UsernameTextField.getText();
         String password = passwordPasswordField.getText();
-       
+
         try {
-            
-            boolean result =  UserManager.isLoginValid(inputUsername, password);
-            
-            if(result && usage == 0){
-                            
+
+            boolean result = UserManager.isLoginValid(inputUsername, password);
+
+            if (result && usage == 0) {
+
                 String colour1 = BackgroundManager.getFirstColourSideMenuBackground(inputUsername);
-            
+
                 String colour2 = BackgroundManager.getLastColourSideMenuBackground(inputUsername);
-            
-                SideMenuBackground.setSideMenuBackground(colour1,colour2);
-            
+
+                SideMenuBackground.setSideMenuBackground(colour1, colour2);
+
                 colour1 = BackgroundManager.getFirstColourTextingBackground(inputUsername);
-            
+
                 colour2 = BackgroundManager.getLastColourTextingBackground(inputUsername);
-            
+
                 TextingBackground.setTextingScreenBackground(colour1, colour2);
-            
-                 new HomeScreen(inputUsername).setVisible(true);
-                 
-                 dispose();
-                 
-            }
-            
-            else if(result && usage == 1 && !(UserManager.isAccountConnected(username, inputUsername))){
-                    
-                    UserManager.addConnectedAccount(username, inputUsername);
-                
-                    new SettingScreen(username,"Account added successful").setVisible(true);
-                
-                    dispose();
-                
-            }
-            
-            else if(usage == 1){
-                
-                new SettingScreen(username,"Account added failed").setVisible(true);
-                
+
+                new HomeScreen(inputUsername).setVisible(true);
+
                 dispose();
-                
-            }
-            
-            else{
-                
+
+            } else if (result && usage == 1 && !(UserManager.isAccountConnected(username, inputUsername))) {
+
+                UserManager.addConnectedAccount(username, inputUsername);
+
+                new SettingScreen(username, "Account added successful").setVisible(true);
+
+                dispose();
+
+            } else if (usage == 1) {
+
+                new SettingScreen(username, "Account added failed").setVisible(true);
+
+                dispose();
+
+            } else {
+
                 FinalErrorCheckerLabel.setText("Username or password is incorrect");
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(LoginMainScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -314,7 +324,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -335,7 +345,6 @@ public class LoginMainScreen extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             new LoginMainScreen().setVisible(true);

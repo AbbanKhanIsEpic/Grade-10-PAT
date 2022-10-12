@@ -16,40 +16,45 @@ import java.sql.SQLException;
  */
 //This class commicate with mySQL database
 public class DB {
+
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String url = "jdbc:mysql://102.130.115.69:3306/abbankDB";
     private static final String user = "abbank";
     private static final String pass = "Reddam2021";
 
-    //This code from 23 to the last line of code is repurposed from MrB's github 
-    
+    private static Connection conn;
+
+    private static PreparedStatement statement;
+
+    public static void createConnection() throws SQLException {
+
+        conn = DriverManager.getConnection(url, user, pass);
+
+    }
+
+    //This code from 23 to the last line of code is repurposed from MrB's github
     //This method purpose is to insert, update or delete values in mySQL Table
     //This method's input is query to the database
     public static void update(String update) throws SQLException {
-        
-        Connection conn = DriverManager.getConnection(url, user, pass);
 
-        PreparedStatement statement = conn.prepareStatement(update);
-        
-	statement.executeUpdate();
-        
-	statement.close();
-                
+        statement = conn.prepareStatement(update);
+
+        statement.executeUpdate();
+
+        statement.close();
+
     }
 
-        
     //Purpose of this method is to select something from mySQL Table
     //This method's input is query to the database
-    //This method returns the result(ResultSet) from the database 
+    //This method returns the result(ResultSet) from the database
     public static ResultSet query(String stmt) throws SQLException {
-            
-	    Connection conn = DriverManager.getConnection(url, user, pass);
 
-	    PreparedStatement statement = conn.prepareStatement(stmt);
-                
-	    ResultSet resultSet = statement.executeQuery();
-                
-            return resultSet;
-            
-	}
+        statement = conn.prepareStatement(stmt);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        return resultSet;
+
+    }
 }

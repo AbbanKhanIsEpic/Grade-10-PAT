@@ -25,7 +25,9 @@ public class DB {
     private static Connection conn;
 
     private static PreparedStatement statement;
-
+    
+    //Made a method to createConnection with a database because we wanted it to only create the connection once
+    //Make it query faster
     public static void createConnection() throws SQLException {
 
         conn = DriverManager.getConnection(url, user, pass);

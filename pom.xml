@@ -11,7 +11,7 @@
         <maven.compiler.target>15</maven.compiler.target>
     </properties>
 
-<build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

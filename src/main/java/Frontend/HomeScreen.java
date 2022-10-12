@@ -4,7 +4,6 @@
  */
 package Frontend;
 
-import Backend.BackgroundManager;
 import Backend.FriendManager;
 import Backend.GroupManager;
 import Backend.MessageManager;
@@ -12,14 +11,11 @@ import Backend.FriendMessageThread;
 import Backend.GroupMessageThread;
 import Backend.MessageVisualManager;
 import Backend.UserManager;
-import Backgrounds.SideMenuBackground;
-import Backgrounds.TextingBackground;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 
 /**
  *
@@ -84,12 +80,6 @@ public class HomeScreen extends javax.swing.JFrame {
                 boolean isFriendBlocked = FriendManager.isBlocked(username, friend);
 
                 String friendDisplayName = UserManager.getDisplayName(friend);
-
-                if (isFriendBlocked) {
-
-                    friendDisplayName = friendDisplayName + " (blocked)";
-
-                }
 
                 defaultFriendOrGroupListModel.addElement(friendDisplayName);
 
@@ -321,19 +311,15 @@ public class HomeScreen extends javax.swing.JFrame {
                     .addComponent(swapAccountLabel))
                 .addGap(18, 18, 18)
                 .addComponent(Separator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FriendsOrGroupToggleButton)
+                    .addComponent(AddButton))
+                .addGap(21, 21, 21)
                 .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(FriendsOrGroupToggleButton)
-                            .addComponent(AddButton))
-                        .addGap(31, 31, 31)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(sideMenuBackground1Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(RemoveOrExitButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RemoveOrExitButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Separator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(sideMenuBackground1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -397,6 +383,8 @@ public class HomeScreen extends javax.swing.JFrame {
 
                     FriendManager.blockFriend(username, selectedFriend);
 
+                    TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue() + " (Blocked)");
+
                     BlockButton.setText("Unblock");
 
                 } catch (SQLException ex) {
@@ -408,6 +396,8 @@ public class HomeScreen extends javax.swing.JFrame {
                 try {
 
                     FriendManager.unblockFriend(username, selectedFriend);
+
+                    TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
 
                     BlockButton.setText("Block");
 
@@ -425,6 +415,8 @@ public class HomeScreen extends javax.swing.JFrame {
 
                     GroupManager.blockGroup(username, indexOfSelectedGroup);
 
+                    TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue() + " (Blocked)");
+
                     BlockButton.setText("Unblock");
 
                 } catch (SQLException ex) {
@@ -436,6 +428,8 @@ public class HomeScreen extends javax.swing.JFrame {
                 try {
 
                     GroupManager.unblockGroup(username, indexOfSelectedGroup);
+
+                    TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
 
                     BlockButton.setText("Block");
 
@@ -524,6 +518,9 @@ public class HomeScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void FriendORGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_FriendORGroupListValueChanged
+
+        String showBlock = "";
+
         try {
             // TODO add your handling code here:
 
@@ -541,6 +538,8 @@ public class HomeScreen extends javax.swing.JFrame {
                     friendMessageThread = new FriendMessageThread(username, selectedFriend, ViewMessageTextArea);
 
                     if (result) {
+
+                        showBlock = " (Blocked)";
 
                         BlockButton.setText("Unblock");
 
@@ -568,6 +567,8 @@ public class HomeScreen extends javax.swing.JFrame {
 
                     if (result) {
 
+                        showBlock = " (Blocked)";
+
                         BlockButton.setText("Unblock");
 
                     } else {
@@ -580,8 +581,7 @@ public class HomeScreen extends javax.swing.JFrame {
                     Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
-            TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue());
+            TalkToLabel.setText("You are currently talking to: " + FriendORGroupList.getSelectedValue() + showBlock);
         } catch (SQLException ex) {
             Logger.getLogger(HomeScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -633,15 +633,7 @@ public class HomeScreen extends javax.swing.JFrame {
 
                 for (String friend : friendList) {
 
-                    boolean isFriendBlocked = FriendManager.isBlocked(username, friend);
-
                     String friendDisplayName = UserManager.getDisplayName(friend);
-
-                    if (isFriendBlocked) {
-
-                        friendDisplayName = friendDisplayName + " (blocked)";
-
-                    }
 
                     defaultFriendOrGroupListModel.addElement(friendDisplayName);
 

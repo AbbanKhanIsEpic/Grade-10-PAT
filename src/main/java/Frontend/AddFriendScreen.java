@@ -20,41 +20,37 @@ public class AddFriendScreen extends javax.swing.JFrame {
     /**
      * Creates new form AddFriendScreen
      */
-    
     private String username;
-    
+
     public AddFriendScreen() {
         initComponents();
-        
-        
+
     }
+
     public AddFriendScreen(String username) {
         initComponents();
-        
+
         this.username = username;
-        
+
         try {
-            
+
             String[] incomingFriendRequest = FriendManager.getFriendRequestList(username);
-            
+
             DefaultListModel defaultIncomingFriendRequestListModel = new DefaultListModel();
-            
+
             for (String incomingFriendRequest1 : incomingFriendRequest) {
-                
+
                 defaultIncomingFriendRequestListModel.addElement(incomingFriendRequest1);
-                
+
             }
-            
+
             IncomingFriendRequestList.setModel(defaultIncomingFriendRequestListModel);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
 
     }
-    
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -226,19 +222,19 @@ public class AddFriendScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         String search = SearchFriendTextField.getText();
         try {
-            
+
             String[] listOfPeople = FriendManager.findPeople(search, username);
-            
+
             DefaultListModel defaultSearchResultListModel = new DefaultListModel();
-            
+
             for (String listOfPeople1 : listOfPeople) {
-                
+
                 defaultSearchResultListModel.addElement(listOfPeople1);
-                
+
             }
-            
+
             PeopleToSendFriendRequestList.setModel(defaultSearchResultListModel);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -248,50 +244,47 @@ public class AddFriendScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         String to = PeopleToSendFriendRequestList.getSelectedValue();
         try {
-            
+
             boolean friendRequestSucess = FriendManager.sendFriendRequest(username, to);
-            
-            if(friendRequestSucess){
-                
+
+            if (friendRequestSucess) {
+
                 SendFriendRequestSucessLabel.setForeground(Color.green);
                 SendFriendRequestSucessLabel.setText("Friend request sent");
-                
-            }
-            else{
-                
+
+            } else {
+
                 SendFriendRequestSucessLabel.setForeground(Color.red);
                 SendFriendRequestSucessLabel.setText("Friend request failed");
-                        
+
             }
-            
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }//GEN-LAST:event_SendFriendRequestButtonActionPerformed
 
     private void AcceptFriendRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptFriendRequestButtonActionPerformed
         // TODO add your handling code here:
         String selectedFriendRequest = IncomingFriendRequestList.getSelectedValue();
-        
+
         try {
-            
+
             FriendManager.acceptFriendRequest(username, selectedFriendRequest);
-            
+
             String[] newIncomingFriendRequest = FriendManager.getFriendRequestList(username);
-            
+
             DefaultListModel defaultNewIncomingFriendRequestListModel = new DefaultListModel();
-            
+
             for (String newIncomingFriendRequest1 : newIncomingFriendRequest) {
-                
+
                 defaultNewIncomingFriendRequestListModel.addElement(newIncomingFriendRequest1);
-                
+
             }
-            
+
             IncomingFriendRequestList.setModel(defaultNewIncomingFriendRequestListModel);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -301,15 +294,15 @@ public class AddFriendScreen extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             String[] incomingFriendRequest = FriendManager.getFriendRequestList(username);
-            
+
             DefaultListModel defaultIncomingFriendRequestListModel = new DefaultListModel();
-            
+
             for (String incomingFriendRequest1 : incomingFriendRequest) {
-                
+
                 defaultIncomingFriendRequestListModel.addElement(incomingFriendRequest1);
-                
+
             }
-            
+
             IncomingFriendRequestList.setModel(defaultIncomingFriendRequestListModel);
         } catch (SQLException ex) {
             Logger.getLogger(AddFriendScreen.class.getName()).log(Level.SEVERE, null, ex);

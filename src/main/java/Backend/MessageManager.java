@@ -18,6 +18,7 @@ public class MessageManager {
         boolean friendBlock = FriendManager.isBlocked(username, friend);
 
         boolean friendMessageDelete = FriendManager.isMessageDelete(username, friend);
+
         int userID = UserManager.getUserID(username);
 
         int friendID = UserManager.getUserID(friend);

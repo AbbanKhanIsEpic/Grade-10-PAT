@@ -19,7 +19,6 @@ public class LoginBackground extends javax.swing.JPanel {
     /**
      * Creates new form LoginBackground
      */
-    
     //From 29 to 39 is stolen
     //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
     //The reason for the colour is because blue represent a feeling of welcoming. The login screen is welcoming the user back to the program(for the LoginMainScreen)
@@ -27,8 +26,9 @@ public class LoginBackground extends javax.swing.JPanel {
         initComponents();
         setOpaque(false);
     }
+
     @Override
-    
+
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -38,6 +38,7 @@ public class LoginBackground extends javax.swing.JPanel {
         g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());
         super.paintChildren(grphcs);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,7 +48,6 @@ public class LoginBackground extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

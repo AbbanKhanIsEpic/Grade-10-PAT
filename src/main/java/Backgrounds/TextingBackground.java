@@ -20,23 +20,23 @@ public class TextingBackground extends javax.swing.JPanel {
      * Creates new form TextingBackground
      */
     private static String Colour1 = "#90EE90";
-    
+
     private static String Colour2 = "#18A558";
-    
+
     public TextingBackground() {
-        
+
         initComponents();
         setOpaque(false);
-        
+
     }
-    
-    public static void setTextingScreenBackground(String colour1,String colour2){
-        
+
+    public static void setTextingScreenBackground(String colour1, String colour2) {
+
         Colour1 = colour1;
         Colour2 = colour2;
-        
+
     }
-    
+
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -67,7 +67,6 @@ public class TextingBackground extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

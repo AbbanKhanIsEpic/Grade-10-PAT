@@ -23,73 +23,82 @@ public class ProfileScreen extends javax.swing.JFrame {
      * Creates new form ProfileScreen
      */
     private String username = "";
-    
+
     public ProfileScreen() {
         initComponents();
-        
+
     }
-    
-    public ProfileScreen(String friend,String username) {
+
+    public ProfileScreen(String friend, String username) {
         try {
-            
+
             initComponents();
-            
+
             this.username = username;
-            
+
             String colour1 = BackgroundManager.getFirstColourProfileBackground(friend);
-            
+
             String colour2 = BackgroundManager.getLastColourProfileBackground(friend);
-            
+
             ProfileBackground.setProfileBackground(colour1, colour2);
-            
+
             String bio = ProfileManager.getBio(friend);
-            
+
             String profileTextFont = ProfileManager.getTextFont(friend);
-            
+
             int profileTextSize = ProfileManager.getTextSize(friend);
-            
+
             BioTextArea.setText(bio);
-            
+
             BioTextArea.setFont(new java.awt.Font(profileTextFont, 0, profileTextSize));
-            
+
             String displayName = UserManager.getDisplayName(friend);
-            
+
             DisplayNameLabel.setText(displayName);
-            
+
             usernameLabel.setText("@" + friend);
-            
+
             Date whenFriendJoined = ProfileManager.getAccountCreated(friend);
-            
+
             JoinedLabel.setText("Joined: " + whenFriendJoined);
-            
+
             int profileIcon = ProfileManager.getProfileIcon(friend);
-            
+
             switch (profileIcon) {
-                
-                case 1 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_icon.png")));
-                
-                case 2 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fancy_croc_profile_icon.png")));
-                
-                case 3 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/charli_sqaud_profile_icon.png")));
-                
-                case 4 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/real_charli_squad_profile_icon.png")));
-                
-                case 5 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/los_pollos_hermandoes_profile_icon.png")));
-                
-                case 6 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/old_man_with_stick_profile_icon.png")));
-                
-                case 7 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/capybara_profile_icon.png")));
-                
-                case 8 -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/doofenshmirtz_evil_incorporated_profile_icon.png")));
-                
-                default -> ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/true_fat_man_profile_icon.png")));
-                
+
+                case 1 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/account_icon.png")));
+
+                case 2 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fancy_croc_profile_icon.png")));
+
+                case 3 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/charli_sqaud_profile_icon.png")));
+
+                case 4 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/real_charli_squad_profile_icon.png")));
+
+                case 5 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/los_pollos_hermandoes_profile_icon.png")));
+
+                case 6 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/old_man_with_stick_profile_icon.png")));
+
+                case 7 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/capybara_profile_icon.png")));
+
+                case 8 ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/doofenshmirtz_evil_incorporated_profile_icon.png")));
+
+                default ->
+                    ProfileIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/true_fat_man_profile_icon.png")));
+
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ProfileScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
+
     }
 
     /**
@@ -221,8 +230,7 @@ public class ProfileScreen extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -245,7 +253,7 @@ public class ProfileScreen extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ProfileScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             new ProfileScreen().setVisible(true);

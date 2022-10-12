@@ -23,58 +23,57 @@ public class AddGroupScreen extends javax.swing.JFrame {
      * Creates new form AddGroupScreen
      */
     private String username;
-    
+
     private DefaultListModel defaultMemberForNewGroupListModel = new DefaultListModel();
-    private DefaultListModel defaultFriendListModel = new DefaultListModel(); 
-    
-    private  ArrayList<String> groupMemberArrayList = new ArrayList<>();
-    
+    private DefaultListModel defaultFriendListModel = new DefaultListModel();
+
+    private ArrayList<String> groupMemberArrayList = new ArrayList<>();
+
     private String[] groupMembers;
-    
+
     public AddGroupScreen() {
         initComponents();
     }
-    
+
     public AddGroupScreen(String username) {
-        
+
         initComponents();
-        
+
         this.username = username;
-        
+
         try {
             String[] currentGroupsList = GroupManager.getGroupNames(username);
-            
+
             String[] friendList = FriendManager.getFriends(username);
-            
-            DefaultListModel defaultCurrentGroupListModel = new DefaultListModel();        
-            
+
+            DefaultListModel defaultCurrentGroupListModel = new DefaultListModel();
+
             for (String currentGroupsList1 : currentGroupsList) {
-                
+
                 defaultCurrentGroupListModel.addElement(currentGroupsList1);
-                
+
             }
-            
+
             for (String friendList1 : friendList) {
-                
+
                 defaultFriendListModel.addElement(friendList1);
-                
+
             }
-            
+
             defaultMemberForNewGroupListModel.addElement(username);
-            
+
             CurrentGroupList.setModel(defaultCurrentGroupListModel);
-            
+
             FriendList.setModel(defaultFriendListModel);
-            
+
             MemberList.setModel(defaultMemberForNewGroupListModel);
-            
+
             groupMemberArrayList.add(username);
-            
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     /**
@@ -298,25 +297,25 @@ public class AddGroupScreen extends javax.swing.JFrame {
     private void CurrentGroupListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_CurrentGroupListValueChanged
         // TODO add your handling code here:
         int indexOfSelectedGroup = CurrentGroupList.getSelectedIndex();
-        
+
         try {
-            
+
             String[] listOfSelectedGroupMembers = GroupManager.getGroupMembers(username, indexOfSelectedGroup);
-            
+
             DefaultListModel defaultGroupMembersListModel = new DefaultListModel();
-            
+
             for (String listOfSelectedGroupMember : listOfSelectedGroupMembers) {
-                
+
                 defaultGroupMembersListModel.addElement(listOfSelectedGroupMember);
-                
+
             }
-            
+
             groupMemberList.setModel(defaultGroupMembersListModel);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_CurrentGroupListValueChanged
 
     private void ReturnHomeScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnHomeScreenButtonActionPerformed
@@ -330,25 +329,23 @@ public class AddGroupScreen extends javax.swing.JFrame {
             // TODO add your handling code here:
             groupMembers = groupMemberArrayList.toArray(String[]::new);
             String groupName = newGroupNameTextField.getText();
-            
-            if(groupName.isEmpty()){
-                
+
+            if (groupName.isEmpty()) {
+
                 CreateGroupResultLabel.setForeground(Color.red);
                 CreateGroupResultLabel.setText("Group name can't be empthy");
-                
-            }
-            else if(groupMembers.length < 3){
-                
+
+            } else if (groupMembers.length < 3) {
+
                 CreateGroupResultLabel.setForeground(Color.red);
                 CreateGroupResultLabel.setText("Need more people");
-                
-            }
-            else{
-                
+
+            } else {
+
                 CreateGroupResultLabel.setForeground(Color.green);
                 CreateGroupResultLabel.setText("Group created");
                 GroupManager.createGroup(groupName, groupMembers);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(AddGroupScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -363,37 +360,36 @@ public class AddGroupScreen extends javax.swing.JFrame {
         defaultMemberForNewGroupListModel.addElement(selectedFriend);
 
         defaultFriendListModel.removeElement(selectedFriend);
-        
+
         MemberList.setModel(defaultMemberForNewGroupListModel);
-        
+
         FriendList.setModel(defaultFriendListModel);
-        
+
         groupMemberArrayList.add(selectedFriend);
-        
+
     }//GEN-LAST:event_FriendListMouseClicked
 
     private void MemberListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MemberListMouseClicked
         // TODO add your handling code here:
         String selectedGroupMember = MemberList.getSelectedValue();
 
-        if(!(selectedGroupMember.equals(username))){
-            
+        if (!(selectedGroupMember.equals(username))) {
+
             defaultMemberForNewGroupListModel.removeElement(selectedGroupMember);
 
             defaultFriendListModel.addElement(selectedGroupMember);
-        
+
             MemberList.setModel(defaultMemberForNewGroupListModel);
-        
+
             FriendList.setModel(defaultFriendListModel);
-            
+
             groupMemberArrayList.remove(selectedGroupMember);
-            
-        }
-        else{
-            
+
+        } else {
+
             CreateGroupResultLabel.setForeground(Color.red);
             CreateGroupResultLabel.setText("Can't remove yourself");
-            
+
         }
     }//GEN-LAST:event_MemberListMouseClicked
 

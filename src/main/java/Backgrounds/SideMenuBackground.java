@@ -14,41 +14,40 @@ import java.awt.RenderingHints;
  *
  * @author abban
  */
-
-
 public class SideMenuBackground extends javax.swing.JPanel {
 
     /**
      * Creates new form SideMenuBackground
      */
     private static String Colour1 = "#1CB5E0";
-    
+
     private static String Colour2 = "#1CB5E0";
-    
+
     public SideMenuBackground() {
-        
+
         initComponents();
-        
-        setOpaque(false);
-        
-    }
-    public SideMenuBackground(String colour1) {
-        initComponents();
-        
+
         setOpaque(false);
 
     }
-    
-    public static void setSideMenuBackground(String colour1,String colour2){
-        
+
+    public SideMenuBackground(String colour1) {
+        initComponents();
+
+        setOpaque(false);
+
+    }
+
+    public static void setSideMenuBackground(String colour1, String colour2) {
+
         Colour1 = colour1;
         Colour2 = colour2;
-        
+
     }
-        
+
     @Override
     protected void paintChildren(Graphics grphcs) {
-        
+
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint g = new GradientPaint(0, 0, Color.decode(Colour1), 0, getHeight(), Color.decode(Colour2));
@@ -56,9 +55,8 @@ public class SideMenuBackground extends javax.swing.JPanel {
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());
         super.paintChildren(grphcs);
-        
+
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,7 +78,6 @@ public class SideMenuBackground extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

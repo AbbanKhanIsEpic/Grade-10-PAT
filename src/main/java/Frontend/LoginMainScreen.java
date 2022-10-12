@@ -22,7 +22,8 @@ public class LoginMainScreen extends javax.swing.JFrame {
     /**
      * Creates new form LoginMainScreeb
      */
-    private int usage = 0;
+    //Normal login is a type of login that when the user login in, the home screen opens
+    private String usage = "Normal Login";
 
     private String username = "";
 
@@ -31,7 +32,8 @@ public class LoginMainScreen extends javax.swing.JFrame {
         initComponents();
 
         try {
-
+            
+            //The create connection is here because this Screen is the first screen that will run
             DB.createConnection();
 
         } catch (SQLException ex) {
@@ -40,7 +42,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
     }
 
-    public LoginMainScreen(int usage, String username) {
+    public LoginMainScreen(String username, String usage) {
         initComponents();
 
         this.usage = usage;
@@ -275,7 +277,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
             boolean result = UserManager.isLoginValid(inputUsername, password);
 
-            if (result && usage == 0) {
+            if (result && usage.equals("Normal Login")) {
 
                 String colour1 = BackgroundManager.getFirstColourSideMenuBackground(inputUsername);
 
@@ -293,7 +295,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
                 dispose();
 
-            } else if (result && usage == 1 && !(UserManager.isAccountConnected(username, inputUsername))) {
+            } else if (result && usage.equals("Add Account Login") && !(UserManager.isAccountConnected(username, inputUsername))) {
 
                 UserManager.addConnectedAccount(username, inputUsername);
 
@@ -301,7 +303,7 @@ public class LoginMainScreen extends javax.swing.JFrame {
 
                 dispose();
 
-            } else if (usage == 1) {
+            } else if (usage.equals("Add Account Login"))  {
 
                 new SettingScreen(username, "Account added failed").setVisible(true);
 

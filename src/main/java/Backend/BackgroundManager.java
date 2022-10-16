@@ -17,9 +17,11 @@ public class BackgroundManager {
     //This method updates the user's side menu background
     //This method's inputs are username, first colour of the screen and the last colour of the screen
     public static void updateSideMenuBackground(String username, String firstColour, String lastColour) throws SQLException {
-
+        
+        //Query to update the first colour of side menu background
         DB.update("Update abbankDB.Users Set FirstColourSideMenuBackground = '" + firstColour + "' Where Username = '" + username + "'");
 
+        //Query to  updates the last colour of side menu background
         DB.update("Update abbankDB.Users Set LastColourSideMenuBackground = '" + lastColour + "' Where Username = '" + username + "'");
 
     }
@@ -27,9 +29,11 @@ public class BackgroundManager {
     //This method updates the user's texting background
     //This method's inputs are username, first colour of the screen and the last colour of the screen
     public static void updateTextingBackground(String username, String firstColour, String lastColour) throws SQLException {
-
+        
+        //Query to updates the first colour of texting background
         DB.update("Update abbankDB.Users Set FirstColourTextingScreenBackground = '" + firstColour + "' Where Username = '" + username + "'");
-
+        
+        //Query to updates the last colour of texting background
         DB.update("Update abbankDB.Users Set LastColourTextingScreenBackground = '" + lastColour + "' Where Username = '" + username + "'");
 
     }
@@ -37,9 +41,11 @@ public class BackgroundManager {
     //This method updates the user's profile background
     //This method's inputs are username, first colour of the screen and the last colour of the scre
     public static void updateProfileBackground(String username, String firstColour, String lastColour) throws SQLException {
-
+        
+        //Query to updates the first colour of profile background
         DB.update("Update abbankDB.Users Set FirstColourProfileScreenBackground = '" + firstColour + "' Where Username = '" + username + "'");
-
+        
+        //Query to updates the last colour of profile background
         DB.update("Update abbankDB.Users Set LastColourProfileScreenBackground = '" + lastColour + "' Where Username = '" + username + "'");
 
     }
@@ -49,13 +55,16 @@ public class BackgroundManager {
     //This method's input is username
     public static String getFirstColourSideMenuBackground(String username) throws SQLException {
 
-        ResultSet mysqlColourResult = DB.query("Select FirstColourSideMenuBackground from abbankDB.Users Where Username = '" + username + "'");
+        //Query to get the first colour of side menu background
+        ResultSet mysqlColourBackgroundResult = DB.query("Select FirstColourSideMenuBackground from abbankDB.Users Where Username = '" + username + "'");
 
-        mysqlColourResult.next();
+        mysqlColourBackgroundResult.next();
+        
+        //Get the colour as String
+        String firstSideMenuBackgroundColour = mysqlColourBackgroundResult.getString(1);
 
-        String firstColour = mysqlColourResult.getString(1);
-
-        return firstColour;
+        //Return colout
+        return firstSideMenuBackgroundColour;
 
     }
 
@@ -63,14 +72,17 @@ public class BackgroundManager {
     //This method returns a string
     //This method's input a username
     public static String getLastColourSideMenuBackground(String username) throws SQLException {
+        
+        //Query to get the last colour of side menu background
+        ResultSet mysqlSideMenuColourBackgroundResult = DB.query("Select LastColourSideMenuBackground from abbankDB.Users Where Username = '" + username + "'");
 
-        ResultSet mysqlColourResult = DB.query("Select LastColourSideMenuBackground from abbankDB.Users Where Username = '" + username + "'");
-
-        mysqlColourResult.next();
-
-        String colour = mysqlColourResult.getString(1);
-
-        return colour;
+        mysqlSideMenuColourBackgroundResult.next();
+        
+        //Get colour as String
+        String lastSideMenuBackgroundColour = mysqlSideMenuColourBackgroundResult.getString(1);
+        
+        //Return colour
+        return lastSideMenuBackgroundColour;
 
     }
 
@@ -78,14 +90,17 @@ public class BackgroundManager {
     //This method returns a string
     //This method's input is username
     public static String getFirstColourTextingBackground(String username) throws SQLException {
+        
+        //Query to get the first colour of texting background
+        ResultSet mysqlColourTextingBackgroundResult = DB.query("Select FirstColourTextingScreenBackground from abbankDB.Users Where Username = '" + username + "'");
 
-        ResultSet mysqlColourResult = DB.query("Select FirstColourTextingScreenBackground from abbankDB.Users Where Username = '" + username + "'");
-
-        mysqlColourResult.next();
-
-        String colour = mysqlColourResult.getString(1);
-
-        return colour;
+        mysqlColourTextingBackgroundResult.next();
+        
+        //Get colour as String
+        String firstTextingBackgroundColour = mysqlColourTextingBackgroundResult.getString(1);
+        
+        //Return colour
+        return firstTextingBackgroundColour;
 
     }
 
@@ -93,14 +108,17 @@ public class BackgroundManager {
     //This method returns a string
     //This method's input is username
     public static String getLastColourTextingBackground(String username) throws SQLException {
+        
+        //Query to get the last colour of texting background
+        ResultSet mysqlColourTextingBackgroundResult = DB.query("Select LastColourTextingScreenBackground from abbankDB.Users Where Username = '" + username + "'");
 
-        ResultSet result = DB.query("Select LastColourTextingScreenBackground from abbankDB.Users Where Username = '" + username + "'");
-
-        result.next();
-
-        String colour = result.getString(1);
-
-        return colour;
+        mysqlColourTextingBackgroundResult.next();
+        
+        //Get colour as String
+        String lastTextingBackgroundColour = mysqlColourTextingBackgroundResult.getString(1);
+        
+        //Return colour
+        return lastTextingBackgroundColour;
 
     }
 
@@ -108,14 +126,17 @@ public class BackgroundManager {
     //This method returns a string
     //This method's input is username
     public static String getFirstColourProfileBackground(String username) throws SQLException {
+        
+        //Query to get the first colour of profile background
+        ResultSet mysqlColourProfileBackgroundResult = DB.query("Select FirstColourProfileScreenBackground from abbankDB.Users Where Username = '" + username + "'");
 
-        ResultSet result = DB.query("Select FirstColourProfileScreenBackground from abbankDB.Users Where Username = '" + username + "'");
+        mysqlColourProfileBackgroundResult.next();
+        
+        //Get colour as String
+        String firstProfileBackgroundColour = mysqlColourProfileBackgroundResult.getString(1);
 
-        result.next();
-
-        String colour = result.getString(1);
-
-        return colour;
+        //Return colour
+        return firstProfileBackgroundColour;
 
     }
 
@@ -124,13 +145,16 @@ public class BackgroundManager {
     //This method's input is username
     public static String getLastColourProfileBackground(String username) throws SQLException {
 
-        ResultSet result = DB.query("Select LastColourProfileScreenBackground from abbankDB.Users Where Username = '" + username + "'");
+        //Query to get the last colour of profile background
+        ResultSet mysqlColourProfileBackgroundResult = DB.query("Select LastColourProfileScreenBackground from abbankDB.Users Where Username = '" + username + "'");
 
-        result.next();
+        mysqlColourProfileBackgroundResult.next();
+        
+        //Get colour as String
+        String lastProfileBackgroundColour = mysqlColourProfileBackgroundResult.getString(1);
 
-        String colour = result.getString(1);
-
-        return colour;
+        //Return colour
+        return lastProfileBackgroundColour;
 
     }
 }

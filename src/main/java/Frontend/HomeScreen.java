@@ -11,6 +11,8 @@ import Backend.FriendMessageThread;
 import Backend.GroupMessageThread;
 import Backend.MessageVisualManager;
 import Backend.UserManager;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +53,7 @@ public class HomeScreen extends javax.swing.JFrame {
 
             groupMessageThread = null;
 
-            setTitle("Welcome to ChatBun");
+            this.setTitle("Welcome to ChatBun");
 
             this.username = username;
 
@@ -609,6 +611,16 @@ public class HomeScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_FriendORGroupListMouseClicked
 
     private void SwapAccountComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SwapAccountComboBoxItemStateChanged
+        if (friendMessageThread != null) {
+
+            friendMessageThread.stopRunning();
+
+        }
+        if (groupMessageThread != null) {
+
+            groupMessageThread.stopRunning();
+
+        }
         try {
             // TODO add your handling code here:
             TalkToLabel.setText("");

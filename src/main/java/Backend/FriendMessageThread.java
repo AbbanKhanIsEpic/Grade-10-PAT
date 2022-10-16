@@ -15,25 +15,27 @@ import javax.swing.JTextArea;
  */
 public class FriendMessageThread implements Runnable {
 
+    //This is a thread that will get friend Messages
+    
     private String username;
     private String friend;
     private JTextArea messageTextArea;
 
-    Thread t;
+    Thread friendMessageThread;
 
     private boolean running = true;
-    //Messages
 
     public FriendMessageThread(String username, String friend, JTextArea messageTextArea) {
         this.username = username;
         this.friend = friend;
         this.messageTextArea = messageTextArea;
 
-        t = new Thread(this);
-        t.start();
+        friendMessageThread = new Thread(this);
+        friendMessageThread.start();
 
     }
 
+    //Stop the tread
     public void stopRunning() {
         this.running = false;
 
@@ -41,13 +43,19 @@ public class FriendMessageThread implements Runnable {
 
     @Override
     public void run() {
+        //Check if the thread stopped
+        //Reason for this so the jTextArea will not look glitched 
         while (running) {
             try {
+                //Cooldown because do not want jTextArea to look weird
                 Thread.sleep(50);
 
-                String messages = MessageManager.getFriendMessages(username, friend);
+                //Get all friend message 
+                String friendMessages = MessageManager.getFriendMessages(username, friend);
 
-                messageTextArea.setText(messages);
+                //Set the JTextArea text to the message
+                messageTextArea.setText(friendMessages);
+                
             } catch (InterruptedException | SQLException ex) {
                 Logger.getLogger(FriendMessageThread.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -31,19 +31,23 @@ public class AddFriendScreen extends javax.swing.JFrame {
         initComponents();
 
         this.username = username;
-
+        
         try {
-
+            
+            //Get a string array of friend request
             String[] incomingFriendRequest = FriendManager.getFriendRequestList(username);
 
+            //use DefaultListModel because you can easily change content of jList
             DefaultListModel defaultIncomingFriendRequestListModel = new DefaultListModel();
 
             for (String incomingFriendRequest1 : incomingFriendRequest) {
-
+                
+                //Add each element from string array to DefaultListModel
                 defaultIncomingFriendRequestListModel.addElement(incomingFriendRequest1);
 
             }
 
+            //Set model
             IncomingFriendRequestList.setModel(defaultIncomingFriendRequestListModel);
 
         } catch (SQLException ex) {
@@ -223,16 +227,20 @@ public class AddFriendScreen extends javax.swing.JFrame {
         String search = SearchFriendTextField.getText();
         try {
 
+            //Get a string array of people
             String[] listOfPeople = FriendManager.findPeople(search, username);
 
+            //use DefaultListModel because you can easily change content of jList
             DefaultListModel defaultSearchResultListModel = new DefaultListModel();
 
             for (String listOfPeople1 : listOfPeople) {
 
+                //Add each element from string array to DefaultListModel
                 defaultSearchResultListModel.addElement(listOfPeople1);
 
             }
 
+            //Set model
             PeopleToSendFriendRequestList.setModel(defaultSearchResultListModel);
 
         } catch (SQLException ex) {

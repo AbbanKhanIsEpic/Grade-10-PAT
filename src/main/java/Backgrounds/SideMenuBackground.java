@@ -23,6 +23,8 @@ public class SideMenuBackground extends javax.swing.JPanel {
 
     private static String Colour2 = "#1CB5E0";
 
+    //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
+    
     public SideMenuBackground() {
 
         initComponents();

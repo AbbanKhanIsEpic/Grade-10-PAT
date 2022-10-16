@@ -14,7 +14,9 @@ import javax.swing.JTextArea;
  * @author abban
  */
 public class GroupMessageThread implements Runnable {
-
+    
+    //This is a thread that will get group  Messages
+    
     private String username;
     private int groupIndex;
     private JTextArea messageTextArea;
@@ -22,7 +24,7 @@ public class GroupMessageThread implements Runnable {
     Thread t;
 
     private boolean running = true;
-    //Messages
+    
 
     public GroupMessageThread(String username, int groupIndex, JTextArea messageTextArea) {
         this.username = username;
@@ -34,19 +36,25 @@ public class GroupMessageThread implements Runnable {
 
     }
 
+    //Stop the tread
     public void stopRunning() {
         this.running = false;
 
     }
 
     @Override
-    public void run() {
+    public void run()  {
+        //Check if the thread stopped
+        //Reason for this so the jTextArea will not look glitched 
         while (running) {
             try {
+                 //Cooldown because do not want jTextArea to look weird
                 Thread.sleep(50);
 
+                //Get all group message
                 String messages = MessageManager.getGroupMessages(username, groupIndex);
-
+                
+               //Set the JTextArea text to the message
                 messageTextArea.setText(messages);
 
             } catch (InterruptedException | SQLException ex) {

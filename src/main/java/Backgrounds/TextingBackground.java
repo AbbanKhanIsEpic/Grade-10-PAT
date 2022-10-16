@@ -19,6 +19,7 @@ public class TextingBackground extends javax.swing.JPanel {
     /**
      * Creates new form TextingBackground
      */
+    //The code is from: https://www.youtube.com/c/HelloWorld-Raven/featured
     private static String Colour1 = "#90EE90";
 
     private static String Colour2 = "#18A558";

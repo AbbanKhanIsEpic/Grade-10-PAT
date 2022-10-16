@@ -79,8 +79,6 @@ public class HomeScreen extends javax.swing.JFrame {
 
             for (String friend : friendList) {
 
-                boolean isFriendBlocked = FriendManager.isBlocked(username, friend);
-
                 String friendDisplayName = UserManager.getDisplayName(friend);
 
                 defaultFriendOrGroupListModel.addElement(friendDisplayName);
